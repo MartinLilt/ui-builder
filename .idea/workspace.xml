@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9c5cf7d-c185-476c-819b-65e772a18963" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/dashboard/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/dashboard/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/login/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/login/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/reg/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/src/app/reg/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/src/app/login/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/src/app/login/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/tailwind.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,11 +68,16 @@
       <workItem from="1722015617842" duration="808000" />
       <workItem from="1723046859781" duration="733000" />
       <workItem from="1727719094359" duration="1469000" />
-      <workItem from="1736419784847" duration="3467000" />
+      <workItem from="1736419784847" duration="4991000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/my-app/tailwind.config.js" />
+      </list>
+    </option>
   </component>
 </project>
