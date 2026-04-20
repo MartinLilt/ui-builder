@@ -1,6 +1,6 @@
 # PromptUI
 
-[![npm](https://img.shields.io/npm/v/@promptui/core)](https://www.npmjs.com/package/@promptui/core)
+[![npm](https://img.shields.io/npm/v/@getpromptui/core)](https://www.npmjs.com/package/@getpromptui/core)
 [![license](https://img.shields.io/github/license/martinli/promptui)](LICENSE)
 
 **An AI-native DSL that compiles semantic UI instructions into component-based frontend templates.**
@@ -13,8 +13,8 @@ PromptUI lets you describe UI using strict, constraint-driven blocks instead of 
 
 | Package | Description |
 |---------|-------------|
-| [`@promptui/core`](packages/core) | Parser, resolver, emitters, and CLI |
-| [`@promptui/ui`](packages/ui) | React component library — the default component set |
+| [`@getpromptui/core`](packages/core) | Parser, resolver, emitters, and CLI |
+| [`@getpromptui/ui`](packages/ui) | React component library — the default component set |
 
 ---
 
@@ -22,13 +22,13 @@ PromptUI lets you describe UI using strict, constraint-driven blocks instead of 
 
 ```bash
 # CLI
-npm install -g @promptui/core
+npm install -g @getpromptui/core
 
 # Programmatic API
-npm install @promptui/core
+npm install @getpromptui/core
 
 # Component library (React)
-npm install @promptui/ui
+npm install @getpromptui/ui
 ```
 
 ---
@@ -98,7 +98,7 @@ promptui compile hero.promptui --target vue
 ## Programmatic API
 
 ```ts
-import { compile } from '@promptui/core'
+import { compile } from '@getpromptui/core'
 import { readFileSync } from 'node:fs'
 
 const source = readFileSync('hero.promptui', 'utf-8')
@@ -111,7 +111,7 @@ warnings.forEach(w => console.warn(w))
 You can also use the lower-level primitives directly:
 
 ```ts
-import { parse, resolve, emitReact, emitVue } from '@promptui/core'
+import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
 
 const doc = parse(source)
 const { document, warnings } = resolve(doc)
@@ -158,9 +158,9 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 
 ---
 
-## Component library (`@promptui/ui`)
+## Component library (`@getpromptui/ui`)
 
-The `use` directive references components by path. `library/*` maps to `@promptui/ui` by default.
+The `use` directive references components by path. `library/*` maps to `@getpromptui/ui` by default.
 
 | Path | Component |
 |------|-----------|
