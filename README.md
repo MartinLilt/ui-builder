@@ -1,200 +1,208 @@
-# PromptUI Preprocessor
+# PromptUI
 
-**PromptUI** is an AI-native DSL that compiles strict semantic UI instructions into real component-based frontend templates.
+[![npm](https://img.shields.io/npm/v/@promptui/core)](https://www.npmjs.com/package/@promptui/core)
+[![license](https://img.shields.io/github/license/martinli/promptui)](LICENSE)
 
-Instead of asking AI to generate arbitrary markup, you write a PromptUI block that references an existing component, declares what can change, what must stay fixed, and what actions are wired. The preprocessor resolves those instructions into Vue, Nuxt, or React output.
+**An AI-native DSL that compiles semantic UI instructions into component-based frontend templates.**
 
-```txt
+PromptUI lets you describe UI using strict, constraint-driven blocks instead of freeform markup. You reference an existing component, declare what can change and what must stay fixed, and the preprocessor emits clean React or Vue output. No hallucinated wrappers, no invented CSS, no layout drift.
+
+---
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| [`@promptui/core`](packages/core) | Parser, resolver, emitters, and CLI |
+| [`@promptui/ui`](packages/ui) | React component library — the default component set |
+
+---
+
+## Install
+
+```bash
+# CLI
+npm install -g @promptui/core
+
+# Programmatic API
+npm install @promptui/core
+
+# Component library (React)
+npm install @promptui/ui
+```
+
+---
+
+## Quick start
+
+Create a file `hero.promptui`:
+
+```
 [Hero:main] {
   role: landing-hero
-  goal: show Vacancy Mirror as AI market intelligence platform for Upwork freelancers
+  goal: present the product as an AI market intelligence tool
 
   use: library/heroes/primary
-  look: centered dark-gradient cyberpunk-glow
+  look: centered dark-gradient
   lock: structure spacing hierarchy
 
   allow: text subtitle buttons
   ban: invent-new-layout custom-css extra-wrappers
   states: desktop tablet mobile
 
-  [Title] { text: "Vacancy Mirror" }
+  [Title] { text: "PromptUI" }
 
   [Subtitle] {
-    text: "Track Upwork trends automatically and adapt your profile before the market changes"
+    text: "Describe UI. Compile it. Ship it."
   }
 
   [PrimaryButton] {
     use: library/buttons/primary
-    text: "Join Waitlist"
-    flow: open-waitlist
+    text: "Get Started"
+    flow: open-docs
   }
 
   [SecondaryButton] {
     use: library/buttons/ghost
-    text: "Watch Demo"
-    flow: open-demo
+    text: "View on GitHub"
+    flow: open-github
   }
 }
 ```
 
+Compile to React:
+
+```bash
+promptui compile hero.promptui --target react
+```
+
+Output:
+
+```jsx
+<HeroPrimary className="centered dark-gradient">
+  <Title>{"PromptUI"}</Title>
+  <Subtitle>{"Describe UI. Compile it. Ship it."}</Subtitle>
+  <ButtonPrimary onClick={openDocs}>{"Get Started"}</ButtonPrimary>
+  <ButtonGhost onClick={openGithub}>{"View on GitHub"}</ButtonGhost>
+</HeroPrimary>
+```
+
+Or compile to Vue:
+
+```bash
+promptui compile hero.promptui --target vue
+```
+
 ---
 
-## Why
+## Programmatic API
 
-Coding models handle backend logic, APIs, and data flows well. UI generation is where they break — they invent wrappers, drift from design system constraints, hallucinate Tailwind classes, and break spacing. PromptUI replaces freeform UI generation with instruction-based assembly: reference an existing pattern, declare constraints, let the preprocessor emit clean output.
+```ts
+import { compile } from '@promptui/core'
+import { readFileSync } from 'node:fs'
+
+const source = readFileSync('hero.promptui', 'utf-8')
+const { output, warnings } = compile(source, { target: 'react' })
+
+console.log(output)
+warnings.forEach(w => console.warn(w))
+```
+
+You can also use the lower-level primitives directly:
+
+```ts
+import { parse, resolve, emitReact, emitVue } from '@promptui/core'
+
+const doc = parse(source)
+const { document, warnings } = resolve(doc)
+const jsx = emitReact(document)
+const vue = emitVue(document)
+```
 
 ---
 
 ## Syntax
 
-A PromptUI document is a tree of **blocks** and **items**. Every block has a type, an optional name, and a set of directives.
+A PromptUI file is a tree of **blocks**. Each block has a type, an optional name, directives, and optional child blocks.
 
-### Block header
-
-```txt
-[BlockType:name]
 ```
-
-`BlockType` is the semantic type (`Hero`, `Calculator`, `Pricing`). `name` is a local instance identifier.
+[BlockType:name] {
+  directive: value
+  ...
+  [ChildType] { ... }
+}
+```
 
 ### Directives
 
 | Directive | Purpose |
 |-----------|---------|
-| `role`    | Semantic role of the block (`landing-hero`, `interactive-form`) |
-| `goal`    | Natural-language intent — acts as an embedded mini-prompt |
-| `use`     | Reference component or pattern (`library/heroes/primary`) |
-| `look`    | Visual recipe as semantic tokens (`centered dark-gradient cyberpunk-glow`) |
-| `lock`    | What must not change (`structure spacing hierarchy`) |
-| `allow`   | What may be changed (`text subtitle buttons`) |
-| `ban`     | Explicitly forbidden behaviors (`invent-new-layout custom-css extra-wrappers`) |
-| `states`  | Supported responsive or interaction variants (`desktop tablet mobile`) |
-| `text`    | Literal content |
-| `flow`    | Interaction intent, mapped to handlers by compiler (`open-waitlist`) |
-| `bind`    | Data binding target (`num1`, `email`, `result`) |
+| `role`    | Semantic role: `landing-hero`, `interactive-form`, `pricing-section` |
+| `goal`    | Natural-language intent, used as a hint for AI-assisted workflows |
+| `use`     | Library reference: `library/heroes/primary`, `library/buttons/ghost` |
+| `look`    | Semantic style tokens: `centered dark-gradient rounded` |
+| `lock`    | What must not change: `structure spacing hierarchy layout` |
+| `allow`   | What may be changed: `text subtitle buttons image` |
+| `ban`     | Explicitly forbidden: `invent-new-layout custom-css extra-wrappers` |
+| `states`  | Supported variants: `desktop tablet mobile` / `default hover disabled` |
+| `text`    | Literal text content |
+| `flow`    | Interaction intent mapped to a handler: `open-waitlist`, `submit-form` |
+| `bind`    | Data binding target: `email`, `result` |
 
 ### Priority rules
 
-1. `lock` overrides `look`
-2. `ban` overrides `allow`
-3. Nested item overrides are valid only if they don't violate parent `lock` and `ban`
-4. If no child `use` is given, compiler assumes slot substitution into the parent reference
-5. `look` values are semantic tokens, not raw CSS
+- `lock` overrides `look`
+- `ban` overrides `allow`
+- Child overrides are valid only if they don't violate parent `lock` and `ban`
+- `look` tokens are semantic — they are not emitted as raw CSS classes
 
 ---
 
-## Example: Calculator
+## Component library (`@promptui/ui`)
 
-```txt
-[Calculator:main] {
-  role: interactive-form
-  goal: render calculator section using strict library references only
+The `use` directive references components by path. `library/*` maps to `@promptui/ui` by default.
 
-  use: library/sections/calc
-  look: bg-light-gray rounded shadow
-  lock: structure spacing hierarchy
+| Path | Component |
+|------|-----------|
+| `library/heroes/primary` | `HeroPrimary` |
+| `library/buttons/primary` | `ButtonPrimary` |
+| `library/buttons/ghost` | `ButtonGhost` |
+| `library/inputs/rounded` | `InputRounded` |
+| `library/headings/gradientH2` | `GradientH2` |
+| `library/results/text` | `ResultText` |
 
-  allow: text inputs buttons result
-  ban: invent-new-layout custom-css extra-wrappers
-  states: desktop tablet mobile
+All components accept a `className` prop for custom styling.
 
-  [Title] {
-    use: library/headings/gradientH2
-    text: "Calculator"
-  }
+---
 
-  [Input:num1] {
-    use: library/inputs/rounded
-    bind: num1
-    look: inline focus-blue-ring
-    states: default focused error
-  }
+## What v1 does not do
 
-  [Input:num2] {
-    use: library/inputs/rounded
-    bind: num2
-    look: inline focus-blue-ring
-    states: default focused error
-  }
+PromptUI v1 compiles **template structure only**. The following are out of scope:
 
-  [PrimaryButton] {
-    use: library/buttons/primary
-    text: "Calculate"
-    flow: calculate
-    states: default hover disabled
-    look: hover-darker hover-scale
-  }
+- Script / TypeScript logic generation
+- Conditional rendering (`if`, `v-if`)
+- Loops (`v-for`, `map`)
+- Computed props or state machines
+- Automatic data fetching
+- Full expression language
 
-  [Result:output] {
-    use: library/results/text
-    bind: result
-    look: large bold
-  }
-}
+---
+
+## Contributing
+
+Contributions are welcome. Please open an issue before submitting a PR for non-trivial changes.
+
+```bash
+git clone https://github.com/martinli/promptui
+cd promptui
+pnpm install
+pnpm build
 ```
 
----
-
-## Compilation model
-
-Three stages:
-
-1. **Parse** — PromptUI block → internal AST
-2. **Resolve** — resolve `use` references, validate `lock`/`ban`/`allow` constraints, place child items
-3. **Emit** — output target template (Nuxt 3, Vue SFC, React JSX, or abstract component tree)
-
-### Example output (Vue/Nuxt)
-
-```vue
-<HeroPrimary>
-  <template #title>Vacancy Mirror</template>
-  <template #subtitle>
-    Track Upwork trends automatically and adapt your profile before the market changes
-  </template>
-  <template #primaryAction>
-    <PrimaryButton @click="openWaitlist">Join Waitlist</PrimaryButton>
-  </template>
-  <template #secondaryAction>
-    <GhostButton @click="openDemo">Watch Demo</GhostButton>
-  </template>
-</HeroPrimary>
-```
+This is a pnpm monorepo. Each package lives in `packages/`.
 
 ---
 
-## MVP scope
+## License
 
-**In scope:** block definitions, nested items, library references, text content, visual recipes (`look`), action bindings (`flow`), data bindings (`bind`), allowed/forbidden change declarations, responsive state declarations.
-
-**Out of scope (v1):** script generation, TypeScript logic, automatic data fetching, full expression language, conditional rendering, loops, computed props, state machines.
-
-PromptUI v1 describes template assembly intent only — it does not execute logic.
-
----
-
-## Project structure
-
-```txt
-/promptui
-  /spec
-    syntax.md
-    directives.md
-    examples.md
-  /library-map
-    heroes.json
-    buttons.json
-    inputs.json
-  /compiler
-    parser.ts
-    resolver.ts
-    emit-vue.ts
-    emit-react.ts
-  /examples
-    hero.promptui
-    calculator.promptui
-/vault
-  Home.md
-  spec/
-  decisions/
-  research/
-```
+MIT © Martin Li. See [LICENSE](LICENSE).
