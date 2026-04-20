@@ -188,6 +188,21 @@ PromptUI v1 compiles **template structure only**. The following are out of scope
 
 ---
 
+## Claude Code skill
+
+If you use [Claude Code](https://claude.ai/code), you can add the PromptUI skill so Claude understands the DSL, compiler pipeline, and component library out of the box.
+
+```bash
+# copy the skill into your project
+mkdir -p .claude/commands
+curl -o .claude/commands/promptui.md \
+  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
+```
+
+Then type `/promptui` in Claude Code to activate it.
+
+---
+
 ## Contributing
 
 Contributions are welcome. Please open an issue before submitting a PR for non-trivial changes.
