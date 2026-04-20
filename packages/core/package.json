@@ -1,5 +1,5 @@
 {
-  "name": "@promptui/core",
+  "name": "@getpromptui/core",
   "version": "0.1.0",
   "description": "PromptUI preprocessor — compiles .promptui DSL into Vue/React templates",
   "main": "dist/index.js",
