@@ -1,40 +1,42 @@
 import { Block, Document } from '../types'
-
-function singularize(word: string): string {
-  if (word.endsWith('ies')) return word.slice(0, -3) + 'y'
-  if (word.endsWith('oes')) return word.slice(0, -2)   // heroes -> hero
-  if (word.endsWith('ses') || word.endsWith('xes') || word.endsWith('ches') || word.endsWith('shes')) return word.slice(0, -2)
-  if (word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1)
-  return word
-}
-
-function useToComponentName(use: string): string {
-  // library/heroes/primary -> HeroPrimary
-  // library/buttons/ghost -> ButtonGhost
-  const parts = use.split('/').filter(Boolean)
-  return parts
-    .slice(Math.max(0, parts.length - 2))
-    .map(p => { const s = singularize(p); return s.charAt(0).toUpperCase() + s.slice(1) })
-    .join('')
-}
+import { lookupByUse, isKnownComponent, packageForComponent } from '../library'
 
 function lookToClassName(look: string | undefined): string {
   if (!look) return ''
   return look.split(/\s+/).filter(Boolean).join(' ')
 }
 
+function flowToHandler(flow: string): string {
+  return flow.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
+}
+
+function componentNameFor(block: Block): string {
+  const use = block.directives.get('use')
+  if (use) {
+    const entry = lookupByUse(use)
+    if (entry) return entry.main
+  }
+  // Sub-part or unresolved block: fall back to blockType
+  return block.blockType
+}
+
+function collectUsedComponents(block: Block, used: Set<string>): void {
+  const name = componentNameFor(block)
+  if (isKnownComponent(name)) used.add(name)
+  for (const child of block.children) collectUsedComponents(child, used)
+}
+
 function emitBlock(block: Block, indent: number): string {
   const pad = '  '.repeat(indent)
   const childPad = '  '.repeat(indent + 1)
 
-  const use = block.directives.get('use')
   const text = block.directives.get('text')
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
   const className = lookToClassName(look)
 
-  const componentName = use ? useToComponentName(use) : block.blockType
+  const componentName = componentNameFor(block)
 
   const attrs: string[] = []
   if (className) attrs.push(`className="${className}"`)
@@ -60,12 +62,35 @@ function emitBlock(block: Block, indent: number): string {
   return lines.join('\n')
 }
 
-function flowToHandler(flow: string): string {
-  // open-waitlist -> openWaitlist
-  return flow.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
+function groupImportsByPackage(components: Set<string>): Map<string, string[]> {
+  const byPkg = new Map<string, string[]>()
+  for (const name of components) {
+    const pkg = packageForComponent(name)
+    if (!pkg) continue
+    const arr = byPkg.get(pkg)
+    if (arr) arr.push(name)
+    else byPkg.set(pkg, [name])
+  }
+  for (const [, names] of byPkg) names.sort()
+  return byPkg
+}
+
+function emitImports(components: Set<string>): string {
+  const byPkg = groupImportsByPackage(components)
+  if (byPkg.size === 0) return ''
+  const lines: string[] = []
+  for (const [pkg, names] of [...byPkg].sort(([a], [b]) => a.localeCompare(b))) {
+    lines.push(`import { ${names.join(', ')} } from '${pkg}'`)
+  }
+  return lines.join('\n')
 }
 
 export function emitReact(doc: Document): string {
-  const blocks = doc.blocks.map(b => emitBlock(b, 0)).join('\n\n')
-  return blocks
+  const used = new Set<string>()
+  for (const block of doc.blocks) collectUsedComponents(block, used)
+
+  const imports = emitImports(used)
+  const body = doc.blocks.map(b => emitBlock(b, 0)).join('\n\n')
+
+  return imports ? `${imports}\n\n${body}` : body
 }

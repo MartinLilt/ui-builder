@@ -1,0 +1,27 @@
+[Section:signup] {
+  use: library/cards/default
+  role: signup-card
+  goal: "Compact card that collects an email and returns a confirmation toast"
+  lock: structure hierarchy
+  allow: text subtitle buttons
+
+  [CardHeader] {
+    [CardTitle] { text: "Join the waitlist" }
+    [CardDescription] { text: "We'll ping you when PromptUI ships." }
+  }
+
+  [CardContent] {
+    [Input] {
+      use: library/inputs/default
+      bind: email
+    }
+  }
+
+  [CardFooter] {
+    [Button] {
+      use: library/buttons/default
+      flow: submit-waitlist
+      text: "Notify me"
+    }
+  }
+}

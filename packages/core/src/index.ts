@@ -2,6 +2,14 @@ export { parse, ParseError } from './parser'
 export { resolve } from './resolver'
 export { emitReact } from './emitters/react'
 export { emitVue } from './emitters/vue'
+export {
+  LIBRARY_ENTRIES,
+  lookupByUse,
+  lookupByPart,
+  isKnownComponent,
+  packageForComponent,
+} from './library'
+export type { LibraryEntry } from './library'
 export type { Block, Document, CompileOptions, CompileResult, EmitTarget } from './types'
 export type { ResolvedDocument, ResolveWarning } from './resolver'
 

@@ -1,4 +1,5 @@
 import { Block, Document } from './types'
+import { lookupByUse, isKnownComponent } from './library'
 
 export interface ResolveWarning {
   message: string
@@ -52,8 +53,15 @@ function validateBlock(block: Block, warnings: ResolveWarning[]): void {
     }
   }
 
-  if (!block.directives.has('use')) {
-    warnings.push({ message: 'No "use" directive — output will not be anchored to a library component', blockType: block.blockType, name: block.name })
+  const useValue = block.directives.get('use')
+  if (!useValue) {
+    // Child blocks may reference library sub-parts by blockType (e.g. [AccordionItem]) — those are fine.
+    // Only warn at the root level where a missing `use` means output won't resolve to a real component.
+    if (!isKnownComponent(block.blockType)) {
+      warnings.push({ message: 'No "use" directive — output will not be anchored to a library component', blockType: block.blockType, name: block.name })
+    }
+  } else if (!lookupByUse(useValue)) {
+    warnings.push({ message: `Unknown library path: "${useValue}"`, blockType: block.blockType, name: block.name })
   }
 
   for (const child of block.children) {
