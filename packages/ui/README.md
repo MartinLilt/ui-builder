@@ -1,7 +1,7 @@
 # @getpromptui/ui
 
 [![npm](https://img.shields.io/npm/v/@getpromptui/ui)](https://www.npmjs.com/package/@getpromptui/ui)
-[![license](https://img.shields.io/npm/l/@getpromptui/ui)](https://github.com/MartinLilt/ui-builder/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@getpromptui/ui)](https://github.com/MartinLilt/promptui/blob/main/LICENSE)
 
 React component library for the PromptUI preprocessor. Provides the default `library/*` components that [`@getpromptui/core`](https://www.npmjs.com/package/@getpromptui/core) resolves `use` paths against.
 
@@ -72,7 +72,7 @@ Compile with `promptui compile <file>`. See [`@getpromptui/core`](https://www.np
 - **Disclosure** — Accordion (3 variants), Collapsible, Carousel.
 - **Other** — Toggle, ToggleGroup, Select.
 
-For the full list with sub-parts, see the [catalog on GitHub](https://github.com/MartinLilt/ui-builder#component-library) or inspect `LIBRARY_ENTRIES` from `@getpromptui/core`.
+For the full list with sub-parts, see the [catalog on GitHub](https://github.com/MartinLilt/promptui#component-library) or inspect `LIBRARY_ENTRIES` from `@getpromptui/core`.
 
 ## Changelog
 

@@ -11,13 +11,13 @@
     "shadcn",
     "headless"
   ],
-  "homepage": "https://github.com/MartinLilt/ui-builder#readme",
+  "homepage": "https://github.com/MartinLilt/promptui#readme",
   "bugs": {
-    "url": "https://github.com/MartinLilt/ui-builder/issues"
+    "url": "https://github.com/MartinLilt/promptui/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MartinLilt/ui-builder.git",
+    "url": "git+https://github.com/MartinLilt/promptui.git",
     "directory": "packages/ui"
   },
   "license": "MIT",

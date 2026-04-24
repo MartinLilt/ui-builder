@@ -1,7 +1,7 @@
 # @getpromptui/core
 
 [![npm](https://img.shields.io/npm/v/@getpromptui/core)](https://www.npmjs.com/package/@getpromptui/core)
-[![license](https://img.shields.io/npm/l/@getpromptui/core)](https://github.com/MartinLilt/ui-builder/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@getpromptui/core)](https://github.com/MartinLilt/promptui/blob/main/LICENSE)
 
 Preprocessor for the PromptUI DSL — compiles `.promptui` files into React or Vue templates with imports resolved against a component registry.
 
@@ -120,7 +120,7 @@ import { LIBRARY_ENTRIES, lookupByUse, isKnownComponent } from '@getpromptui/cor
 
 101 registered `use`-paths out of the box, mapped to components in [`@getpromptui/ui`](https://www.npmjs.com/package/@getpromptui/ui). The resolver warns on unknown paths; the emitter auto-imports main components + any sub-parts referenced as nested blocks.
 
-See the [full catalog](https://github.com/MartinLilt/ui-builder#component-library) or `import { LIBRARY_ENTRIES } from '@getpromptui/core'`.
+See the [full catalog](https://github.com/MartinLilt/promptui#component-library) or `import { LIBRARY_ENTRIES } from '@getpromptui/core'`.
 
 ## Scope limits (v0.2)
 

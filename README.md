@@ -2,7 +2,7 @@
 
 [![@getpromptui/core](https://img.shields.io/npm/v/@getpromptui/core?label=%40getpromptui%2Fcore)](https://www.npmjs.com/package/@getpromptui/core)
 [![@getpromptui/ui](https://img.shields.io/npm/v/@getpromptui/ui?label=%40getpromptui%2Fui)](https://www.npmjs.com/package/@getpromptui/ui)
-[![license](https://img.shields.io/github/license/MartinLilt/ui-builder)](LICENSE)
+[![license](https://img.shields.io/github/license/MartinLilt/promptui)](LICENSE)
 
 **An AI-native DSL that compiles semantic UI instructions into component-based frontend templates.**
 
@@ -269,7 +269,7 @@ If you use [Claude Code](https://claude.ai/code), the repo ships with a skill th
 # copy the skill into your project
 mkdir -p .claude/commands
 curl -o .claude/commands/promptui.md \
-  https://raw.githubusercontent.com/MartinLilt/ui-builder/main/.claude/commands/promptui.md
+  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
 ```
 
 Then type `/promptui` in Claude Code to activate it.
@@ -279,7 +279,7 @@ Then type `/promptui` in Claude Code to activate it.
 ## Contributing
 
 ```bash
-git clone https://github.com/MartinLilt/ui-builder
+git clone https://github.com/MartinLilt/promptui
 cd ui-builder
 pnpm install
 pnpm build
