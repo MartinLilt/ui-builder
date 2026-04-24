@@ -1,7 +1,30 @@
 {
   "name": "@getpromptui/core",
-  "version": "0.1.0",
-  "description": "PromptUI preprocessor — compiles .promptui DSL into Vue/React templates",
+  "version": "0.2.0",
+  "description": "PromptUI preprocessor — compiles .promptui DSL into React or Vue templates",
+  "keywords": [
+    "promptui",
+    "dsl",
+    "preprocessor",
+    "ui",
+    "ai",
+    "compiler",
+    "react",
+    "vue",
+    "template",
+    "codegen"
+  ],
+  "homepage": "https://github.com/MartinLilt/ui-builder#readme",
+  "bugs": {
+    "url": "https://github.com/MartinLilt/ui-builder/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinLilt/ui-builder.git",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
+  "author": "Martin Li",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,10 +38,19 @@
       "require": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
     "@types/node": "^20",
