@@ -58,6 +58,18 @@ Write a `.promptui` file:
 
 Compile with `promptui compile <file>`. See [`@getpromptui/core`](https://www.npmjs.com/package/@getpromptui/core).
 
+## Use with Claude Code
+
+The intended workflow is: Claude Code generates `.promptui` files against a typed catalog, the preprocessor compiles them into JSX that imports from this package. Install the skill to let Claude use the library without guessing component names:
+
+```bash
+mkdir -p .claude/commands
+curl -o .claude/commands/promptui.md \
+  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
+```
+
+Then `/promptui` in Claude Code teaches Claude all 101 `use`-paths, sub-parts, and variants shipped by this package.
+
 ## Component catalog
 
 50+ categories, 101 total entries across defaults and structural variants. Highlights:
@@ -75,6 +87,10 @@ Compile with `promptui compile <file>`. See [`@getpromptui/core`](https://www.np
 For the full list with sub-parts, see the [catalog on GitHub](https://github.com/MartinLilt/promptui#component-library) or inspect `LIBRARY_ENTRIES` from `@getpromptui/core`.
 
 ## Changelog
+
+### 0.2.2
+
+Docs-only: added a "Use with Claude Code" section linking to the skill. No code changes.
 
 ### 0.2.1
 

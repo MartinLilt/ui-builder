@@ -4,9 +4,56 @@
 [![@getpromptui/ui](https://img.shields.io/npm/v/@getpromptui/ui?label=%40getpromptui%2Fui)](https://www.npmjs.com/package/@getpromptui/ui)
 [![license](https://img.shields.io/github/license/MartinLilt/promptui)](LICENSE)
 
-**An AI-native DSL that compiles semantic UI instructions into component-based frontend templates.**
+**The typed contract between your LLM and your frontend.**
 
-PromptUI lets you describe UI using strict, constraint-driven blocks instead of freeform markup. You reference an existing component, declare what can change and what must stay fixed, and the preprocessor emits clean React or Vue output with imports resolved against a component registry. No hallucinated wrappers, no invented CSS, no layout drift.
+PromptUI is an AI-native UI DSL. You give Claude (or any coding agent) a catalog of ~100 anchored components and a constraint-driven block grammar; it emits a `.promptui` file; the preprocessor compiles deterministic React or Vue — imports resolved, no hallucinated components, no invented CSS, no layout drift.
+
+[Install](#install) · **[Use with Claude Code](#use-with-claude-code)** · [Quick start](#quick-start) · [Component library](#component-library)
+
+---
+
+## Use with Claude Code
+
+PromptUI ships with a Claude Code skill that teaches Claude the full DSL, the 101 registered `use`-paths, sub-part relationships, and the `variant:`-vs-new-file rule. One command to install:
+
+```bash
+mkdir -p .claude/commands
+curl -o .claude/commands/promptui.md \
+  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
+```
+
+Then in Claude Code:
+
+```
+/promptui
+
+make a signup card: email input + destructive alert on error + loading button
+```
+
+Claude writes a valid `.promptui`:
+
+```
+[Signup] {
+  use: library/cards/default
+  [CardHeader] { [CardTitle] { text: "Join the waitlist" } }
+  [CardContent] {
+    [Email] { use: library/inputs/email bind: email }
+    [Error] {
+      use: library/alerts/default
+      variant: destructive
+      [AlertTitle]       { text: "Invalid email" }
+      [AlertDescription] { text: "Please provide a valid address." }
+    }
+  }
+  [CardFooter] {
+    [Submit] { use: library/buttons/loading text: "Notify me" flow: submit-waitlist }
+  }
+}
+```
+
+Run `npx promptui compile` and you have production JSX with imports at the top. Because Claude resolves against a typed registry, not guessing, output is consistent run-to-run.
+
+This is the intended workflow. The CLI works standalone, but the skill is how you get the value without writing `.promptui` by hand.
 
 ---
 
@@ -261,21 +308,6 @@ PromptUI compiles **structure + imports** only. Not supported:
 
 ---
 
-## Claude Code skill
-
-If you use [Claude Code](https://claude.ai/code), the repo ships with a skill that teaches Claude the full DSL, compiler pipeline, and component catalog:
-
-```bash
-# copy the skill into your project
-mkdir -p .claude/commands
-curl -o .claude/commands/promptui.md \
-  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
-```
-
-Then type `/promptui` in Claude Code to activate it.
-
----
-
 ## Contributing
 
 ```bash
@@ -290,6 +322,14 @@ pnpm monorepo with packages under `packages/`. Please open an issue before submi
 ---
 
 ## Changelog
+
+### 0.2.2
+
+Docs: promoted the Claude Code skill to a hero section in the root + core READMEs. No code changes.
+
+### 0.2.1
+
+Metadata-only: repository URLs updated to `MartinLilt/promptui` after GitHub rename.
 
 ### 0.2.0
 

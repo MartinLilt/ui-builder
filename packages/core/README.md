@@ -71,6 +71,28 @@ import { ButtonDefault, HeroActions, HeroSplit, HeroSplitContent, HeroSplitVisua
 
 Vue output is a full SFC (`<script setup lang="ts">` + `<template>`).
 
+## Use with Claude Code
+
+**This is the intended workflow.** PromptUI exists so an LLM can describe UI against a typed catalog instead of hallucinating markup. The repo ships with a Claude Code skill that teaches Claude the full DSL, the 101 registered `use`-paths, sub-part relationships, and the `variant:`-vs-new-file rule.
+
+```bash
+mkdir -p .claude/commands
+curl -o .claude/commands/promptui.md \
+  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
+```
+
+Then in Claude Code:
+
+```
+/promptui
+
+make a signup card: email input + destructive alert on error + loading button
+```
+
+Claude emits a valid `.promptui`, `npx promptui compile` gives you production JSX with imports at the top. No prompt engineering, no guessed component names.
+
+If you write `.promptui` by hand, the same CLI works. The skill is just how you get the value faster.
+
 ## CLI
 
 ```bash
@@ -127,6 +149,10 @@ See the [full catalog](https://github.com/MartinLilt/promptui#component-library)
 The compiler emits **structure + imports** only. Not supported: conditionals, loops, computed props, state management, data fetching.
 
 ## Changelog
+
+### 0.2.2
+
+Docs-only: promoted the Claude Code skill to a top-level section (this is the intended workflow). No code changes.
 
 ### 0.2.1
 
