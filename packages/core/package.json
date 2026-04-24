@@ -1,6 +1,6 @@
 {
   "name": "@getpromptui/core",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "PromptUI preprocessor — compiles .promptui DSL into React or Vue templates",
   "keywords": [
     "promptui",
@@ -36,6 +36,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.js"
     }
   },
   "files": [

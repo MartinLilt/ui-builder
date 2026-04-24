@@ -93,11 +93,45 @@ Claude emits a valid `.promptui`, `npx promptui compile` gives you production JS
 
 If you write `.promptui` by hand, the same CLI works. The skill is just how you get the value faster.
 
+## Use with Vite
+
+Drop `.promptui` files straight into your source tree — the plugin compiles them on import.
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import promptui from '@getpromptui/core/vite'
+
+export default defineConfig({
+  plugins: [react(), promptui()],
+})
+```
+
+```ts
+// src/promptui.d.ts — for TypeScript
+declare module '*.promptui' {
+  const Component: React.ComponentType<any>
+  export default Component
+}
+```
+
+Then anywhere in your code:
+
+```tsx
+import Signup from './signup.promptui'
+
+<Signup onSubmitWaitlist={() => fetch('/api/waitlist', ...)} />
+```
+
+HMR reloads the page on `.promptui` save. No manual compile step.
+
 ## CLI
 
 ```bash
 promptui compile <file.promptui> --target react
 promptui compile <file.promptui> --target vue
+promptui compile signup.promptui --export Signup -o src/Signup.tsx --watch
 ```
 
 ## Programmatic API
@@ -149,6 +183,12 @@ See the [full catalog](https://github.com/MartinLilt/promptui#component-library)
 The compiler emits **structure + imports** only. Not supported: conditionals, loops, computed props, state management, data fetching.
 
 ## Changelog
+
+### 0.3.1
+
+- `--watch` / `-w` flag on CLI (recompile on file change).
+- `--output <file>` / `-o <file>` flag (write to file instead of stdout).
+- **Vite plugin** at `@getpromptui/core/vite`. Drop into `vite.config.ts` and `import Component from './file.promptui'` works — the plugin compiles, wraps as React component, adds default export, and HMR-reloads on save.
 
 ### 0.3.0
 
