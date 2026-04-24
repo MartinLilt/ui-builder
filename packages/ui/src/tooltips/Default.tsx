@@ -1,59 +1,55 @@
 import React from 'react'
+import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 
-export interface TooltipDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {}
+
+export function TooltipProvider(props: TooltipProviderProps) {
+  return <TooltipPrimitive.Provider delayDuration={200} {...props} />
+}
+
+export interface TooltipDefaultProps {
   open?: boolean
-  children?: React.ReactNode
-}
-
-export function TooltipDefault({ open = false, children, className, ...props }: TooltipDefaultProps) {
-  return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-tooltip-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
-
-export interface TooltipTriggerProps extends React.HTMLAttributes<HTMLSpanElement> {
-  children?: React.ReactNode
-}
-
-export function TooltipTrigger({ children, className, ...props }: TooltipTriggerProps) {
-  return (
-    <span className={['promptui-tooltip-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </span>
-  )
-}
-
-export interface TooltipContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
-
-export function TooltipContent({ children, className, ...props }: TooltipContentProps) {
-  return (
-    <div
-      role="tooltip"
-      className={['promptui-tooltip-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
-
-export interface TooltipProviderProps extends React.HTMLAttributes<HTMLDivElement> {
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
   delayDuration?: number
   children?: React.ReactNode
 }
 
-export function TooltipProvider({ delayDuration: _delayDuration, children, className, ...props }: TooltipProviderProps) {
+export function TooltipDefault({ open, defaultOpen, onOpenChange, delayDuration, children }: TooltipDefaultProps) {
   return (
-    <div className={['promptui-tooltip-provider', className].filter(Boolean).join(' ')} {...props}>
+    <TooltipPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} delayDuration={delayDuration}>
       {children}
-    </div>
+    </TooltipPrimitive.Root>
   )
 }
+
+export interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> {}
+
+export const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
+  function TooltipTrigger({ className, ...props }, ref) {
+    return (
+      <TooltipPrimitive.Trigger
+        ref={ref}
+        className={['promptui-tooltip-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
+
+export interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {}
+
+export const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
+  function TooltipContent({ className, sideOffset = 4, ...props }, ref) {
+    return (
+      <TooltipPrimitive.Portal>
+        <TooltipPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={['promptui-tooltip-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </TooltipPrimitive.Portal>
+    )
+  }
+)

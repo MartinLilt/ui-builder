@@ -88,6 +88,18 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.4.0
+
+**Behavior arrives.** Three overlay components now wrap Radix UI primitives for real a11y and interaction. Breaking: composition moved to shadcn-style `<Root><Trigger/><Content/></Root>`.
+
+- `DialogDefault` → `@radix-ui/react-dialog`. Focus trap, escape-to-close, scroll-lock, portal rendering, aria attributes — all handled. New sub-part `DialogContent` wraps Radix Portal + Overlay + Content. `variant: default | fullscreen | compact` moved from DialogDefault to DialogContent.
+- `PopoverDefault` → `@radix-ui/react-popover`. Click-outside dismiss, keyboard nav, Floating UI positioning. `PopoverContent` now supports `align` / `sideOffset`.
+- `TooltipDefault` + `TooltipRich` → `@radix-ui/react-tooltip`. Hover/focus delays, proper keyboard support, portal.
+- `TooltipProvider` is now real — wrap your app root with it for shared `delayDuration`.
+- Animations: `promptui-dialog-overlay` fade, dialog content scale/translate, popover/tooltip float-in.
+
+Migration: existing `<DialogDefault open><DialogTitle/></DialogDefault>` becomes `<DialogDefault open><DialogContent><DialogTitle/></DialogContent></DialogDefault>`.
+
 ### 0.3.0
 
 - **Ships default CSS.** `import '@getpromptui/ui/styles.css'` and every component renders with decent defaults — tokens on `:root`, 68 KB / 589 selectors covering all 101 registered `use`-paths. Dark mode via `[data-theme="dark"]` or `prefers-color-scheme`.

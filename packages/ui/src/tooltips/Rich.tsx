@@ -1,41 +1,48 @@
 import React from 'react'
+import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 
-export interface TooltipRichProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TooltipRichProps {
   open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  delayDuration?: number
   children?: React.ReactNode
 }
 
-export function TooltipRich({ open = false, children, className, ...props }: TooltipRichProps) {
+export function TooltipRich({ open, defaultOpen, onOpenChange, delayDuration, children }: TooltipRichProps) {
   return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-tooltip-rich', className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <TooltipPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} delayDuration={delayDuration}>
       {children}
-    </div>
+    </TooltipPrimitive.Root>
   )
 }
 
-export function TooltipRichTrigger({ children, className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
-  return (
-    <span className={['promptui-tooltip-rich-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </span>
-  )
-}
+export const TooltipRichTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>>(
+  function TooltipRichTrigger({ className, ...props }, ref) {
+    return (
+      <TooltipPrimitive.Trigger
+        ref={ref}
+        className={['promptui-tooltip-rich-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function TooltipRichContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="tooltip"
-      className={['promptui-tooltip-rich-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TooltipRichContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>>(
+  function TooltipRichContent({ className, sideOffset = 6, ...props }, ref) {
+    return (
+      <TooltipPrimitive.Portal>
+        <TooltipPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={['promptui-tooltip-rich-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </TooltipPrimitive.Portal>
+    )
+  }
+)
 
 export function TooltipRichTitle({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (

@@ -1,51 +1,50 @@
 import React from 'react'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
 
-export interface PopoverDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverDefaultProps {
   open?: boolean
+  defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  modal?: boolean
   children?: React.ReactNode
 }
 
-export function PopoverDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: PopoverDefaultProps) {
+export function PopoverDefault({ open, defaultOpen, onOpenChange, modal, children }: PopoverDefaultProps) {
   return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-popover-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <PopoverPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal={modal}>
       {children}
-    </div>
+    </PopoverPrimitive.Root>
   )
 }
 
-export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children?: React.ReactNode
-}
+export interface PopoverTriggerProps extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger> {}
 
-export function PopoverTrigger({ children, className, ...props }: PopoverTriggerProps) {
-  return (
-    <button
-      type="button"
-      className={['promptui-popover-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
+  function PopoverTrigger({ className, ...props }, ref) {
+    return (
+      <PopoverPrimitive.Trigger
+        ref={ref}
+        className={['promptui-popover-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
+export interface PopoverContentProps extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> {}
 
-export function PopoverContent({ children, className, ...props }: PopoverContentProps) {
-  return (
-    <div
-      role="dialog"
-      className={['promptui-popover-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
+  function PopoverContent({ className, align = 'center', sideOffset = 6, ...props }, ref) {
+    return (
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          ref={ref}
+          align={align}
+          sideOffset={sideOffset}
+          className={['promptui-popover-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </PopoverPrimitive.Portal>
+    )
+  }
+)

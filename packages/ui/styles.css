@@ -615,6 +615,23 @@
  * Overlay primitives — floating panels with shadow
  * ------------------------------------------------------------------ */
 
+.promptui-dialog-overlay,
+.promptui-alert-dialog-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 49;
+  animation: promptui-overlay-in 0.15s ease-out;
+}
+@keyframes promptui-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes promptui-content-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes promptui-float-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .promptui-dialog-default,
 .promptui-alert-dialog-default,
 .promptui-sheet-default,
@@ -622,6 +639,17 @@
   position: fixed; z-index: 50;
   background: var(--promptui-bg); color: var(--promptui-fg);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.promptui-dialog-default[data-state="open"],
+.promptui-alert-dialog-default[data-state="open"] {
+  animation: promptui-content-in 0.18s ease-out;
+}
+
+.promptui-popover-content[data-state="open"],
+.promptui-tooltip-content[data-state="delayed-open"],
+.promptui-tooltip-rich-content[data-state="delayed-open"] {
+  animation: promptui-float-in 0.12s ease-out;
 }
 
 .promptui-dialog-default,

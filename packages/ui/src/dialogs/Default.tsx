@@ -1,56 +1,69 @@
 import React from 'react'
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 export type DialogVariant = 'default' | 'fullscreen' | 'compact'
 
-export interface DialogDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DialogDefaultProps {
   open?: boolean
+  defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  variant?: DialogVariant
+  modal?: boolean
   children?: React.ReactNode
 }
 
-export function DialogDefault({
-  open = false,
-  onOpenChange: _onOpenChange,
-  variant = 'default',
-  children,
-  className,
-  ...props
-}: DialogDefaultProps) {
-  if (!open) return null
+/**
+ * Root. Wraps the whole dialog tree. Use `<DialogTrigger>` + `<DialogContent>` inside.
+ * Open state can be controlled (`open` + `onOpenChange`) or uncontrolled (`defaultOpen`).
+ */
+export function DialogDefault({ open, defaultOpen, onOpenChange, modal, children }: DialogDefaultProps) {
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      data-state="open"
-      data-variant={variant}
-      className={[
-        'promptui-dialog-default',
-        `promptui-dialog-default--${variant}`,
-        className,
-      ].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <DialogPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal={modal}>
       {children}
-    </div>
+    </DialogPrimitive.Root>
   )
 }
 
-export function DialogTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" className={['promptui-dialog-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </button>
-  )
+export interface DialogTriggerProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> {}
+
+export const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
+  function DialogTrigger({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Trigger
+        ref={ref}
+        className={['promptui-dialog-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
+
+export interface DialogContentProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+  variant?: DialogVariant
+  /** When true, hides the default overlay. */
+  noOverlay?: boolean
 }
 
-export function DialogContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-dialog-content', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
+  function DialogContent({ variant = 'default', noOverlay, className, children, ...props }, ref) {
+    return (
+      <DialogPrimitive.Portal>
+        {!noOverlay && <DialogPrimitive.Overlay className="promptui-dialog-overlay" />}
+        <DialogPrimitive.Content
+          ref={ref}
+          data-variant={variant}
+          className={[
+            'promptui-dialog-default',
+            `promptui-dialog-default--${variant}`,
+            className,
+          ].filter(Boolean).join(' ')}
+          {...props}
+        >
+          {children}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    )
+  }
+)
 
 export function DialogHeader({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -68,26 +81,41 @@ export function DialogFooter({ children, className, ...props }: React.HTMLAttrib
   )
 }
 
-export function DialogTitle({ children, className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2 className={['promptui-dialog-title', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </h2>
-  )
-}
+export const DialogTitle = React.forwardRef<HTMLHeadingElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>>(
+  function DialogTitle({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Title
+        ref={ref}
+        className={['promptui-dialog-title', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DialogDescription({ children, className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={['promptui-dialog-description', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </p>
-  )
-}
+export const DialogDescription = React.forwardRef<HTMLParagraphElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>>(
+  function DialogDescription({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Description
+        ref={ref}
+        className={['promptui-dialog-description', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DialogClose({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" aria-label="Close" className={['promptui-dialog-close', className].filter(Boolean).join(' ')} {...props}>
-      {children ?? '×'}
-    </button>
-  )
-}
+export const DialogClose = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>>(
+  function DialogClose({ className, children, ...props }, ref) {
+    return (
+      <DialogPrimitive.Close
+        ref={ref}
+        aria-label="Close"
+        className={['promptui-dialog-close', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        {children ?? '×'}
+      </DialogPrimitive.Close>
+    )
+  }
+)
