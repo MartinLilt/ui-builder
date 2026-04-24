@@ -1,7 +1,7 @@
 [Section:signup] {
   use: library/cards/default
   role: signup-card
-  goal: "Compact card that collects an email and returns a confirmation toast"
+  goal: "Card that collects an email and shows a destructive alert on error"
   lock: structure hierarchy
   allow: text subtitle buttons
 
@@ -15,11 +15,18 @@
       use: library/inputs/default
       bind: email
     }
+    [Alert] {
+      use: library/alerts/default
+      variant: destructive
+      [AlertTitle] { text: "Invalid email" }
+      [AlertDescription] { text: "Please provide a valid address." }
+    }
   }
 
   [CardFooter] {
     [Button] {
       use: library/buttons/default
+      variant: destructive
       flow: submit-waitlist
       text: "Notify me"
     }

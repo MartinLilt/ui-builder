@@ -7,6 +7,8 @@ export interface LibraryEntry {
   parts: string[]
   /** npm package to import from */
   package: string
+  /** Allowed values for the `variant:` directive. Omit if the component has no variant prop. */
+  variants?: string[]
 }
 
 const PKG = '@getpromptui/ui'
@@ -32,6 +34,7 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     main: 'AlertDefault',
     parts: ['AlertTitle', 'AlertDescription'],
     package: PKG,
+    variants: ['default', 'destructive'],
   },
   {
     use: 'library/alertDialogs/default',
@@ -55,7 +58,13 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     parts: ['AvatarImage', 'AvatarFallback'],
     package: PKG,
   },
-  { use: 'library/badges/default', main: 'BadgeDefault', parts: [], package: PKG },
+  {
+    use: 'library/badges/default',
+    main: 'BadgeDefault',
+    parts: [],
+    package: PKG,
+    variants: ['default', 'secondary', 'destructive', 'outline'],
+  },
   {
     use: 'library/breadcrumbs/default',
     main: 'BreadcrumbDefault',
@@ -69,7 +78,27 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     ],
     package: PKG,
   },
-  { use: 'library/buttons/default', main: 'ButtonDefault', parts: [], package: PKG },
+  {
+    use: 'library/buttons/default',
+    main: 'ButtonDefault',
+    parts: [],
+    package: PKG,
+    variants: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+  },
+  {
+    use: 'library/buttons/icon',
+    main: 'ButtonIcon',
+    parts: [],
+    package: PKG,
+    variants: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+  },
+  {
+    use: 'library/buttons/loading',
+    main: 'ButtonLoading',
+    parts: [],
+    package: PKG,
+    variants: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+  },
   { use: 'library/calendars/default', main: 'CalendarDefault', parts: [], package: PKG },
   {
     use: 'library/cards/default',
@@ -175,6 +204,15 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     package: PKG,
   },
   { use: 'library/inputs/default', main: 'InputDefault', parts: [], package: PKG },
+  { use: 'library/inputs/email', main: 'InputEmail', parts: [], package: PKG },
+  { use: 'library/inputs/password', main: 'InputPassword', parts: [], package: PKG },
+  { use: 'library/inputs/search', main: 'InputSearch', parts: [], package: PKG },
+  { use: 'library/inputs/number', main: 'InputNumber', parts: [], package: PKG },
+  { use: 'library/inputs/file', main: 'InputFile', parts: [], package: PKG },
+  { use: 'library/inputs/date', main: 'InputDate', parts: [], package: PKG },
+  { use: 'library/inputs/withIcon', main: 'InputWithIcon', parts: [], package: PKG },
+  { use: 'library/inputs/withPrefix', main: 'InputWithPrefix', parts: [], package: PKG },
+  { use: 'library/inputs/withSuffix', main: 'InputWithSuffix', parts: [], package: PKG },
   {
     use: 'library/inputOtps/default',
     main: 'InputOtpDefault',
@@ -319,6 +357,7 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
       'ToastViewport',
     ],
     package: PKG,
+    variants: ['default', 'destructive'],
   },
   { use: 'library/toggles/default', main: 'ToggleDefault', parts: [], package: PKG },
   {

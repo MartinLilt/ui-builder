@@ -33,12 +33,14 @@ function emitBlock(block: Block, indent: number): string {
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
+  const variant = block.directives.get('variant')
   const cls = lookToClass(look)
 
   const tag = componentNameFor(block)
 
   const attrs: string[] = []
   if (cls) attrs.push(`class="${cls}"`)
+  if (variant) attrs.push(`variant="${variant}"`)
   if (bind) attrs.push(`:modelValue="${bind}" @update:modelValue="${bind} = $event"`)
   if (flow) attrs.push(`@click="${flowToHandler(flow)}"`)
 

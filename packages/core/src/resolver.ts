@@ -54,14 +54,26 @@ function validateBlock(block: Block, warnings: ResolveWarning[]): void {
   }
 
   const useValue = block.directives.get('use')
+  const entry = useValue ? lookupByUse(useValue) : undefined
   if (!useValue) {
     // Child blocks may reference library sub-parts by blockType (e.g. [AccordionItem]) — those are fine.
     // Only warn at the root level where a missing `use` means output won't resolve to a real component.
     if (!isKnownComponent(block.blockType)) {
       warnings.push({ message: 'No "use" directive — output will not be anchored to a library component', blockType: block.blockType, name: block.name })
     }
-  } else if (!lookupByUse(useValue)) {
+  } else if (!entry) {
     warnings.push({ message: `Unknown library path: "${useValue}"`, blockType: block.blockType, name: block.name })
+  }
+
+  const variant = block.directives.get('variant')
+  if (variant !== undefined) {
+    if (!entry) {
+      warnings.push({ message: `"variant" directive requires a valid "use" — ignored`, blockType: block.blockType, name: block.name })
+    } else if (!entry.variants) {
+      warnings.push({ message: `Library entry "${entry.use}" does not declare variants — "variant: ${variant}" ignored`, blockType: block.blockType, name: block.name })
+    } else if (!entry.variants.includes(variant)) {
+      warnings.push({ message: `Unknown variant "${variant}" for "${entry.use}". Allowed: ${entry.variants.join(', ')}`, blockType: block.blockType, name: block.name })
+    }
   }
 
   for (const child of block.children) {

@@ -67,6 +67,12 @@ export type {
 export { ButtonDefault } from './buttons/Default'
 export type { ButtonDefaultProps, ButtonVariant, ButtonSize } from './buttons/Default'
 
+export { ButtonIcon } from './buttons/Icon'
+export type { ButtonIconProps, ButtonIconSize } from './buttons/Icon'
+
+export { ButtonLoading } from './buttons/Loading'
+export type { ButtonLoadingProps } from './buttons/Loading'
+
 export { CalendarDefault } from './calendars/Default'
 export type { CalendarDefaultProps } from './calendars/Default'
 
@@ -167,6 +173,33 @@ export type { HoverCardDefaultProps, HoverCardTriggerProps, HoverCardContentProp
 
 export { InputDefault } from './inputs/Default'
 export type { InputDefaultProps } from './inputs/Default'
+
+export { InputEmail } from './inputs/Email'
+export type { InputEmailProps } from './inputs/Email'
+
+export { InputPassword } from './inputs/Password'
+export type { InputPasswordProps } from './inputs/Password'
+
+export { InputSearch } from './inputs/Search'
+export type { InputSearchProps } from './inputs/Search'
+
+export { InputNumber } from './inputs/Number'
+export type { InputNumberProps } from './inputs/Number'
+
+export { InputFile } from './inputs/File'
+export type { InputFileProps } from './inputs/File'
+
+export { InputDate } from './inputs/Date'
+export type { InputDateProps } from './inputs/Date'
+
+export { InputWithIcon } from './inputs/WithIcon'
+export type { InputWithIconProps, InputIconPosition } from './inputs/WithIcon'
+
+export { InputWithPrefix } from './inputs/WithPrefix'
+export type { InputWithPrefixProps } from './inputs/WithPrefix'
+
+export { InputWithSuffix } from './inputs/WithSuffix'
+export type { InputWithSuffixProps } from './inputs/WithSuffix'
 
 export { InputOtpDefault, InputOtpGroup, InputOtpSlot, InputOtpSeparator } from './inputOtps/Default'
 export type { InputOtpDefaultProps, InputOtpSlotProps } from './inputOtps/Default'

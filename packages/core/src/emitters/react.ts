@@ -34,12 +34,14 @@ function emitBlock(block: Block, indent: number): string {
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
+  const variant = block.directives.get('variant')
   const className = lookToClassName(look)
 
   const componentName = componentNameFor(block)
 
   const attrs: string[] = []
   if (className) attrs.push(`className="${className}"`)
+  if (variant) attrs.push(`variant="${variant}"`)
   if (bind) attrs.push(`value={${bind}} onChange={(v) => set${bind.charAt(0).toUpperCase() + bind.slice(1)}(v)}`)
   if (flow) attrs.push(`onClick={${flowToHandler(flow)}}`)
 
