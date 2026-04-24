@@ -1,16 +1,24 @@
 import React from 'react'
 
+export type TabVariant = 'default' | 'pills' | 'boxed'
+
 export interface TabDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string
   onValueChange?: (value: string) => void
+  variant?: TabVariant
   children?: React.ReactNode
 }
 
-export function TabDefault({ value, onValueChange: _onValueChange, children, className, ...props }: TabDefaultProps) {
+export function TabDefault({ value, onValueChange: _onValueChange, variant = 'default', children, className, ...props }: TabDefaultProps) {
   return (
     <div
       data-value={value}
-      className={['promptui-tab-default', className].filter(Boolean).join(' ')}
+      data-variant={variant}
+      className={[
+        'promptui-tab-default',
+        `promptui-tab-default--${variant}`,
+        className,
+      ].filter(Boolean).join(' ')}
       {...props}
     >
       {children}

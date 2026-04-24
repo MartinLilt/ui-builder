@@ -1,15 +1,23 @@
 import React from 'react'
 
+export type PaginationVariant = 'default' | 'compact'
+
 export interface PaginationDefaultProps extends React.HTMLAttributes<HTMLElement> {
+  variant?: PaginationVariant
   children?: React.ReactNode
 }
 
-export function PaginationDefault({ children, className, ...props }: PaginationDefaultProps) {
+export function PaginationDefault({ variant = 'default', children, className, ...props }: PaginationDefaultProps) {
   return (
     <nav
       role="navigation"
       aria-label="pagination"
-      className={['promptui-pagination-default', className].filter(Boolean).join(' ')}
+      data-variant={variant}
+      className={[
+        'promptui-pagination-default',
+        `promptui-pagination-default--${variant}`,
+        className,
+      ].filter(Boolean).join(' ')}
       {...props}
     >
       {children}

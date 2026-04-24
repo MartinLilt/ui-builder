@@ -1,19 +1,34 @@
 import React from 'react'
 
+export type DialogVariant = 'default' | 'fullscreen' | 'compact'
+
 export interface DialogDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  variant?: DialogVariant
   children?: React.ReactNode
 }
 
-export function DialogDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: DialogDefaultProps) {
+export function DialogDefault({
+  open = false,
+  onOpenChange: _onOpenChange,
+  variant = 'default',
+  children,
+  className,
+  ...props
+}: DialogDefaultProps) {
   if (!open) return null
   return (
     <div
       role="dialog"
       aria-modal="true"
       data-state="open"
-      className={['promptui-dialog-default', className].filter(Boolean).join(' ')}
+      data-variant={variant}
+      className={[
+        'promptui-dialog-default',
+        `promptui-dialog-default--${variant}`,
+        className,
+      ].filter(Boolean).join(' ')}
       {...props}
     >
       {children}

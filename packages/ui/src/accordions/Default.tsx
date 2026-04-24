@@ -1,20 +1,35 @@
 import React from 'react'
 
 export type AccordionType = 'single' | 'multiple'
+export type AccordionVariant = 'default' | 'bordered' | 'separated'
 
 export interface AccordionDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: AccordionType
   value?: string | string[]
   onValueChange?: (value: string | string[]) => void
+  variant?: AccordionVariant
   children?: React.ReactNode
 }
 
-export function AccordionDefault({ type = 'single', value, onValueChange: _onValueChange, children, className, ...props }: AccordionDefaultProps) {
+export function AccordionDefault({
+  type = 'single',
+  value,
+  onValueChange: _onValueChange,
+  variant = 'default',
+  children,
+  className,
+  ...props
+}: AccordionDefaultProps) {
   return (
     <div
       data-type={type}
+      data-variant={variant}
       data-value={Array.isArray(value) ? value.join(',') : value}
-      className={['promptui-accordion-default', className].filter(Boolean).join(' ')}
+      className={[
+        'promptui-accordion-default',
+        `promptui-accordion-default--${variant}`,
+        className,
+      ].filter(Boolean).join(' ')}
       {...props}
     >
       {children}

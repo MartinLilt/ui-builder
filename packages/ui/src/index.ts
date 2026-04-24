@@ -2,6 +2,26 @@
 export { HeroPrimary } from './heroes/Primary'
 export type { HeroPrimaryProps } from './heroes/Primary'
 
+// Shared hero parts (used by all Hero variants)
+export { HeroTitle, HeroSubtitle, HeroActions, HeroEyebrow } from './heroes/Parts'
+
+export { HeroSplit, HeroSplitContent, HeroSplitVisual } from './heroes/Split'
+export type { HeroSplitProps, HeroSplitSide } from './heroes/Split'
+
+export { HeroCentered } from './heroes/Centered'
+export type { HeroCenteredProps } from './heroes/Centered'
+
+export {
+  HeroWithVideo,
+  HeroWithVideoBg,
+  HeroWithVideoOverlay,
+  HeroWithVideoContent,
+} from './heroes/WithVideo'
+export type { HeroWithVideoProps, HeroWithVideoBgProps } from './heroes/WithVideo'
+
+export { HeroWithGradient } from './heroes/WithGradient'
+export type { HeroWithGradientProps, HeroGradientPreset } from './heroes/WithGradient'
+
 export { ButtonPrimary } from './buttons/Primary'
 export type { ButtonPrimaryProps } from './buttons/Primary'
 
@@ -19,7 +39,7 @@ export type { ResultTextProps } from './results/Text'
 
 // Shadcn-aligned primitives
 export { AccordionDefault, AccordionItem, AccordionTrigger, AccordionContent } from './accordions/Default'
-export type { AccordionDefaultProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps, AccordionType } from './accordions/Default'
+export type { AccordionDefaultProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps, AccordionType, AccordionVariant } from './accordions/Default'
 
 export { AlertDefault, AlertTitle, AlertDescription } from './alerts/Default'
 export type { AlertDefaultProps, AlertTitleProps, AlertDescriptionProps, AlertVariant } from './alerts/Default'
@@ -43,6 +63,12 @@ export type { AspectRatioDefaultProps } from './aspectRatios/Default'
 export { AvatarDefault, AvatarImage, AvatarFallback } from './avatars/Default'
 export type { AvatarDefaultProps, AvatarImageProps, AvatarFallbackProps } from './avatars/Default'
 
+export { AvatarWithStatus, AvatarStatusDot } from './avatars/WithStatus'
+export type { AvatarWithStatusProps, AvatarStatusDotProps, AvatarStatus } from './avatars/WithStatus'
+
+export { AvatarGroup, AvatarGroupOverflow } from './avatars/Group'
+export type { AvatarGroupProps, AvatarGroupOverflowProps } from './avatars/Group'
+
 export { BadgeDefault } from './badges/Default'
 export type { BadgeDefaultProps, BadgeVariant } from './badges/Default'
 
@@ -64,6 +90,14 @@ export type {
   BreadcrumbSeparatorProps,
 } from './breadcrumbs/Default'
 
+export {
+  BreadcrumbWithDropdown,
+  BreadcrumbDropdown,
+  BreadcrumbDropdownTrigger,
+  BreadcrumbDropdownContent,
+} from './breadcrumbs/WithDropdown'
+export type { BreadcrumbWithDropdownProps, BreadcrumbDropdownProps } from './breadcrumbs/WithDropdown'
+
 export { ButtonDefault } from './buttons/Default'
 export type { ButtonDefaultProps, ButtonVariant, ButtonSize } from './buttons/Default'
 
@@ -76,14 +110,79 @@ export type { ButtonLoadingProps } from './buttons/Loading'
 export { CalendarDefault } from './calendars/Default'
 export type { CalendarDefaultProps } from './calendars/Default'
 
+export { CalendarRange } from './calendars/Range'
+export type { CalendarRangeProps, CalendarRangeValue } from './calendars/Range'
+
+export { CalendarMultiple } from './calendars/Multiple'
+export type { CalendarMultipleProps } from './calendars/Multiple'
+
 export { CardDefault, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './cards/Default'
 export type { CardDefaultProps } from './cards/Default'
+
+export {
+  CardStat,
+  CardStatLabel,
+  CardStatValue,
+  CardStatTrend,
+  CardStatDescription,
+} from './cards/Stat'
+export type { CardStatProps, CardStatTrendProps, CardStatTrendDirection } from './cards/Stat'
+
+export {
+  CardProfile,
+  CardProfileAvatar,
+  CardProfileName,
+  CardProfileRole,
+  CardProfileBio,
+  CardProfileActions,
+} from './cards/Profile'
+export type { CardProfileProps, CardProfileAvatarProps } from './cards/Profile'
+
+export { CardMedia, CardMediaImage } from './cards/Media'
+export type { CardMediaProps, CardMediaImageProps, CardMediaPosition } from './cards/Media'
+
+export {
+  CardPricing,
+  CardPricingHeader,
+  CardPricingName,
+  CardPricingPrice,
+  CardPricingFeatures,
+  CardPricingFeature,
+  CardPricingCta,
+} from './cards/Pricing'
+export type {
+  CardPricingProps,
+  CardPricingPriceProps,
+  CardPricingFeatureProps,
+} from './cards/Pricing'
+
+export { CardInteractive } from './cards/Interactive'
+export type {
+  CardInteractiveProps,
+  CardInteractiveAsButtonProps,
+  CardInteractiveAsAnchorProps,
+} from './cards/Interactive'
 
 export { CarouselDefault, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './carousels/Default'
 export type { CarouselDefaultProps, CarouselOrientation } from './carousels/Default'
 
 export { ChartDefault } from './charts/Default'
 export type { ChartDefaultProps } from './charts/Default'
+
+export { ChartBar } from './charts/Bar'
+export type { ChartBarProps, ChartDatum } from './charts/Bar'
+
+export { ChartLine } from './charts/Line'
+export type { ChartLineProps } from './charts/Line'
+
+export { ChartArea } from './charts/Area'
+export type { ChartAreaProps } from './charts/Area'
+
+export { ChartPie } from './charts/Pie'
+export type { ChartPieProps } from './charts/Pie'
+
+export { ChartRadar } from './charts/Radar'
+export type { ChartRadarProps, ChartRadarDatum } from './charts/Radar'
 
 export { CheckboxDefault } from './checkboxes/Default'
 export type { CheckboxDefaultProps } from './checkboxes/Default'
@@ -93,6 +192,9 @@ export type { CollapsibleDefaultProps, CollapsibleTriggerProps, CollapsibleConte
 
 export { ComboboxDefault } from './comboboxes/Default'
 export type { ComboboxDefaultProps, ComboboxOption } from './comboboxes/Default'
+
+export { ComboboxMulti } from './comboboxes/Multi'
+export type { ComboboxMultiProps } from './comboboxes/Multi'
 
 export {
   CommandDefault,
@@ -122,6 +224,12 @@ export type { DataTableDefaultProps, DataTableColumn } from './dataTables/Defaul
 export { DatePickerDefault } from './datePickers/Default'
 export type { DatePickerDefaultProps } from './datePickers/Default'
 
+export { DatePickerRange } from './datePickers/Range'
+export type { DatePickerRangeProps } from './datePickers/Range'
+
+export { DatePickerMultiple } from './datePickers/Multiple'
+export type { DatePickerMultipleProps } from './datePickers/Multiple'
+
 export {
   DialogDefault,
   DialogTrigger,
@@ -132,7 +240,7 @@ export {
   DialogDescription,
   DialogClose,
 } from './dialogs/Default'
-export type { DialogDefaultProps } from './dialogs/Default'
+export type { DialogDefaultProps, DialogVariant } from './dialogs/Default'
 
 export {
   DrawerDefault,
@@ -228,6 +336,24 @@ export {
 export type { NavigationMenuDefaultProps } from './navigationMenus/Default'
 
 export {
+  NavigationMenuMobile,
+  NavigationMenuMobileTrigger,
+  NavigationMenuMobileDrawer,
+  NavigationMenuMobileClose,
+} from './navigationMenus/Mobile'
+export type { NavigationMenuMobileProps } from './navigationMenus/Mobile'
+
+export {
+  NavigationMenuMega,
+  NavigationMenuMegaContent,
+  NavigationMenuMegaColumns,
+  NavigationMenuMegaColumn,
+  NavigationMenuMegaGroup,
+  NavigationMenuMegaGroupTitle,
+} from './navigationMenus/Mega'
+export type { NavigationMenuMegaProps, NavigationMenuMegaColumnsProps } from './navigationMenus/Mega'
+
+export {
   PaginationDefault,
   PaginationContent,
   PaginationItem,
@@ -236,13 +362,27 @@ export {
   PaginationNext,
   PaginationEllipsis,
 } from './paginations/Default'
-export type { PaginationDefaultProps, PaginationLinkProps } from './paginations/Default'
+export type { PaginationDefaultProps, PaginationLinkProps, PaginationVariant } from './paginations/Default'
+
+export {
+  PaginationWithPageSize,
+  PaginationPageSize,
+  PaginationPageSizeLabel,
+  PaginationPageSizeSelect,
+} from './paginations/WithPageSize'
+export type { PaginationWithPageSizeProps, PaginationPageSizeSelectProps } from './paginations/WithPageSize'
 
 export { PopoverDefault, PopoverTrigger, PopoverContent } from './popovers/Default'
 export type { PopoverDefaultProps, PopoverTriggerProps, PopoverContentProps } from './popovers/Default'
 
 export { ProgressDefault } from './progresses/Default'
 export type { ProgressDefaultProps } from './progresses/Default'
+
+export { ProgressCircular } from './progresses/Circular'
+export type { ProgressCircularProps } from './progresses/Circular'
+
+export { ProgressStepped } from './progresses/Stepped'
+export type { ProgressSteppedProps, ProgressStepState } from './progresses/Stepped'
 
 export { RadioGroupDefault, RadioGroupItem } from './radioGroups/Default'
 export type { RadioGroupDefaultProps, RadioGroupItemProps } from './radioGroups/Default'
@@ -266,7 +406,10 @@ export {
 export type { SelectDefaultProps, SelectValueProps, SelectItemProps } from './selects/Default'
 
 export { SeparatorDefault } from './separators/Default'
-export type { SeparatorDefaultProps, SeparatorOrientation } from './separators/Default'
+export type { SeparatorDefaultProps, SeparatorOrientation, SeparatorVariant } from './separators/Default'
+
+export { SeparatorWithLabel } from './separators/WithLabel'
+export type { SeparatorWithLabelProps, SeparatorWithLabelAlign } from './separators/WithLabel'
 
 export {
   SheetDefault,
@@ -297,8 +440,20 @@ export type { SidebarDefaultProps, SidebarSide, SidebarVariant, SidebarMenuButto
 export { SkeletonDefault } from './skeletons/Default'
 export type { SkeletonDefaultProps } from './skeletons/Default'
 
+export { SkeletonText } from './skeletons/Text'
+export type { SkeletonTextProps } from './skeletons/Text'
+
+export { SkeletonCircle } from './skeletons/Circle'
+export type { SkeletonCircleProps } from './skeletons/Circle'
+
+export { SkeletonCard } from './skeletons/Card'
+export type { SkeletonCardProps } from './skeletons/Card'
+
 export { SliderDefault } from './sliders/Default'
 export type { SliderDefaultProps } from './sliders/Default'
+
+export { SliderRange } from './sliders/Range'
+export type { SliderRangeProps, SliderRangeValue } from './sliders/Range'
 
 export { SonnerDefault } from './sonners/Default'
 export type { SonnerDefaultProps, SonnerPosition } from './sonners/Default'
@@ -319,7 +474,10 @@ export {
 export type { TableDefaultProps } from './tables/Default'
 
 export { TabDefault, TabList, TabTrigger, TabContent } from './tabs/Default'
-export type { TabDefaultProps, TabListProps, TabTriggerProps, TabContentProps } from './tabs/Default'
+export type { TabDefaultProps, TabListProps, TabTriggerProps, TabContentProps, TabVariant } from './tabs/Default'
+
+export { TabVertical, TabVerticalList, TabVerticalPanels } from './tabs/Vertical'
+export type { TabVerticalProps, TabVerticalListProps, TabVerticalPanelsProps } from './tabs/Vertical'
 
 export { TextareaDefault } from './textareas/Default'
 export type { TextareaDefaultProps } from './textareas/Default'
@@ -342,3 +500,13 @@ export type { ToggleGroupDefaultProps, ToggleGroupItemProps, ToggleGroupType } f
 
 export { TooltipDefault, TooltipTrigger, TooltipContent, TooltipProvider } from './tooltips/Default'
 export type { TooltipDefaultProps, TooltipTriggerProps, TooltipContentProps, TooltipProviderProps } from './tooltips/Default'
+
+export {
+  TooltipRich,
+  TooltipRichTrigger,
+  TooltipRichContent,
+  TooltipRichTitle,
+  TooltipRichDescription,
+  TooltipRichActions,
+} from './tooltips/Rich'
+export type { TooltipRichProps } from './tooltips/Rich'
