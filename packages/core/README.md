@@ -128,6 +128,10 @@ The compiler emits **structure + imports** only. Not supported: conditionals, lo
 
 ## Changelog
 
+### 0.2.1
+
+Metadata-only: repository/homepage/bugs URLs updated to `MartinLilt/promptui` after GitHub rename. No code changes.
+
 ### 0.2.0
 
 - Library registry: 101 `use`-paths, shared via `LIBRARY_ENTRIES`.

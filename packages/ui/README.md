@@ -76,6 +76,10 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.2.1
+
+Metadata-only: repository/homepage/bugs URLs updated to `MartinLilt/promptui` after GitHub rename. No code changes.
+
 ### 0.2.0
 
 - 46 new component files: Input variants (9), Button Icon+Loading, Card variants (5), Hero variants (4) + shared parts, Skeleton variants (3), Tab Vertical, Progress Circular+Stepped, Chart Bar/Line/Area/Pie/Radar, Slider Range, Combobox Multi, Calendar Range+Multiple, DatePicker Range+Multiple, Avatar WithStatus+Group, Tooltip Rich, Pagination WithPageSize, Breadcrumb WithDropdown, Separator WithLabel, NavigationMenu Mobile+Mega.
