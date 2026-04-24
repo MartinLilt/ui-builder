@@ -323,6 +323,15 @@ pnpm monorepo with packages under `packages/`. Please open an issue before submi
 
 ## Changelog
 
+### 0.3.0
+
+- Wrapped React output: `--export <Name>` or root `[Block:Name]` produces a full `export function Name()` with `useState` for `bind:` and `on<Flow>` props for `flow:`.
+- `each: item in items` directive for list rendering (React `.map()` / Vue `v-for`).
+- `if: expr` directive for conditional rendering (React `&&` / Vue `v-if`).
+- `{{expr}}` in `text:` emits as JSX expression / Vue mustache; literals stay strings.
+- `@getpromptui/ui` ships default CSS (68 KB / 589 selectors). Import `@getpromptui/ui/styles.css` and everything renders.
+- Tailwind plugin at `@getpromptui/ui/tailwind` exposing tokens as theme extension.
+
 ### 0.2.2
 
 Docs: promoted the Claude Code skill to a hero section in the root + core READMEs. No code changes.

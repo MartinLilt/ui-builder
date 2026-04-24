@@ -10,13 +10,42 @@ function flowToHandler(flow: string): string {
   return flow.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
 }
 
+function flowToPropName(flow: string): string {
+  const camel = flowToHandler(flow)
+  return 'on' + camel.charAt(0).toUpperCase() + camel.slice(1)
+}
+
+function bindToSetter(bind: string): string {
+  return 'set' + bind.charAt(0).toUpperCase() + bind.slice(1)
+}
+
+const EACH_RE = /^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+(.+?)\s*$/
+const EXPR_RE = /^\{\{\s*(.+?)\s*\}\}$/
+
+function parseEach(value: string): { varName: string; collection: string } | null {
+  const m = value.match(EACH_RE)
+  if (!m) return null
+  return { varName: m[1], collection: m[2].trim() }
+}
+
+function emitTextValue(value: string): string {
+  const m = value.match(EXPR_RE)
+  if (m) return `{${m[1]}}`
+  return `{${JSON.stringify(value)}}`
+}
+
+function emitAttrValue(value: string): string {
+  const m = value.match(EXPR_RE)
+  if (m) return `{${m[1]}}`
+  return JSON.stringify(value)
+}
+
 function componentNameFor(block: Block): string {
   const use = block.directives.get('use')
   if (use) {
     const entry = lookupByUse(use)
     if (entry) return entry.main
   }
-  // Sub-part or unresolved block: fall back to blockType
   return block.blockType
 }
 
@@ -26,7 +55,31 @@ function collectUsedComponents(block: Block, used: Set<string>): void {
   for (const child of block.children) collectUsedComponents(child, used)
 }
 
-function emitBlock(block: Block, indent: number): string {
+function collectBinds(block: Block, acc: Set<string>): void {
+  const bind = block.directives.get('bind')
+  if (bind) acc.add(bind)
+  for (const c of block.children) collectBinds(c, acc)
+}
+
+function collectFlows(block: Block, acc: Set<string>): void {
+  const flow = block.directives.get('flow')
+  if (flow) acc.add(flow)
+  for (const c of block.children) collectFlows(c, acc)
+}
+
+function collectEachCollections(block: Block, acc: Set<string>): void {
+  const eachStr = block.directives.get('each')
+  if (eachStr) {
+    const parsed = parseEach(eachStr)
+    // Only add simple identifiers as auto-props; complex expressions are user-owned.
+    if (parsed && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(parsed.collection)) acc.add(parsed.collection)
+  }
+  for (const c of block.children) collectEachCollections(c, acc)
+}
+
+type EmitMode = 'fragment' | 'component'
+
+function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs: string[]): string {
   const pad = '  '.repeat(indent)
   const childPad = '  '.repeat(indent + 1)
 
@@ -39,11 +92,14 @@ function emitBlock(block: Block, indent: number): string {
 
   const componentName = componentNameFor(block)
 
-  const attrs: string[] = []
+  const attrs: string[] = [...extraAttrs]
   if (className) attrs.push(`className="${className}"`)
-  if (variant) attrs.push(`variant="${variant}"`)
-  if (bind) attrs.push(`value={${bind}} onChange={(v) => set${bind.charAt(0).toUpperCase() + bind.slice(1)}(v)}`)
-  if (flow) attrs.push(`onClick={${flowToHandler(flow)}}`)
+  if (variant) attrs.push(`variant=${emitAttrValue(variant)}`)
+  if (bind) attrs.push(`value={${bind}} onChange={(v) => ${bindToSetter(bind)}(v)}`)
+  if (flow) {
+    const handlerRef = mode === 'component' ? flowToPropName(flow) : flowToHandler(flow)
+    attrs.push(`onClick={${handlerRef}}`)
+  }
 
   const attrStr = attrs.length ? ' ' + attrs.join(' ') : ''
 
@@ -53,15 +109,32 @@ function emitBlock(block: Block, indent: number): string {
 
   const lines: string[] = []
   lines.push(`${pad}<${componentName}${attrStr}>`)
-
-  if (text) lines.push(`${childPad}{${JSON.stringify(text)}}`)
-
-  for (const child of block.children) {
-    lines.push(emitBlock(child, indent + 1))
-  }
-
+  if (text) lines.push(`${childPad}${emitTextValue(text)}`)
+  for (const child of block.children) lines.push(emitBlock(child, indent + 1, mode))
   lines.push(`${pad}</${componentName}>`)
   return lines.join('\n')
+}
+
+function emitBlock(block: Block, indent: number, mode: EmitMode): string {
+  const eachStr = block.directives.get('each')
+  const ifStr = block.directives.get('if')
+  const pad = '  '.repeat(indent)
+  const innerIndent = (eachStr || ifStr) ? indent + 1 : indent
+
+  const each = eachStr ? parseEach(eachStr) : null
+  const extraAttrs = each ? ['key={index}'] : []
+
+  let inner = emitBlockCore(block, innerIndent, mode, extraAttrs)
+
+  if (each) {
+    inner = `${pad}{${each.collection}.map((${each.varName}, index) => (\n${inner}\n${pad}))}`
+  }
+
+  if (ifStr) {
+    inner = `${pad}{${ifStr.trim()} && (\n${inner}\n${pad})}`
+  }
+
+  return inner
 }
 
 function groupImportsByPackage(components: Set<string>): Map<string, string[]> {
@@ -77,22 +150,97 @@ function groupImportsByPackage(components: Set<string>): Map<string, string[]> {
   return byPkg
 }
 
-function emitImports(components: Set<string>): string {
+function emitImportLines(components: Set<string>): string[] {
   const byPkg = groupImportsByPackage(components)
-  if (byPkg.size === 0) return ''
-  const lines: string[] = []
-  for (const [pkg, names] of [...byPkg].sort(([a], [b]) => a.localeCompare(b))) {
-    lines.push(`import { ${names.join(', ')} } from '${pkg}'`)
-  }
-  return lines.join('\n')
+  if (byPkg.size === 0) return []
+  return [...byPkg]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([pkg, names]) => `import { ${names.join(', ')} } from '${pkg}'`)
 }
 
-export function emitReact(doc: Document): string {
+function pascalCase(s: string): string {
+  return s.replace(/(?:^|[-_])([a-z])/g, (_, c: string) => c.toUpperCase())
+    .replace(/(?:^|[-_])([A-Z])/g, (_, c: string) => c)
+    .replace(/^(.)/, (_, c: string) => c.toUpperCase())
+}
+
+function inferExportName(doc: Document): string | null {
+  const root = doc.blocks[0]
+  if (!root?.name) return null
+  return pascalCase(root.name)
+}
+
+export interface EmitReactOptions {
+  exportName?: string
+}
+
+export function emitReact(doc: Document, options?: EmitReactOptions): string {
   const used = new Set<string>()
   for (const block of doc.blocks) collectUsedComponents(block, used)
 
-  const imports = emitImports(used)
-  const body = doc.blocks.map(b => emitBlock(b, 0)).join('\n\n')
+  const exportName = options?.exportName ?? inferExportName(doc)
 
-  return imports ? `${imports}\n\n${body}` : body
+  if (!exportName) {
+    const imports = emitImportLines(used).join('\n')
+    const body = doc.blocks.map(b => emitBlock(b, 0, 'fragment')).join('\n\n')
+    return imports ? `${imports}\n\n${body}` : body
+  }
+
+  const binds = new Set<string>()
+  const flows = new Set<string>()
+  const eachCollections = new Set<string>()
+  for (const b of doc.blocks) {
+    collectBinds(b, binds)
+    collectFlows(b, flows)
+    collectEachCollections(b, eachCollections)
+  }
+
+  const importLines: string[] = []
+  if (binds.size > 0) importLines.push(`import { useState } from 'react'`)
+  importLines.push(...emitImportLines(used))
+
+  const flowProps = [...flows].map(flowToPropName).sort()
+  const eachProps = [...eachCollections].sort()
+  const hasProps = flowProps.length > 0 || eachProps.length > 0
+
+  const propLines: string[] = []
+  for (const name of eachProps) propLines.push(`  ${name}: unknown[]`)
+  for (const name of flowProps) propLines.push(`  ${name}?: () => void`)
+
+  const propsInterface = hasProps
+    ? `export interface ${exportName}Props {\n${propLines.join('\n')}\n}`
+    : ''
+
+  const allProps = [...eachProps, ...flowProps]
+  const propDestructure = hasProps ? `{ ${allProps.join(', ')} }: ${exportName}Props` : ''
+
+  const stateLines = [...binds].sort().map(b => `  const [${b}, ${bindToSetter(b)}] = useState('')`)
+
+  const multipleRoots = doc.blocks.length > 1
+  const blockIndent = multipleRoots ? 3 : 2
+  const bodyBlocks = doc.blocks.map(b => emitBlock(b, blockIndent, 'component')).join('\n\n')
+  const returnBody = multipleRoots
+    ? `    <>\n${bodyBlocks}\n    </>`
+    : bodyBlocks
+
+  const fnLines: string[] = []
+  if (stateLines.length > 0) {
+    fnLines.push(...stateLines, '')
+  }
+  fnLines.push('  return (')
+  fnLines.push(returnBody)
+  fnLines.push('  )')
+
+  const parts: string[] = []
+  parts.push(importLines.join('\n'))
+  parts.push('')
+  if (propsInterface) {
+    parts.push(propsInterface)
+    parts.push('')
+  }
+  parts.push(`export function ${exportName}(${propDestructure}) {`)
+  parts.push(fnLines.join('\n'))
+  parts.push('}')
+
+  return parts.join('\n')
 }

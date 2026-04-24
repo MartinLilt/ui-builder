@@ -88,6 +88,12 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.3.0
+
+- **Ships default CSS.** `import '@getpromptui/ui/styles.css'` and every component renders with decent defaults — tokens on `:root`, 68 KB / 589 selectors covering all 101 registered `use`-paths. Dark mode via `[data-theme="dark"]` or `prefers-color-scheme`.
+- **Tailwind integration.** `@getpromptui/ui/tailwind` plugin exposes tokens as theme extension (`bg-promptui-primary`, `rounded-promptui`, etc.). `withPromptui(config)` helper to wrap an existing Tailwind config. For Tailwind v4, just `@import` the CSS.
+- **Component additions** (from 0.2.x, documented here for completeness): 46 files covering input variants, card variants, hero variants, skeleton variants, charts, progress circular/stepped, range sliders/multi-selects, avatars with status, tooltips rich, pagination with page size, breadcrumb with dropdown, navigation mobile/mega. See [`LIBRARY_ENTRIES`](https://www.npmjs.com/package/@getpromptui/core) for the full catalog.
+
 ### 0.2.2
 
 Docs-only: added a "Use with Claude Code" section linking to the skill. No code changes.

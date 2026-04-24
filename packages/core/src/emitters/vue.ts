@@ -10,6 +10,28 @@ function flowToHandler(flow: string): string {
   return flow.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
 }
 
+const EACH_RE = /^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+(.+?)\s*$/
+const EXPR_RE = /^\{\{\s*(.+?)\s*\}\}$/
+
+function parseEach(value: string): { varName: string; collection: string } | null {
+  const m = value.match(EACH_RE)
+  if (!m) return null
+  return { varName: m[1], collection: m[2].trim() }
+}
+
+function emitTextValue(value: string): string {
+  // In Vue, template interpolation is {{ }} natively. DSL {{expr}} → template {{ expr }}.
+  const m = value.match(EXPR_RE)
+  if (m) return `{{ ${m[1]} }}`
+  return value
+}
+
+function emitAttrValue(value: string, attr: string): string {
+  const m = value.match(EXPR_RE)
+  if (m) return `:${attr}="${m[1]}"`
+  return `${attr}="${value}"`
+}
+
 function componentNameFor(block: Block): string {
   const use = block.directives.get('use')
   if (use) {
@@ -34,13 +56,20 @@ function emitBlock(block: Block, indent: number): string {
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
   const variant = block.directives.get('variant')
+  const eachStr = block.directives.get('each')
+  const ifStr = block.directives.get('if')
   const cls = lookToClass(look)
 
   const tag = componentNameFor(block)
 
   const attrs: string[] = []
+  if (ifStr) attrs.push(`v-if="${ifStr.trim()}"`)
+  if (eachStr) {
+    const parsed = parseEach(eachStr)
+    if (parsed) attrs.push(`v-for="(${parsed.varName}, index) in ${parsed.collection}"`, `:key="index"`)
+  }
   if (cls) attrs.push(`class="${cls}"`)
-  if (variant) attrs.push(`variant="${variant}"`)
+  if (variant) attrs.push(emitAttrValue(variant, 'variant'))
   if (bind) attrs.push(`:modelValue="${bind}" @update:modelValue="${bind} = $event"`)
   if (flow) attrs.push(`@click="${flowToHandler(flow)}"`)
 
@@ -52,13 +81,8 @@ function emitBlock(block: Block, indent: number): string {
 
   const lines: string[] = []
   lines.push(`${pad}<${tag}${attrStr}>`)
-
-  if (text) lines.push(`${childPad}${text}`)
-
-  for (const child of block.children) {
-    lines.push(emitBlock(child, indent + 1))
-  }
-
+  if (text) lines.push(`${childPad}${emitTextValue(text)}`)
+  for (const child of block.children) lines.push(emitBlock(child, indent + 1))
   lines.push(`${pad}</${tag}>`)
   return lines.join('\n')
 }

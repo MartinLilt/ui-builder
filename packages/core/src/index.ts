@@ -25,7 +25,7 @@ export function compile(source: string, options: CompileOptions): CompileResult 
 
   const output = options.target === 'vue'
     ? emitVue(document)
-    : emitReact(document)
+    : emitReact(document, { exportName: options.exportName })
 
   return {
     output,

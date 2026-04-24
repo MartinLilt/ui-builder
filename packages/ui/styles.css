@@ -1,0 +1,1564 @@
+/*
+ * @getpromptui/ui — default component styles
+ *
+ * Import once in your app entry (e.g. main.tsx, _app.tsx, or app/layout.tsx):
+ *
+ *   import '@getpromptui/ui/styles.css'
+ *
+ * Tokens are exposed as CSS custom properties on :root. Override them to theme
+ * the library without touching component rules. Dark mode: set data-theme="dark"
+ * on <html> or add the [data-theme="dark"] selector to a parent.
+ */
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ */
+
+:root {
+  --promptui-bg: #ffffff;
+  --promptui-fg: #09090b;
+  --promptui-muted: #71717a;
+  --promptui-muted-bg: #f4f4f5;
+  --promptui-border: #e4e4e7;
+  --promptui-input-bg: #ffffff;
+
+  --promptui-primary: #18181b;
+  --promptui-primary-fg: #fafafa;
+  --promptui-secondary: #f4f4f5;
+  --promptui-secondary-fg: #18181b;
+  --promptui-destructive: #dc2626;
+  --promptui-destructive-fg: #ffffff;
+  --promptui-accent: #f4f4f5;
+  --promptui-accent-fg: #18181b;
+
+  --promptui-ring: #18181b;
+  --promptui-ring-offset: #ffffff;
+
+  --promptui-radius: 0.5rem;
+  --promptui-radius-sm: 0.375rem;
+  --promptui-radius-lg: 0.75rem;
+
+  --promptui-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --promptui-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+
+[data-theme="dark"] {
+  --promptui-bg: #09090b;
+  --promptui-fg: #fafafa;
+  --promptui-muted: #a1a1aa;
+  --promptui-muted-bg: #27272a;
+  --promptui-border: #27272a;
+  --promptui-input-bg: #09090b;
+
+  --promptui-primary: #fafafa;
+  --promptui-primary-fg: #18181b;
+  --promptui-secondary: #27272a;
+  --promptui-secondary-fg: #fafafa;
+  --promptui-accent: #27272a;
+  --promptui-accent-fg: #fafafa;
+
+  --promptui-ring: #d4d4d8;
+  --promptui-ring-offset: #09090b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --promptui-bg: #09090b;
+    --promptui-fg: #fafafa;
+    --promptui-muted: #a1a1aa;
+    --promptui-muted-bg: #27272a;
+    --promptui-border: #27272a;
+    --promptui-input-bg: #09090b;
+    --promptui-primary: #fafafa;
+    --promptui-primary-fg: #18181b;
+    --promptui-secondary: #27272a;
+    --promptui-secondary-fg: #fafafa;
+    --promptui-accent: #27272a;
+    --promptui-accent-fg: #fafafa;
+    --promptui-ring: #d4d4d8;
+    --promptui-ring-offset: #09090b;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Focus ring helper (applied via :focus-visible)
+ * ------------------------------------------------------------------ */
+
+[class*="promptui-"]:focus-visible {
+  outline: 2px solid var(--promptui-ring);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Button — default/icon/loading variants share a base
+ * ------------------------------------------------------------------ */
+
+.promptui-button-default,
+.promptui-button-icon,
+.promptui-button-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: var(--promptui-radius);
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.promptui-button-default,
+.promptui-button-loading {
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+}
+
+.promptui-button-default--sm,
+.promptui-button-loading--sm { height: 2rem; padding: 0.375rem 0.75rem; font-size: 0.8125rem; }
+.promptui-button-default--lg,
+.promptui-button-loading--lg { height: 2.75rem; padding: 0.625rem 1.25rem; font-size: 0.9375rem; }
+.promptui-button-default--icon { height: 2.25rem; width: 2.25rem; padding: 0; }
+
+.promptui-button-icon { height: 2.25rem; width: 2.25rem; padding: 0; }
+.promptui-button-icon--sm { height: 2rem; width: 2rem; }
+.promptui-button-icon--lg { height: 2.75rem; width: 2.75rem; }
+
+/* Button variants */
+.promptui-button-default--default,
+.promptui-button-icon--default,
+.promptui-button-loading--default {
+  background: var(--promptui-primary);
+  color: var(--promptui-primary-fg);
+}
+.promptui-button-default--default:hover,
+.promptui-button-icon--default:hover,
+.promptui-button-loading--default:hover { opacity: 0.9; }
+
+.promptui-button-default--destructive,
+.promptui-button-icon--destructive,
+.promptui-button-loading--destructive {
+  background: var(--promptui-destructive);
+  color: var(--promptui-destructive-fg);
+}
+.promptui-button-default--destructive:hover,
+.promptui-button-icon--destructive:hover,
+.promptui-button-loading--destructive:hover { opacity: 0.9; }
+
+.promptui-button-default--outline,
+.promptui-button-icon--outline,
+.promptui-button-loading--outline {
+  background: var(--promptui-bg);
+  color: var(--promptui-fg);
+  border-color: var(--promptui-border);
+}
+.promptui-button-default--outline:hover,
+.promptui-button-icon--outline:hover,
+.promptui-button-loading--outline:hover {
+  background: var(--promptui-accent);
+  color: var(--promptui-accent-fg);
+}
+
+.promptui-button-default--secondary,
+.promptui-button-icon--secondary,
+.promptui-button-loading--secondary {
+  background: var(--promptui-secondary);
+  color: var(--promptui-secondary-fg);
+}
+.promptui-button-default--secondary:hover,
+.promptui-button-icon--secondary:hover,
+.promptui-button-loading--secondary:hover { opacity: 0.85; }
+
+.promptui-button-default--ghost,
+.promptui-button-icon--ghost,
+.promptui-button-loading--ghost {
+  background: transparent;
+  color: var(--promptui-fg);
+}
+.promptui-button-default--ghost:hover,
+.promptui-button-icon--ghost:hover,
+.promptui-button-loading--ghost:hover {
+  background: var(--promptui-accent);
+  color: var(--promptui-accent-fg);
+}
+
+.promptui-button-default--link,
+.promptui-button-icon--link,
+.promptui-button-loading--link {
+  background: transparent;
+  color: var(--promptui-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  border-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.promptui-button-default:disabled,
+.promptui-button-icon:disabled,
+.promptui-button-loading:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.promptui-button-loading[data-loading] { pointer-events: none; }
+.promptui-button-loading-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+.promptui-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: promptui-spin 0.7s linear infinite;
+}
+@keyframes promptui-spin { to { transform: rotate(360deg); } }
+
+/* Legacy button classes — kept for back-compat */
+.promptui-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.5rem 1rem; height: 2.25rem;
+  border-radius: var(--promptui-radius);
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+  font-family: var(--promptui-font-sans); font-size: 0.875rem; font-weight: 500;
+  border: none; cursor: pointer;
+}
+.promptui-btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.5rem 1rem; height: 2.25rem;
+  border-radius: var(--promptui-radius);
+  background: transparent; color: var(--promptui-fg);
+  font-family: var(--promptui-font-sans); font-size: 0.875rem; font-weight: 500;
+  border: 1px solid var(--promptui-border); cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ *
+ * Card
+ * ------------------------------------------------------------------ */
+
+.promptui-card-default {
+  display: flex;
+  flex-direction: column;
+  background: var(--promptui-bg);
+  color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.promptui-card-header {
+  display: flex; flex-direction: column; gap: 0.375rem;
+  padding: 1.5rem 1.5rem 0;
+}
+.promptui-card-title {
+  margin: 0;
+  font-family: var(--promptui-font-sans);
+  font-size: 1.25rem; font-weight: 600; line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.promptui-card-description {
+  margin: 0;
+  color: var(--promptui-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.promptui-card-content {
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+.promptui-card-footer {
+  padding: 0 1.5rem 1.5rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Input (default, email, password, search, number, date, file)
+ * ------------------------------------------------------------------ */
+
+.promptui-input-default,
+.promptui-input-email,
+.promptui-input-password,
+.promptui-input-search,
+.promptui-input-number,
+.promptui-input-date,
+.promptui-input-rounded {
+  display: flex;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  color: var(--promptui-fg);
+  background: var(--promptui-input-bg);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.promptui-input-rounded { border-radius: 9999px; }
+
+.promptui-input-default:focus,
+.promptui-input-email:focus,
+.promptui-input-password:focus,
+.promptui-input-search:focus,
+.promptui-input-number:focus,
+.promptui-input-date:focus,
+.promptui-input-rounded:focus {
+  outline: none;
+  border-color: var(--promptui-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--promptui-ring) 20%, transparent);
+}
+
+.promptui-input-file {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  color: var(--promptui-fg);
+}
+
+.promptui-input-with-icon,
+.promptui-input-with-prefix,
+.promptui-input-with-suffix {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: var(--promptui-input-bg);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  gap: 0.5rem;
+}
+.promptui-input-with-icon-input,
+.promptui-input-with-prefix-input,
+.promptui-input-with-suffix-input {
+  flex: 1; min-width: 0;
+  border: none; background: transparent; outline: none;
+  font-family: inherit; font-size: 0.875rem; color: inherit;
+}
+.promptui-input-with-icon-icon,
+.promptui-input-with-prefix-prefix,
+.promptui-input-with-suffix-suffix {
+  display: inline-flex; align-items: center;
+  color: var(--promptui-muted);
+  font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Textarea
+ * ------------------------------------------------------------------ */
+
+.promptui-textarea-default {
+  display: block;
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--promptui-fg);
+  background: var(--promptui-input-bg);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  resize: vertical;
+}
+.promptui-textarea-default:focus {
+  outline: none;
+  border-color: var(--promptui-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--promptui-ring) 20%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
+ * Label
+ * ------------------------------------------------------------------ */
+
+.promptui-label-default {
+  display: inline-block;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--promptui-fg);
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------------ *
+ * Alert
+ * ------------------------------------------------------------------ */
+
+.promptui-alert-default {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  background: var(--promptui-bg);
+  color: var(--promptui-fg);
+}
+.promptui-alert-default--destructive {
+  border-color: color-mix(in srgb, var(--promptui-destructive) 60%, transparent);
+  background: color-mix(in srgb, var(--promptui-destructive) 8%, var(--promptui-bg));
+  color: var(--promptui-destructive);
+}
+.promptui-alert-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.promptui-alert-description {
+  grid-column: 1 / -1;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--promptui-muted);
+}
+.promptui-alert-default--destructive .promptui-alert-description {
+  color: inherit;
+  opacity: 0.9;
+}
+
+/* ------------------------------------------------------------------ *
+ * Badge
+ * ------------------------------------------------------------------ */
+
+.promptui-badge-default {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-family: var(--promptui-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.promptui-badge-default--default {
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+}
+.promptui-badge-default--secondary {
+  background: var(--promptui-secondary); color: var(--promptui-secondary-fg);
+}
+.promptui-badge-default--destructive {
+  background: var(--promptui-destructive); color: var(--promptui-destructive-fg);
+}
+.promptui-badge-default--outline {
+  background: transparent; color: var(--promptui-fg);
+  border-color: var(--promptui-border);
+}
+
+/* ------------------------------------------------------------------ *
+ * Separator
+ * ------------------------------------------------------------------ */
+
+.promptui-separator-default {
+  background: var(--promptui-border);
+  flex-shrink: 0;
+}
+.promptui-separator-default--horizontal { height: 1px; width: 100%; }
+.promptui-separator-default--vertical   { width: 1px; height: 100%; align-self: stretch; }
+.promptui-separator-default--dashed {
+  background: none;
+  border-top: 1px dashed var(--promptui-border);
+}
+.promptui-separator-default--dashed.promptui-separator-default--vertical {
+  border-top: none; border-left: 1px dashed var(--promptui-border); width: 0;
+}
+.promptui-separator-default--dotted {
+  background: none;
+  border-top: 1px dotted var(--promptui-border);
+}
+.promptui-separator-default--dotted.promptui-separator-default--vertical {
+  border-top: none; border-left: 1px dotted var(--promptui-border); width: 0;
+}
+
+.promptui-separator-with-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--promptui-muted);
+  font-family: var(--promptui-font-sans);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.promptui-separator-with-label-line { flex: 1; height: 1px; background: var(--promptui-border); }
+.promptui-separator-with-label--start .promptui-separator-with-label-line--before { display: none; }
+.promptui-separator-with-label--end .promptui-separator-with-label-line--after    { display: none; }
+
+/* ------------------------------------------------------------------ *
+ * Skeleton
+ * ------------------------------------------------------------------ */
+
+@keyframes promptui-skeleton-pulse { 50% { opacity: 0.5; } }
+
+.promptui-skeleton-default,
+.promptui-skeleton-circle,
+.promptui-skeleton-text-line,
+.promptui-skeleton-card-media,
+.promptui-skeleton-card-line {
+  background: var(--promptui-muted-bg);
+  border-radius: var(--promptui-radius-sm);
+  animation: promptui-skeleton-pulse 1.8s ease-in-out infinite;
+}
+.promptui-skeleton-default { height: 1rem; width: 100%; }
+.promptui-skeleton-circle  { border-radius: 9999px; }
+
+.promptui-skeleton-text { display: flex; flex-direction: column; gap: 0.5rem; }
+.promptui-skeleton-text-line { height: 0.75rem; width: 100%; }
+
+.promptui-skeleton-card {
+  display: flex; flex-direction: column; gap: 0.75rem;
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg);
+  padding: 0.75rem;
+  background: var(--promptui-bg);
+}
+.promptui-skeleton-card-media { height: 10rem; width: 100%; border-radius: var(--promptui-radius); }
+.promptui-skeleton-card-body  { display: flex; flex-direction: column; gap: 0.5rem; }
+.promptui-skeleton-card-line  { height: 0.75rem; width: 100%; }
+.promptui-skeleton-card-line:last-child { width: 60%; }
+
+/* ------------------------------------------------------------------ *
+ * Checkbox
+ * ------------------------------------------------------------------ */
+
+.promptui-checkbox-default {
+  width: 1rem; height: 1rem;
+  margin: 0;
+  accent-color: var(--promptui-primary);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-sm);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ *
+ * Switch
+ * ------------------------------------------------------------------ */
+
+.promptui-switch-default {
+  display: inline-flex; align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.promptui-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+.promptui-switch-track {
+  position: relative;
+  display: inline-block;
+  width: 2.25rem; height: 1.25rem;
+  background: var(--promptui-border);
+  border-radius: 9999px;
+  transition: background 0.15s;
+}
+.promptui-switch-input:checked ~ .promptui-switch-track {
+  background: var(--promptui-primary);
+}
+.promptui-switch-thumb {
+  position: absolute;
+  top: 0.125rem; left: 0.125rem;
+  width: 1rem; height: 1rem;
+  background: var(--promptui-bg);
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s;
+}
+.promptui-switch-input:checked ~ .promptui-switch-track .promptui-switch-thumb {
+  transform: translateX(1rem);
+}
+
+/* ------------------------------------------------------------------ *
+ * Radio group
+ * ------------------------------------------------------------------ */
+
+.promptui-radio-group-default {
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.promptui-radio-group-item {
+  width: 1rem; height: 1rem;
+  margin: 0;
+  accent-color: var(--promptui-primary);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ *
+ * Slider
+ * ------------------------------------------------------------------ */
+
+.promptui-slider-default {
+  width: 100%;
+  accent-color: var(--promptui-primary);
+  cursor: pointer;
+}
+.promptui-slider-range {
+  position: relative;
+  display: flex; flex-direction: column; gap: 0.25rem;
+  padding: 0.5rem 0;
+}
+.promptui-slider-range-thumb { width: 100%; accent-color: var(--promptui-primary); cursor: pointer; }
+
+/* ------------------------------------------------------------------ *
+ * Overlay primitives — floating panels with shadow
+ * ------------------------------------------------------------------ */
+
+.promptui-dialog-default,
+.promptui-alert-dialog-default,
+.promptui-sheet-default,
+.promptui-drawer-default {
+  position: fixed; z-index: 50;
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.promptui-dialog-default,
+.promptui-alert-dialog-default {
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem); overflow: auto;
+  padding: 1.5rem;
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg);
+}
+.promptui-dialog-default--fullscreen {
+  top: 0; left: 0; transform: none;
+  width: 100vw; height: 100vh; max-height: 100vh;
+  border-radius: 0; border: none;
+}
+.promptui-dialog-default--compact { width: min(24rem, calc(100vw - 2rem)); padding: 1rem; }
+
+.promptui-dialog-header, .promptui-alert-dialog-header {
+  display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem;
+}
+.promptui-dialog-footer, .promptui-alert-dialog-footer {
+  display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;
+}
+.promptui-dialog-title, .promptui-alert-dialog-title { margin: 0; font-size: 1.125rem; font-weight: 600; line-height: 1.3; }
+.promptui-dialog-description, .promptui-alert-dialog-description { margin: 0; font-size: 0.875rem; color: var(--promptui-muted); }
+.promptui-dialog-trigger, .promptui-alert-dialog-trigger { all: unset; cursor: pointer; display: inline-flex; }
+.promptui-dialog-close {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  width: 1.75rem; height: 1.75rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  color: var(--promptui-muted); cursor: pointer;
+}
+.promptui-dialog-close:hover { background: var(--promptui-accent); color: var(--promptui-fg); }
+
+/* Sheet */
+.promptui-sheet-default { padding: 1.5rem; display: flex; flex-direction: column; }
+.promptui-sheet-default--right  { top: 0; right: 0; bottom: 0; width: min(24rem, 90vw); border-left: 1px solid var(--promptui-border); }
+.promptui-sheet-default--left   { top: 0; left: 0; bottom: 0; width: min(24rem, 90vw); border-right: 1px solid var(--promptui-border); }
+.promptui-sheet-default--top    { top: 0; left: 0; right: 0; max-height: 50vh; border-bottom: 1px solid var(--promptui-border); }
+.promptui-sheet-default--bottom { bottom: 0; left: 0; right: 0; max-height: 50vh; border-top: 1px solid var(--promptui-border); }
+.promptui-sheet-header { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem; }
+.promptui-sheet-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: auto; padding-top: 1rem; }
+.promptui-sheet-title { margin: 0; font-size: 1.125rem; font-weight: 600; }
+.promptui-sheet-description { margin: 0; font-size: 0.875rem; color: var(--promptui-muted); }
+.promptui-sheet-close {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  width: 1.75rem; height: 1.75rem; background: transparent; border: none;
+  border-radius: var(--promptui-radius-sm); color: var(--promptui-muted); cursor: pointer;
+}
+
+/* Drawer */
+.promptui-drawer-default { padding: 1.5rem; display: flex; flex-direction: column; }
+.promptui-drawer-default--bottom { bottom: 0; left: 0; right: 0; max-height: 85vh; border-top-left-radius: var(--promptui-radius-lg); border-top-right-radius: var(--promptui-radius-lg); }
+.promptui-drawer-default--top    { top: 0; left: 0; right: 0; max-height: 85vh; border-bottom-left-radius: var(--promptui-radius-lg); border-bottom-right-radius: var(--promptui-radius-lg); }
+.promptui-drawer-default--left   { top: 0; left: 0; bottom: 0; width: min(20rem, 90vw); }
+.promptui-drawer-default--right  { top: 0; right: 0; bottom: 0; width: min(20rem, 90vw); }
+.promptui-drawer-header { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem; }
+.promptui-drawer-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: auto; padding-top: 1rem; }
+.promptui-drawer-title { margin: 0; font-size: 1.125rem; font-weight: 600; }
+.promptui-drawer-description { margin: 0; font-size: 0.875rem; color: var(--promptui-muted); }
+
+/* Popover / HoverCard / Tooltip */
+.promptui-popover-default,
+.promptui-hover-card-default,
+.promptui-tooltip-default,
+.promptui-tooltip-rich { display: inline-block; position: relative; }
+.promptui-popover-trigger,
+.promptui-hover-card-trigger,
+.promptui-tooltip-trigger,
+.promptui-tooltip-rich-trigger { all: unset; cursor: pointer; display: inline-flex; }
+.promptui-popover-content,
+.promptui-hover-card-content,
+.promptui-tooltip-rich-content {
+  position: absolute; z-index: 40;
+  top: calc(100% + 0.375rem); left: 0;
+  padding: 0.75rem 1rem;
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: var(--promptui-font-sans); font-size: 0.875rem;
+  max-width: 20rem; min-width: 8rem;
+}
+.promptui-tooltip-content {
+  position: absolute; z-index: 40;
+  top: calc(100% + 0.375rem); left: 0;
+  padding: 0.375rem 0.625rem;
+  font-family: var(--promptui-font-sans); font-size: 0.75rem;
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+  border-radius: var(--promptui-radius-sm);
+  max-width: 16rem;
+}
+.promptui-tooltip-rich-title { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; }
+.promptui-tooltip-rich-description { font-size: 0.8125rem; color: var(--promptui-muted); line-height: 1.4; }
+.promptui-tooltip-rich-actions { display: flex; gap: 0.375rem; margin-top: 0.5rem; }
+
+/* ------------------------------------------------------------------ *
+ * Menus (Dropdown, ContextMenu, Menubar)
+ * ------------------------------------------------------------------ */
+
+.promptui-dropdown-menu-default,
+.promptui-context-menu-default { position: relative; display: inline-block; }
+.promptui-dropdown-menu-trigger,
+.promptui-context-menu-trigger { all: unset; cursor: pointer; display: inline-flex; align-items: center; }
+.promptui-dropdown-menu-content,
+.promptui-context-menu-content {
+  position: absolute; z-index: 40;
+  top: calc(100% + 0.25rem); left: 0;
+  min-width: 10rem; padding: 0.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: var(--promptui-font-sans);
+}
+.promptui-dropdown-menu-item,
+.promptui-context-menu-item {
+  display: flex; align-items: center;
+  padding: 0.375rem 0.625rem; font-size: 0.875rem;
+  color: var(--promptui-fg); border-radius: var(--promptui-radius-sm);
+  cursor: pointer;
+}
+.promptui-dropdown-menu-item:hover,
+.promptui-context-menu-item:hover { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-dropdown-menu-item[data-disabled],
+.promptui-context-menu-item[data-disabled] { opacity: 0.5; pointer-events: none; }
+.promptui-dropdown-menu-label,
+.promptui-context-menu-label {
+  padding: 0.375rem 0.625rem; font-size: 0.75rem; font-weight: 600;
+  color: var(--promptui-muted); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.promptui-dropdown-menu-separator,
+.promptui-context-menu-separator { margin: 0.25rem 0; height: 1px; background: var(--promptui-border); }
+.promptui-dropdown-menu-checkbox-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.375rem 0.625rem; font-size: 0.875rem;
+  border-radius: var(--promptui-radius-sm); cursor: pointer;
+}
+.promptui-dropdown-menu-checkbox-item[data-state="checked"]::before { content: "✓"; color: var(--promptui-primary); }
+
+.promptui-menubar-default {
+  display: flex; align-items: center; gap: 0.25rem; padding: 0.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); font-family: var(--promptui-font-sans);
+}
+.promptui-menubar-menu { position: relative; }
+.promptui-menubar-trigger {
+  padding: 0.375rem 0.75rem; font-size: 0.875rem;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  color: var(--promptui-fg); cursor: pointer;
+}
+.promptui-menubar-trigger:hover { background: var(--promptui-accent); }
+.promptui-menubar-content {
+  position: absolute; top: calc(100% + 0.25rem); left: 0;
+  min-width: 10rem; padding: 0.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); z-index: 40;
+}
+.promptui-menubar-item { padding: 0.375rem 0.625rem; font-size: 0.875rem; border-radius: var(--promptui-radius-sm); cursor: pointer; }
+.promptui-menubar-item:hover { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-menubar-separator { margin: 0.25rem 0; height: 1px; background: var(--promptui-border); }
+
+/* NavigationMenu */
+.promptui-navigation-menu-default { display: flex; align-items: center; font-family: var(--promptui-font-sans); }
+.promptui-navigation-menu-list { display: flex; align-items: center; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+.promptui-navigation-menu-item { position: relative; }
+.promptui-navigation-menu-trigger {
+  padding: 0.5rem 0.75rem; font-size: 0.875rem; font-weight: 500;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  color: var(--promptui-fg); cursor: pointer;
+}
+.promptui-navigation-menu-trigger:hover { background: var(--promptui-accent); }
+.promptui-navigation-menu-content {
+  position: absolute; top: calc(100% + 0.25rem); left: 0;
+  padding: 0.75rem; min-width: 12rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); z-index: 40;
+}
+.promptui-navigation-menu-link {
+  display: block; padding: 0.375rem 0.5rem; font-size: 0.875rem;
+  color: var(--promptui-fg); text-decoration: none; border-radius: var(--promptui-radius-sm);
+}
+.promptui-navigation-menu-link:hover { background: var(--promptui-accent); }
+
+.promptui-navigation-menu-mobile { position: relative; }
+.promptui-navigation-menu-mobile-trigger {
+  padding: 0.5rem; background: transparent; border: none;
+  border-radius: var(--promptui-radius-sm);
+  font-size: 1.25rem; color: var(--promptui-fg); cursor: pointer;
+}
+.promptui-navigation-menu-mobile-drawer {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: min(18rem, 85vw); padding: 1.5rem;
+  background: var(--promptui-bg); border-right: 1px solid var(--promptui-border);
+  z-index: 40; box-shadow: 6px 0 20px rgba(0, 0, 0, 0.08);
+}
+.promptui-navigation-menu-mobile-close {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  width: 1.75rem; height: 1.75rem;
+  background: transparent; border: none; color: var(--promptui-muted); cursor: pointer;
+}
+
+.promptui-navigation-menu-mega { display: flex; align-items: center; font-family: var(--promptui-font-sans); }
+.promptui-navigation-menu-mega-content {
+  padding: 1.5rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+.promptui-navigation-menu-mega-columns { display: grid; gap: 1.5rem; }
+.promptui-navigation-menu-mega-column { display: flex; flex-direction: column; gap: 0.5rem; }
+.promptui-navigation-menu-mega-group { display: flex; flex-direction: column; gap: 0.25rem; }
+.promptui-navigation-menu-mega-group-title {
+  margin: 0 0 0.25rem; font-size: 0.75rem; font-weight: 600;
+  color: var(--promptui-muted); text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+/* ------------------------------------------------------------------ *
+ * Accordion + Collapsible
+ * ------------------------------------------------------------------ */
+
+.promptui-accordion-default { display: flex; flex-direction: column; font-family: var(--promptui-font-sans); }
+.promptui-accordion-default--bordered { border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius); overflow: hidden; }
+.promptui-accordion-default--separated .promptui-accordion-item {
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  margin-bottom: 0.5rem; overflow: hidden;
+}
+.promptui-accordion-item { border-bottom: 1px solid var(--promptui-border); }
+.promptui-accordion-item:last-child { border-bottom: none; }
+.promptui-accordion-trigger {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.875rem 1rem;
+  background: transparent; border: none;
+  font-family: inherit; font-size: 0.9375rem; font-weight: 500;
+  color: var(--promptui-fg); text-align: left; cursor: pointer;
+}
+.promptui-accordion-trigger:hover { background: var(--promptui-accent); }
+.promptui-accordion-trigger::after {
+  content: "›"; display: inline-block; margin-left: 0.5rem;
+  transition: transform 0.2s; color: var(--promptui-muted);
+}
+.promptui-accordion-item[data-state="open"] > .promptui-accordion-trigger::after { transform: rotate(90deg); }
+.promptui-accordion-content { padding: 0 1rem 0.875rem; font-size: 0.875rem; color: var(--promptui-fg); line-height: 1.5; }
+
+.promptui-collapsible-default { display: flex; flex-direction: column; font-family: var(--promptui-font-sans); }
+.promptui-collapsible-trigger {
+  padding: 0.5rem 0.75rem;
+  background: transparent; border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  font-family: inherit; font-size: 0.875rem;
+  color: var(--promptui-fg); cursor: pointer; text-align: left;
+}
+.promptui-collapsible-content { padding: 0.5rem 0.75rem; font-size: 0.875rem; }
+
+/* ------------------------------------------------------------------ *
+ * Tabs + TabVertical
+ * ------------------------------------------------------------------ */
+
+.promptui-tab-default { display: flex; flex-direction: column; gap: 0.5rem; font-family: var(--promptui-font-sans); }
+.promptui-tab-list { display: inline-flex; align-items: center; gap: 0.25rem; border-bottom: 1px solid var(--promptui-border); }
+.promptui-tab-default--pills .promptui-tab-list { border-bottom: none; padding: 0.25rem; background: var(--promptui-muted-bg); border-radius: var(--promptui-radius); }
+.promptui-tab-default--boxed .promptui-tab-list { border-bottom: none; gap: 0; }
+.promptui-tab-trigger {
+  padding: 0.5rem 0.875rem; font-size: 0.875rem; font-weight: 500;
+  background: transparent; border: none;
+  color: var(--promptui-muted); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.promptui-tab-trigger:hover { color: var(--promptui-fg); }
+.promptui-tab-trigger[data-state="active"] { color: var(--promptui-fg); border-bottom-color: var(--promptui-primary); }
+.promptui-tab-default--pills .promptui-tab-trigger { border-radius: var(--promptui-radius-sm); border-bottom: none; margin-bottom: 0; }
+.promptui-tab-default--pills .promptui-tab-trigger[data-state="active"] {
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.promptui-tab-default--boxed .promptui-tab-trigger { border: 1px solid var(--promptui-border); border-right-width: 0; margin-bottom: 0; }
+.promptui-tab-default--boxed .promptui-tab-trigger:first-child { border-top-left-radius: var(--promptui-radius); border-bottom-left-radius: var(--promptui-radius); }
+.promptui-tab-default--boxed .promptui-tab-trigger:last-child  { border-right-width: 1px; border-top-right-radius: var(--promptui-radius); border-bottom-right-radius: var(--promptui-radius); }
+.promptui-tab-default--boxed .promptui-tab-trigger[data-state="active"] { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-tab-content { padding: 0.75rem 0; font-size: 0.875rem; }
+.promptui-tab-content[hidden] { display: none; }
+
+.promptui-tab-vertical { display: flex; gap: 1.5rem; font-family: var(--promptui-font-sans); }
+.promptui-tab-vertical-list {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  min-width: 10rem; border-right: 1px solid var(--promptui-border); padding-right: 1rem;
+}
+.promptui-tab-vertical-panels { flex: 1; font-size: 0.875rem; }
+
+/* ------------------------------------------------------------------ *
+ * Select / Combobox / Command / InputOTP / Toggle
+ * ------------------------------------------------------------------ */
+
+.promptui-select-default { position: relative; display: inline-block; font-family: var(--promptui-font-sans); }
+.promptui-select-trigger {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  min-width: 10rem; height: 2.25rem; padding: 0 0.75rem;
+  background: var(--promptui-input-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  font-family: inherit; font-size: 0.875rem; cursor: pointer;
+}
+.promptui-select-trigger::after { content: "▾"; color: var(--promptui-muted); font-size: 0.75rem; }
+.promptui-select-content {
+  position: absolute; top: calc(100% + 0.25rem); left: 0; right: 0;
+  padding: 0.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  z-index: 40; max-height: 16rem; overflow: auto;
+}
+.promptui-select-item { padding: 0.375rem 0.625rem; font-size: 0.875rem; border-radius: var(--promptui-radius-sm); cursor: pointer; }
+.promptui-select-item:hover { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-select-item[data-state="checked"]::before { content: "✓ "; color: var(--promptui-primary); }
+.promptui-select-label { padding: 0.375rem 0.625rem; font-size: 0.75rem; font-weight: 600; color: var(--promptui-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.promptui-select-separator { margin: 0.25rem 0; height: 1px; background: var(--promptui-border); }
+
+.promptui-combobox-default, .promptui-combobox-multi { position: relative; display: inline-block; font-family: var(--promptui-font-sans); }
+.promptui-combobox-trigger, .promptui-combobox-multi-trigger {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  min-width: 12rem; height: 2.25rem; padding: 0 0.75rem;
+  background: var(--promptui-input-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  font-family: inherit; font-size: 0.875rem; cursor: pointer;
+}
+.promptui-combobox-list, .promptui-combobox-multi-list {
+  position: absolute; top: calc(100% + 0.25rem); left: 0; right: 0;
+  list-style: none; margin: 0; padding: 0.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  z-index: 40; max-height: 16rem; overflow: auto;
+}
+.promptui-combobox-item, .promptui-combobox-multi-item {
+  padding: 0.375rem 0.625rem; font-size: 0.875rem;
+  border-radius: var(--promptui-radius-sm); cursor: pointer;
+}
+.promptui-combobox-item:hover, .promptui-combobox-multi-item:hover { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-combobox-item[aria-selected="true"]::before,
+.promptui-combobox-multi-item[data-selected]::before { content: "✓ "; color: var(--promptui-primary); }
+
+.promptui-command-default {
+  display: flex; flex-direction: column;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg); font-family: var(--promptui-font-sans);
+  overflow: hidden;
+}
+.promptui-command-input {
+  padding: 0.75rem 1rem; font-family: inherit; font-size: 0.9375rem;
+  background: transparent; border: none; border-bottom: 1px solid var(--promptui-border);
+  outline: none; color: var(--promptui-fg);
+}
+.promptui-command-list { max-height: 20rem; overflow: auto; padding: 0.25rem; }
+.promptui-command-empty { padding: 1.5rem; text-align: center; color: var(--promptui-muted); font-size: 0.875rem; }
+.promptui-command-group-heading { padding: 0.375rem 0.625rem; font-size: 0.75rem; font-weight: 600; color: var(--promptui-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.promptui-command-item { padding: 0.5rem 0.625rem; font-size: 0.875rem; border-radius: var(--promptui-radius-sm); cursor: pointer; }
+.promptui-command-item:hover, .promptui-command-item[data-selected] { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+.promptui-command-separator { margin: 0.25rem 0; height: 1px; background: var(--promptui-border); }
+
+.promptui-input-otp-default { display: flex; align-items: center; gap: 0.5rem; position: relative; }
+.promptui-input-otp-input { width: 0; height: 0; opacity: 0; position: absolute; }
+.promptui-input-otp-group { display: inline-flex; gap: 0.25rem; }
+.promptui-input-otp-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.75rem;
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  background: var(--promptui-input-bg); color: var(--promptui-fg);
+  font-family: var(--promptui-font-mono); font-size: 1.125rem; font-weight: 500;
+}
+.promptui-input-otp-slot[data-active] {
+  border-color: var(--promptui-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--promptui-ring) 20%, transparent);
+}
+.promptui-input-otp-separator { color: var(--promptui-muted); font-size: 1rem; }
+
+.promptui-toggle-default {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  height: 2.25rem; padding: 0 0.75rem;
+  background: transparent; color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  font-family: var(--promptui-font-sans); font-size: 0.875rem; cursor: pointer;
+}
+.promptui-toggle-default:hover { background: var(--promptui-accent); }
+.promptui-toggle-default[data-state="on"] { background: var(--promptui-accent); color: var(--promptui-accent-fg); }
+
+.promptui-toggle-group-default {
+  display: inline-flex; align-items: center; gap: 0;
+  background: var(--promptui-muted-bg); border-radius: var(--promptui-radius); padding: 0.25rem;
+}
+.promptui-toggle-group-item {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 1.75rem; padding: 0 0.625rem;
+  background: transparent; color: var(--promptui-muted);
+  border: none; border-radius: var(--promptui-radius-sm);
+  font-family: var(--promptui-font-sans); font-size: 0.8125rem; cursor: pointer;
+}
+.promptui-toggle-group-item[data-state="on"] {
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ------------------------------------------------------------------ *
+ * Calendar + DatePicker
+ * ------------------------------------------------------------------ */
+
+.promptui-calendar-default,
+.promptui-calendar-range,
+.promptui-calendar-multiple {
+  display: inline-flex; flex-direction: column; gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); font-family: var(--promptui-font-sans);
+}
+.promptui-calendar-header,
+.promptui-calendar-range-header,
+.promptui-calendar-multiple-header {
+  font-size: 0.875rem; font-weight: 600; text-align: center; color: var(--promptui-fg);
+  padding: 0.25rem 0;
+}
+.promptui-calendar-grid,
+.promptui-calendar-range-grid,
+.promptui-calendar-multiple-grid { display: flex; flex-direction: column; gap: 0.125rem; }
+.promptui-calendar-row,
+.promptui-calendar-range-row,
+.promptui-calendar-multiple-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.125rem; }
+.promptui-calendar-day,
+.promptui-calendar-range-day,
+.promptui-calendar-multiple-day {
+  width: 2rem; height: 2rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.8125rem;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  color: var(--promptui-fg); cursor: pointer;
+}
+.promptui-calendar-day:hover,
+.promptui-calendar-range-day:hover,
+.promptui-calendar-multiple-day:hover { background: var(--promptui-accent); }
+.promptui-calendar-day[aria-selected],
+.promptui-calendar-multiple-day[aria-selected],
+.promptui-calendar-range-day[data-range-start],
+.promptui-calendar-range-day[data-range-end] {
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+}
+.promptui-calendar-range-day[data-in-range] {
+  background: color-mix(in srgb, var(--promptui-primary) 15%, transparent);
+  border-radius: 0;
+}
+.promptui-calendar-day[data-outside],
+.promptui-calendar-range-day[data-outside],
+.promptui-calendar-multiple-day[data-outside] { color: var(--promptui-muted); opacity: 0.5; }
+
+.promptui-date-picker-default,
+.promptui-date-picker-range,
+.promptui-date-picker-multiple { position: relative; display: inline-block; font-family: var(--promptui-font-sans); }
+.promptui-date-picker-trigger,
+.promptui-date-picker-range-trigger,
+.promptui-date-picker-multiple-trigger {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  height: 2.25rem; padding: 0 0.75rem;
+  background: var(--promptui-input-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  font-family: inherit; font-size: 0.875rem; cursor: pointer;
+}
+.promptui-date-picker-popover,
+.promptui-date-picker-range-popover,
+.promptui-date-picker-multiple-popover {
+  position: absolute; top: calc(100% + 0.25rem); left: 0;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); z-index: 40;
+}
+
+/* ------------------------------------------------------------------ *
+ * Carousel
+ * ------------------------------------------------------------------ */
+
+.promptui-carousel-default { position: relative; display: flex; align-items: center; gap: 0.5rem; }
+.promptui-carousel-content { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; flex: 1; }
+.promptui-carousel-content::-webkit-scrollbar { display: none; }
+.promptui-carousel-item { flex: 0 0 auto; scroll-snap-align: start; min-width: 16rem; }
+.promptui-carousel-previous,
+.promptui-carousel-next {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border); border-radius: 9999px;
+  color: var(--promptui-fg); cursor: pointer; font-size: 1rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Avatar + Toast / Sonner / Pagination / Breadcrumb / ScrollArea /
+ * Resizable / Sidebar / AspectRatio / Form
+ * ------------------------------------------------------------------ */
+
+.promptui-avatar-default,
+.promptui-avatar-with-status {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  background: var(--promptui-muted-bg); color: var(--promptui-fg);
+  border-radius: 9999px; font-family: var(--promptui-font-sans);
+  font-size: 0.875rem; font-weight: 600;
+  overflow: hidden; position: relative; flex-shrink: 0;
+}
+.promptui-avatar-image { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.promptui-avatar-fallback {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  background: var(--promptui-muted-bg); color: var(--promptui-fg);
+}
+.promptui-avatar-status-dot {
+  position: absolute; bottom: 0; right: 0;
+  width: 0.75rem; height: 0.75rem;
+  border-radius: 9999px; border: 2px solid var(--promptui-bg);
+}
+.promptui-avatar-status-dot--online  { background: #16a34a; }
+.promptui-avatar-status-dot--offline { background: #a1a1aa; }
+.promptui-avatar-status-dot--away    { background: #eab308; }
+.promptui-avatar-status-dot--busy    { background: #dc2626; }
+
+.promptui-avatar-group { display: inline-flex; align-items: center; }
+.promptui-avatar-group > * { margin-left: -0.5rem; border: 2px solid var(--promptui-bg); box-sizing: content-box; }
+.promptui-avatar-group > *:first-child { margin-left: 0; }
+.promptui-avatar-group-overflow {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.5rem; height: 2.5rem; padding: 0 0.5rem;
+  background: var(--promptui-muted-bg); color: var(--promptui-fg);
+  border-radius: 9999px; border: 2px solid var(--promptui-bg);
+  font-size: 0.75rem; font-weight: 600;
+}
+
+.promptui-toast-default {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  padding: 0.875rem 1rem; position: relative;
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: var(--promptui-font-sans); font-size: 0.875rem;
+  list-style: none;
+}
+.promptui-toast-default--destructive {
+  border-color: var(--promptui-destructive);
+  background: var(--promptui-destructive); color: var(--promptui-destructive-fg);
+}
+.promptui-toast-title { font-weight: 600; }
+.promptui-toast-description { color: var(--promptui-muted); font-size: 0.8125rem; }
+.promptui-toast-default--destructive .promptui-toast-description { color: inherit; opacity: 0.9; }
+.promptui-toast-close {
+  position: absolute; top: 0.25rem; right: 0.25rem;
+  width: 1.5rem; height: 1.5rem;
+  background: transparent; border: none; color: inherit; cursor: pointer;
+}
+.promptui-toast-viewport,
+.promptui-sonner-default {
+  position: fixed; z-index: 60;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  list-style: none; margin: 0; padding: 0;
+  max-width: min(24rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+.promptui-toast-viewport > *,
+.promptui-sonner-default > * { pointer-events: auto; }
+.promptui-sonner-default--bottom-right { bottom: 1rem; right: 1rem; }
+.promptui-sonner-default--bottom-left  { bottom: 1rem; left: 1rem; }
+.promptui-sonner-default--bottom-center { bottom: 1rem; left: 50%; transform: translateX(-50%); }
+.promptui-sonner-default--top-right { top: 1rem; right: 1rem; }
+.promptui-sonner-default--top-left  { top: 1rem; left: 1rem; }
+.promptui-sonner-default--top-center { top: 1rem; left: 50%; transform: translateX(-50%); }
+
+.promptui-table-wrapper { width: 100%; overflow-x: auto; }
+.promptui-table-default,
+.promptui-data-table-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--promptui-font-sans); font-size: 0.875rem;
+}
+.promptui-table-head,
+.promptui-data-table-head {
+  padding: 0.625rem 0.875rem;
+  text-align: left; font-weight: 600; color: var(--promptui-muted);
+  border-bottom: 1px solid var(--promptui-border);
+  font-size: 0.8125rem;
+}
+.promptui-table-cell,
+.promptui-data-table-cell {
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--promptui-border);
+  color: var(--promptui-fg);
+}
+.promptui-table-row:last-child .promptui-table-cell,
+.promptui-data-table-row:last-child .promptui-data-table-cell { border-bottom: none; }
+.promptui-table-caption { caption-side: bottom; padding-top: 0.5rem; color: var(--promptui-muted); font-size: 0.8125rem; }
+.promptui-data-table-empty { padding: 2rem; text-align: center; color: var(--promptui-muted); }
+
+.promptui-pagination-default,
+.promptui-pagination-with-page-size {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-family: var(--promptui-font-sans);
+}
+.promptui-pagination-content { display: inline-flex; align-items: center; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+.promptui-pagination-link,
+.promptui-pagination-previous,
+.promptui-pagination-next {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; height: 2rem; padding: 0 0.5rem;
+  font-size: 0.875rem; color: var(--promptui-fg); text-decoration: none;
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius-sm);
+  background: transparent;
+}
+.promptui-pagination-link:hover,
+.promptui-pagination-previous:hover,
+.promptui-pagination-next:hover { background: var(--promptui-accent); }
+.promptui-pagination-link[aria-current="page"],
+.promptui-pagination-link[data-state="active"] {
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+  border-color: var(--promptui-primary);
+}
+.promptui-pagination-ellipsis { padding: 0 0.375rem; color: var(--promptui-muted); }
+.promptui-pagination-default--compact .promptui-pagination-link { min-width: 1.75rem; height: 1.75rem; font-size: 0.8125rem; }
+.promptui-pagination-page-size { display: inline-flex; align-items: center; gap: 0.5rem; }
+.promptui-pagination-page-size-label { font-size: 0.8125rem; color: var(--promptui-muted); }
+.promptui-pagination-page-size-select {
+  height: 2rem; padding: 0 0.5rem;
+  background: var(--promptui-input-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius-sm);
+  font-family: inherit; font-size: 0.8125rem;
+}
+
+.promptui-breadcrumb-default,
+.promptui-breadcrumb-with-dropdown { font-family: var(--promptui-font-sans); font-size: 0.875rem; }
+.promptui-breadcrumb-list {
+  display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0.375rem;
+  list-style: none; margin: 0; padding: 0;
+}
+.promptui-breadcrumb-link { color: var(--promptui-muted); text-decoration: none; }
+.promptui-breadcrumb-link:hover { color: var(--promptui-fg); text-decoration: underline; }
+.promptui-breadcrumb-page { color: var(--promptui-fg); font-weight: 500; }
+.promptui-breadcrumb-separator { color: var(--promptui-muted); }
+.promptui-breadcrumb-ellipsis { color: var(--promptui-muted); padding: 0 0.25rem; }
+.promptui-breadcrumb-dropdown { position: relative; display: inline-flex; }
+.promptui-breadcrumb-dropdown-trigger {
+  background: transparent; border: none; color: var(--promptui-muted); cursor: pointer;
+  font-size: 1rem; padding: 0 0.25rem;
+}
+.promptui-breadcrumb-dropdown-content {
+  position: absolute; top: calc(100% + 0.25rem); left: 0;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius); padding: 0.25rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); min-width: 10rem; z-index: 40;
+}
+
+.promptui-scroll-area-default { overflow: auto; position: relative; }
+.promptui-scroll-area-viewport { width: 100%; height: 100%; }
+.promptui-scroll-area-scrollbar {
+  position: absolute;
+  background: color-mix(in srgb, var(--promptui-muted-bg) 60%, transparent);
+  border-radius: 9999px;
+}
+.promptui-scroll-area-scrollbar--vertical   { width: 0.375rem; right: 0; top: 0; bottom: 0; }
+.promptui-scroll-area-scrollbar--horizontal { height: 0.375rem; left: 0; right: 0; bottom: 0; }
+.promptui-scroll-area-thumb { background: var(--promptui-muted); border-radius: 9999px; }
+
+.promptui-resizable-default {
+  display: flex; width: 100%; height: 100%;
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius); overflow: hidden;
+}
+.promptui-resizable-default--vertical { flex-direction: column; }
+.promptui-resizable-panel { flex: 1 1 0; padding: 1rem; overflow: auto; }
+.promptui-resizable-handle { background: var(--promptui-border); flex-shrink: 0; position: relative; transition: background 0.15s; }
+.promptui-resizable-default:not(.promptui-resizable-default--vertical) .promptui-resizable-handle { width: 1px; cursor: col-resize; }
+.promptui-resizable-default--vertical .promptui-resizable-handle { height: 1px; cursor: row-resize; }
+.promptui-resizable-handle:hover { background: var(--promptui-primary); }
+.promptui-resizable-handle-grip {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 0.25rem; height: 1.5rem; background: var(--promptui-muted); border-radius: 9999px;
+}
+
+.promptui-sidebar-default {
+  display: flex; flex-direction: column;
+  width: 16rem; height: 100%;
+  background: var(--promptui-bg);
+  border-right: 1px solid var(--promptui-border);
+  font-family: var(--promptui-font-sans);
+}
+.promptui-sidebar-default--right { border-right: none; border-left: 1px solid var(--promptui-border); }
+.promptui-sidebar-default[data-state="collapsed"] { width: 3rem; }
+.promptui-sidebar-header { padding: 0.875rem 1rem; border-bottom: 1px solid var(--promptui-border); }
+.promptui-sidebar-content { flex: 1; overflow-y: auto; padding: 0.5rem; }
+.promptui-sidebar-footer { padding: 0.875rem 1rem; border-top: 1px solid var(--promptui-border); }
+.promptui-sidebar-group { display: flex; flex-direction: column; gap: 0.125rem; padding: 0.5rem 0; }
+.promptui-sidebar-group-label {
+  padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600;
+  color: var(--promptui-muted); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.promptui-sidebar-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.125rem; }
+.promptui-sidebar-menu-button {
+  flex: 1;
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  font-family: inherit; font-size: 0.875rem; color: var(--promptui-fg);
+  text-align: left; cursor: pointer; width: 100%;
+}
+.promptui-sidebar-menu-button:hover { background: var(--promptui-accent); }
+.promptui-sidebar-menu-button[data-active] { background: var(--promptui-accent); font-weight: 600; }
+.promptui-sidebar-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem;
+  background: transparent; border: none; border-radius: var(--promptui-radius-sm);
+  color: var(--promptui-fg); cursor: pointer; font-size: 1.125rem;
+}
+
+.promptui-aspect-ratio-default { width: 100%; }
+
+.promptui-form-default { display: flex; flex-direction: column; gap: 1rem; font-family: var(--promptui-font-sans); }
+.promptui-form-item { display: flex; flex-direction: column; gap: 0.375rem; }
+.promptui-form-label { font-size: 0.875rem; font-weight: 500; color: var(--promptui-fg); }
+.promptui-form-control { display: flex; flex-direction: column; }
+.promptui-form-description { font-size: 0.8125rem; color: var(--promptui-muted); margin: 0; }
+.promptui-form-message { font-size: 0.8125rem; color: var(--promptui-destructive); margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Progress — Default already handled; add Circular + Stepped
+ * ------------------------------------------------------------------ */
+
+.promptui-progress-circular { color: var(--promptui-primary); }
+.promptui-progress-circular-track { stroke: var(--promptui-muted-bg); }
+.promptui-progress-circular-indicator { stroke: currentColor; transition: stroke-dashoffset 0.3s; }
+.promptui-progress-circular-value {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--promptui-font-sans); font-size: 0.75rem; font-weight: 600;
+  color: var(--promptui-fg);
+}
+.promptui-progress-stepped { display: flex; align-items: center; gap: 0.5rem; font-family: var(--promptui-font-sans); }
+.promptui-progress-stepped-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.375rem; }
+.promptui-progress-stepped-marker {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.5rem; height: 1.5rem;
+  background: var(--promptui-muted-bg); color: var(--promptui-muted);
+  border-radius: 9999px; font-size: 0.75rem; font-weight: 600;
+}
+.promptui-progress-stepped-step[data-state="complete"] .promptui-progress-stepped-marker {
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+}
+.promptui-progress-stepped-step[data-state="active"] .promptui-progress-stepped-marker {
+  background: var(--promptui-primary); color: var(--promptui-primary-fg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--promptui-primary) 25%, transparent);
+}
+.promptui-progress-stepped-label { font-size: 0.75rem; color: var(--promptui-muted); }
+
+/* ------------------------------------------------------------------ *
+ * Heroes (Primary legacy + Split/Centered/WithVideo/WithGradient) + shared parts
+ * ------------------------------------------------------------------ */
+
+.promptui-hero-primary,
+.promptui-hero-split,
+.promptui-hero-centered,
+.promptui-hero-with-video,
+.promptui-hero-with-gradient {
+  position: relative;
+  padding: 4rem 1.5rem;
+  font-family: var(--promptui-font-sans);
+  color: var(--promptui-fg);
+}
+
+.promptui-hero-primary { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
+.promptui-hero-primary .promptui-hero-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.promptui-hero-primary .promptui-hero-subtitle { font-size: 1.125rem; color: var(--promptui-muted); max-width: 40rem; margin: 0; }
+
+.promptui-hero-split {
+  display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center;
+  max-width: 72rem; margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .promptui-hero-split { grid-template-columns: 1fr 1fr; }
+  .promptui-hero-split--visual-left .promptui-hero-split-visual { order: -1; }
+}
+.promptui-hero-split-content { display: flex; flex-direction: column; gap: 1rem; }
+.promptui-hero-split-visual { display: flex; align-items: center; justify-content: center; }
+
+.promptui-hero-centered { max-width: 48rem; margin: 0 auto; text-align: center; }
+.promptui-hero-centered-inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+.promptui-hero-with-video { overflow: hidden; isolation: isolate; }
+.promptui-hero-with-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.promptui-hero-with-video-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: -1; }
+.promptui-hero-with-video-content { position: relative; display: flex; flex-direction: column; gap: 1rem; color: #ffffff; max-width: 48rem; }
+
+.promptui-hero-with-gradient { text-align: center; overflow: hidden; }
+.promptui-hero-with-gradient--sunset   { background: linear-gradient(135deg, #f97316, #ec4899, #a855f7); color: #ffffff; }
+.promptui-hero-with-gradient--ocean    { background: linear-gradient(135deg, #0ea5e9, #06b6d4, #3b82f6); color: #ffffff; }
+.promptui-hero-with-gradient--forest   { background: linear-gradient(135deg, #15803d, #10b981, #22c55e); color: #ffffff; }
+.promptui-hero-with-gradient--midnight { background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81); color: #ffffff; }
+.promptui-hero-with-gradient-inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; max-width: 48rem; margin: 0 auto; }
+
+.promptui-hero-title { margin: 0; font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.promptui-hero-subtitle { margin: 0; font-size: 1.0625rem; color: var(--promptui-muted); line-height: 1.5; }
+.promptui-hero-with-video .promptui-hero-subtitle,
+.promptui-hero-with-gradient .promptui-hero-subtitle { color: rgba(255,255,255,0.85); }
+.promptui-hero-eyebrow {
+  display: inline-block;
+  padding: 0.25rem 0.75rem; font-size: 0.8125rem; font-weight: 600;
+  background: var(--promptui-muted-bg); color: var(--promptui-muted);
+  border-radius: 9999px; align-self: flex-start; letter-spacing: 0.03em;
+}
+.promptui-hero-centered .promptui-hero-eyebrow,
+.promptui-hero-with-gradient .promptui-hero-eyebrow { align-self: center; }
+.promptui-hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+.promptui-hero-centered .promptui-hero-actions,
+.promptui-hero-with-gradient .promptui-hero-actions { justify-content: center; }
+
+/* ------------------------------------------------------------------ *
+ * Card variants (Stat / Profile / Media / Pricing / Interactive)
+ * ------------------------------------------------------------------ */
+
+.promptui-card-stat {
+  display: flex; flex-direction: column; gap: 0.375rem;
+  padding: 1.25rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg);
+  font-family: var(--promptui-font-sans);
+}
+.promptui-card-stat-label { font-size: 0.8125rem; color: var(--promptui-muted); font-weight: 500; }
+.promptui-card-stat-value { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.01em; color: var(--promptui-fg); }
+.promptui-card-stat-trend {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.8125rem; font-weight: 600;
+}
+.promptui-card-stat-trend--up      { color: #16a34a; }
+.promptui-card-stat-trend--down    { color: #dc2626; }
+.promptui-card-stat-trend--neutral { color: var(--promptui-muted); }
+.promptui-card-stat-description { font-size: 0.8125rem; color: var(--promptui-muted); margin: 0; }
+
+.promptui-card-profile {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.625rem;
+  padding: 1.5rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg); font-family: var(--promptui-font-sans);
+}
+.promptui-card-profile-avatar { width: 4rem; height: 4rem; border-radius: 9999px; object-fit: cover; }
+.promptui-card-profile-name { margin: 0; font-size: 1rem; font-weight: 600; }
+.promptui-card-profile-role { margin: 0; font-size: 0.8125rem; color: var(--promptui-muted); }
+.promptui-card-profile-bio { margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.5; color: var(--promptui-fg); }
+.promptui-card-profile-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+
+.promptui-card-media {
+  display: flex; flex-direction: column;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg); overflow: hidden;
+  font-family: var(--promptui-font-sans);
+}
+.promptui-card-media--bottom { flex-direction: column-reverse; }
+.promptui-card-media-image { width: 100%; height: 12rem; object-fit: cover; display: block; }
+
+.promptui-card-pricing {
+  display: flex; flex-direction: column; gap: 1rem;
+  padding: 1.5rem;
+  background: var(--promptui-bg); border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius-lg); font-family: var(--promptui-font-sans);
+}
+.promptui-card-pricing--featured { border-color: var(--promptui-primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--promptui-primary) 20%, transparent); }
+.promptui-card-pricing-header { display: flex; flex-direction: column; gap: 0.375rem; }
+.promptui-card-pricing-name { margin: 0; font-size: 1.125rem; font-weight: 600; }
+.promptui-card-pricing-price { display: flex; align-items: baseline; gap: 0.25rem; }
+.promptui-card-pricing-amount { font-size: 2rem; font-weight: 700; letter-spacing: -0.01em; }
+.promptui-card-pricing-period { font-size: 0.875rem; color: var(--promptui-muted); }
+.promptui-card-pricing-features { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem; }
+.promptui-card-pricing-feature { font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem; }
+.promptui-card-pricing-feature::before { content: "✓"; color: var(--promptui-primary); font-weight: 700; }
+.promptui-card-pricing-feature--excluded { color: var(--promptui-muted); text-decoration: line-through; }
+.promptui-card-pricing-feature--excluded::before { content: "×"; color: var(--promptui-muted); }
+.promptui-card-pricing-cta { display: flex; margin-top: auto; }
+
+.promptui-card-interactive {
+  display: flex; flex-direction: column;
+  padding: 1.25rem;
+  background: var(--promptui-bg); color: var(--promptui-fg);
+  border: 1px solid var(--promptui-border); border-radius: var(--promptui-radius-lg);
+  font-family: var(--promptui-font-sans); text-align: left;
+  cursor: pointer; text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.promptui-card-interactive:hover { background: var(--promptui-accent); border-color: var(--promptui-fg); }
+.promptui-card-interactive:active { transform: translateY(1px); }
+
+/* ------------------------------------------------------------------ *
+ * Charts (Bar / Line / Area / Pie / Radar) — SVG styling
+ * ------------------------------------------------------------------ */
+
+.promptui-chart-default { font-family: var(--promptui-font-sans); }
+.promptui-chart-bar,
+.promptui-chart-line,
+.promptui-chart-area,
+.promptui-chart-pie,
+.promptui-chart-radar { width: 100%; font-family: var(--promptui-font-sans); }
+
+.promptui-chart-bar-bar { fill: var(--promptui-primary); transition: fill 0.15s; }
+.promptui-chart-bar-bar:hover { fill: color-mix(in srgb, var(--promptui-primary) 75%, var(--promptui-bg)); }
+
+.promptui-chart-line-path { stroke: var(--promptui-primary); stroke-width: 2; fill: none; }
+.promptui-chart-line-point { fill: var(--promptui-primary); stroke: var(--promptui-bg); stroke-width: 2; }
+
+.promptui-chart-area-fill { fill: color-mix(in srgb, var(--promptui-primary) 20%, transparent); }
+.promptui-chart-area-line { stroke: var(--promptui-primary); stroke-width: 2; fill: none; }
+
+.promptui-chart-pie-slice { stroke: var(--promptui-bg); stroke-width: 2; transition: opacity 0.15s; }
+.promptui-chart-pie-slice:nth-child(1)  { fill: #18181b; }
+.promptui-chart-pie-slice:nth-child(2)  { fill: #4b5563; }
+.promptui-chart-pie-slice:nth-child(3)  { fill: #9ca3af; }
+.promptui-chart-pie-slice:nth-child(4)  { fill: #3b82f6; }
+.promptui-chart-pie-slice:nth-child(5)  { fill: #8b5cf6; }
+.promptui-chart-pie-slice:nth-child(6)  { fill: #ec4899; }
+.promptui-chart-pie-slice:nth-child(7)  { fill: #f59e0b; }
+.promptui-chart-pie-slice:nth-child(8)  { fill: #10b981; }
+.promptui-chart-pie-slice:hover { opacity: 0.8; }
+
+.promptui-chart-radar-ring { stroke: var(--promptui-border); stroke-width: 1; fill: none; }
+.promptui-chart-radar-axis { stroke: var(--promptui-border); stroke-width: 1; }
+.promptui-chart-radar-area {
+  fill: color-mix(in srgb, var(--promptui-primary) 25%, transparent);
+  stroke: var(--promptui-primary); stroke-width: 2;
+}
+
+/* ------------------------------------------------------------------ *
+ * Legacy (GradientH2 / ResultText) — pre-v0.2 API
+ * ------------------------------------------------------------------ */
+
+.promptui-gradient-h2 {
+  margin: 0;
+  font-family: var(--promptui-font-sans);
+  font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700;
+  background: linear-gradient(90deg, var(--promptui-fg), var(--promptui-muted));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  letter-spacing: -0.01em;
+}
+
+.promptui-result-text {
+  padding: 0.75rem 1rem;
+  background: var(--promptui-muted-bg);
+  border: 1px solid var(--promptui-border);
+  border-radius: var(--promptui-radius);
+  font-family: var(--promptui-font-mono); font-size: 0.875rem;
+  color: var(--promptui-fg);
+}

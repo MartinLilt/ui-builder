@@ -65,6 +65,11 @@ function validateBlock(block: Block, warnings: ResolveWarning[]): void {
     warnings.push({ message: `Unknown library path: "${useValue}"`, blockType: block.blockType, name: block.name })
   }
 
+  const eachStr = block.directives.get('each')
+  if (eachStr !== undefined && !/^\s*[a-zA-Z_][a-zA-Z0-9_]*\s+in\s+.+\s*$/.test(eachStr)) {
+    warnings.push({ message: `"each" must be of the form "<var> in <collection>", got: "${eachStr}"`, blockType: block.blockType, name: block.name })
+  }
+
   const variant = block.directives.get('variant')
   if (variant !== undefined) {
     if (!entry) {

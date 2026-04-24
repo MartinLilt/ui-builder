@@ -8,12 +8,23 @@ const args = process.argv.slice(2)
 
 function printUsage(): void {
   console.log(`
-Usage: promptui compile <file> [--target react|vue]
+Usage: promptui compile <file> [--target react|vue] [--export <Name>]
 
 Options:
   --target   Output target: react (default) or vue
+  --export   (React only) Wrap output as \`export function <Name>(...)\`.
+             When omitted, falls back to the root block's :Name, then to a
+             bare JSX fragment.
   --help     Show this help
 `.trim())
+}
+
+function flagValue(argList: string[], name: string): string | undefined {
+  const i = argList.indexOf(name)
+  if (i === -1) return undefined
+  const next = argList[i + 1]
+  if (next === undefined || next.startsWith('--')) return undefined
+  return next
 }
 
 function run(): void {
@@ -36,8 +47,9 @@ function run(): void {
     process.exit(1)
   }
 
-  const targetIdx = rest.indexOf('--target')
-  const target: EmitTarget = targetIdx !== -1 && rest[targetIdx + 1] === 'vue' ? 'vue' : 'react'
+  const targetValue = flagValue(rest, '--target')
+  const target: EmitTarget = targetValue === 'vue' ? 'vue' : 'react'
+  const exportName = flagValue(rest, '--export')
 
   const resolved = path.resolve(process.cwd(), filePath)
 
@@ -49,7 +61,7 @@ function run(): void {
   const source = fs.readFileSync(resolved, 'utf-8')
 
   try {
-    const { output, warnings } = compile(source, { target })
+    const { output, warnings } = compile(source, { target, exportName })
     if (warnings.length > 0) {
       for (const w of warnings) console.warn(`warn: ${w}`)
     }

@@ -48,8 +48,19 @@ You are an expert in the PromptUI DSL — an AI-native language that compiles se
 | `text`     | Literal text content |
 | `flow`     | Interaction → handler: `open-waitlist` → `onClick={openWaitlist}` |
 | `bind`     | Data binding: `email` → `value={email} onChange={(v) => setEmail(v)}` |
+| `each`     | Repeat block: `each: user in users` → React `{users.map((user, i) => ...)}` / Vue `v-for`. Auto-adds `<collection>: unknown[]` to Props when wrapped. |
+| `if`       | Conditional: `if: hasError` → React `{hasError && (...)}` / Vue `v-if`. Expression is opaque; consumer wires identifiers. |
 
 **Priority rules:** `lock` > `look`, `ban` > `allow`
+
+### Expressions in `text:`
+
+Values wrapped in `{{ }}` are emitted as JS expressions. Unwrapped values are string literals.
+
+- `text: "Hello"` → `{"Hello"}` (React) / `Hello` (Vue)
+- `text: {{user.name}}` → `{user.name}` (React) / `{{ user.name }}` (Vue)
+
+This is required for referencing the iteration variable from `each:` in child blocks.
 
 ### `variant:` vs new file — the rule
 
@@ -91,7 +102,16 @@ import { CardContent, CardDefault, CardHeader, CardTitle } from '@getpromptui/ui
 ```bash
 npx promptui compile <file.promptui> --target react
 npx promptui compile <file.promptui> --target vue
+npx promptui compile <file.promptui> --export Signup   # wrap as `export function Signup`
 ```
+
+**Wrapping (React).** When `--export <Name>` is passed (or the root block has `:Name` like `[Page:Signup]`), the emitter outputs a complete `.tsx` file:
+
+- `export interface <Name>Props` lists every `flow:` as `on<Flow>?: () => void`.
+- The function body declares `const [x, setX] = useState('')` for every unique `bind:`.
+- All library imports are grouped at the top (plus `useState` from `react` if needed).
+
+Without a name or flag, the emitter falls back to a bare JSX fragment (back-compat mode for embedding into a larger file).
 
 ### Programmatic API
 

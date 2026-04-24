@@ -150,6 +150,14 @@ The compiler emits **structure + imports** only. Not supported: conditionals, lo
 
 ## Changelog
 
+### 0.3.0
+
+- **Wrapped React output.** `--export <Name>` CLI flag (or root `[Block:Name]`) wraps output as `export function Name()` with auto-declared `useState` hooks for `bind:` values and an `on<Flow>?: () => void` props interface derived from `flow:` values. Without a name, emits a bare JSX fragment (back-compat).
+- **`each:` directive.** `each: item in items` wraps a block in `{items.map((item, index) => ...)}` (React) or `v-for="(item, index) in items"` (Vue). Auto-adds the collection to the component's Props as `unknown[]`.
+- **`if:` directive.** `if: hasError` wraps a block in `{hasError && (...)}` (React) or `v-if` (Vue). Expression is emitted verbatim.
+- **Expressions in `text:`.** `text: {{user.name}}` emits as JSX expression / Vue mustache; literals without `{{}}` stay as strings.
+- **Vue SFC output.** Continues to emit full `.vue` with `<script setup lang="ts">` + `<template>`.
+
 ### 0.2.2
 
 Docs-only: promoted the Claude Code skill to a top-level section (this is the intended workflow). No code changes.
