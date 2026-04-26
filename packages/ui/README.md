@@ -88,6 +88,18 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.4.1
+
+Stage 4b — four more overlays now backed by Radix:
+
+- `AlertDialogDefault` → `@radix-ui/react-alert-dialog`. Confirmation pattern with focus on cancel by default. New `AlertDialogContent` portals + overlays.
+- `SheetDefault` / `DrawerDefault` — both built on `@radix-ui/react-dialog` with side-aware slide-in animation. `side` prop moved from root to `*Content`.
+- `HoverCardDefault` → `@radix-ui/react-hover-card`. Hover-only trigger (no click), `openDelay` / `closeDelay` props.
+
+Adds: `@radix-ui/react-alert-dialog`, `@radix-ui/react-hover-card` (^1.1).
+
+CSS: `promptui-slide-in-{right,left,top,bottom}` keyframes drive Sheet/Drawer panel entrance based on `data-side`.
+
 ### 0.4.0
 
 **Behavior arrives.** Three overlay components now wrap Radix UI primitives for real a11y and interaction. Breaking: composition moved to shadcn-style `<Root><Trigger/><Content/></Root>`.

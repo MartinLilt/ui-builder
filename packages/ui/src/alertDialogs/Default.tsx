@@ -1,41 +1,51 @@
 import React from 'react'
+import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 
-export interface AlertDialogDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AlertDialogDefaultProps {
   open?: boolean
+  defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   children?: React.ReactNode
 }
 
-export function AlertDialogDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: AlertDialogDefaultProps) {
-  if (!open) return null
+export function AlertDialogDefault({ open, defaultOpen, onOpenChange, children }: AlertDialogDefaultProps) {
   return (
-    <div
-      role="alertdialog"
-      aria-modal="true"
-      data-state="open"
-      className={['promptui-alert-dialog-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <AlertDialogPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       {children}
-    </div>
+    </AlertDialogPrimitive.Root>
   )
 }
 
-export function AlertDialogTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" className={['promptui-alert-dialog-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </button>
-  )
-}
+export const AlertDialogTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger>>(
+  function AlertDialogTrigger({ className, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Trigger
+        ref={ref}
+        className={['promptui-alert-dialog-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function AlertDialogContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-alert-dialog-content', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export interface AlertDialogContentProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {}
+
+export const AlertDialogContent = React.forwardRef<HTMLDivElement, AlertDialogContentProps>(
+  function AlertDialogContent({ className, children, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Portal>
+        <AlertDialogPrimitive.Overlay className="promptui-alert-dialog-overlay" />
+        <AlertDialogPrimitive.Content
+          ref={ref}
+          className={['promptui-alert-dialog-default', className].filter(Boolean).join(' ')}
+          {...props}
+        >
+          {children}
+        </AlertDialogPrimitive.Content>
+      </AlertDialogPrimitive.Portal>
+    )
+  }
+)
 
 export function AlertDialogHeader({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -53,34 +63,50 @@ export function AlertDialogFooter({ children, className, ...props }: React.HTMLA
   )
 }
 
-export function AlertDialogTitle({ children, className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2 className={['promptui-alert-dialog-title', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </h2>
-  )
-}
+export const AlertDialogTitle = React.forwardRef<HTMLHeadingElement, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>>(
+  function AlertDialogTitle({ className, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Title
+        ref={ref}
+        className={['promptui-alert-dialog-title', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function AlertDialogDescription({ children, className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={['promptui-alert-dialog-description', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </p>
-  )
-}
+export const AlertDialogDescription = React.forwardRef<HTMLParagraphElement, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>>(
+  function AlertDialogDescription({ className, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Description
+        ref={ref}
+        className={['promptui-alert-dialog-description', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function AlertDialogAction({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" className={['promptui-alert-dialog-action', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </button>
-  )
-}
+export const AlertDialogAction = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>>(
+  function AlertDialogAction({ className, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Action
+        ref={ref}
+        className={['promptui-alert-dialog-action', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function AlertDialogCancel({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" className={['promptui-alert-dialog-cancel', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </button>
-  )
-}
+export const AlertDialogCancel = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>>(
+  function AlertDialogCancel({ className, ...props }, ref) {
+    return (
+      <AlertDialogPrimitive.Cancel
+        ref={ref}
+        className={['promptui-alert-dialog-cancel', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

@@ -1,45 +1,61 @@
 import React from 'react'
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 export type DrawerSide = 'top' | 'bottom' | 'left' | 'right'
 
-export interface DrawerDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DrawerDefaultProps {
   open?: boolean
-  side?: DrawerSide
+  defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  modal?: boolean
   children?: React.ReactNode
 }
 
-export function DrawerDefault({ open = false, side = 'bottom', onOpenChange: _onOpenChange, children, className, ...props }: DrawerDefaultProps) {
-  if (!open) return null
+export function DrawerDefault({ open, defaultOpen, onOpenChange, modal, children }: DrawerDefaultProps) {
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      data-state="open"
-      data-side={side}
-      className={['promptui-drawer-default', `promptui-drawer-default--${side}`, className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <DialogPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal={modal}>
       {children}
-    </div>
+    </DialogPrimitive.Root>
   )
 }
 
-export function DrawerTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" className={['promptui-drawer-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </button>
-  )
+export const DrawerTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>>(
+  function DrawerTrigger({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Trigger
+        ref={ref}
+        className={['promptui-drawer-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
+
+export interface DrawerContentProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+  side?: DrawerSide
 }
 
-export function DrawerContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-drawer-content', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
+  function DrawerContent({ side = 'bottom', className, children, ...props }, ref) {
+    return (
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="promptui-dialog-overlay" />
+        <DialogPrimitive.Content
+          ref={ref}
+          data-side={side}
+          className={[
+            'promptui-drawer-default',
+            `promptui-drawer-default--${side}`,
+            className,
+          ].filter(Boolean).join(' ')}
+          {...props}
+        >
+          {children}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    )
+  }
+)
 
 export function DrawerHeader({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -57,26 +73,41 @@ export function DrawerFooter({ children, className, ...props }: React.HTMLAttrib
   )
 }
 
-export function DrawerTitle({ children, className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2 className={['promptui-drawer-title', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </h2>
-  )
-}
+export const DrawerTitle = React.forwardRef<HTMLHeadingElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>>(
+  function DrawerTitle({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Title
+        ref={ref}
+        className={['promptui-drawer-title', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DrawerDescription({ children, className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={['promptui-drawer-description', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </p>
-  )
-}
+export const DrawerDescription = React.forwardRef<HTMLParagraphElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>>(
+  function DrawerDescription({ className, ...props }, ref) {
+    return (
+      <DialogPrimitive.Description
+        ref={ref}
+        className={['promptui-drawer-description', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DrawerClose({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button type="button" aria-label="Close" className={['promptui-drawer-close', className].filter(Boolean).join(' ')} {...props}>
-      {children ?? '×'}
-    </button>
-  )
-}
+export const DrawerClose = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>>(
+  function DrawerClose({ className, children, ...props }, ref) {
+    return (
+      <DialogPrimitive.Close
+        ref={ref}
+        aria-label="Close"
+        className={['promptui-drawer-close', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        {children ?? '×'}
+      </DialogPrimitive.Close>
+    )
+  }
+)
