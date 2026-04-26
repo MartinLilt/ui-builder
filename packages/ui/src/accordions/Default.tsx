@@ -1,89 +1,90 @@
 import React from 'react'
+import * as AccordionPrimitive from '@radix-ui/react-accordion'
 
 export type AccordionType = 'single' | 'multiple'
 export type AccordionVariant = 'default' | 'bordered' | 'separated'
 
-export interface AccordionDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  type?: AccordionType
-  value?: string | string[]
-  onValueChange?: (value: string | string[]) => void
+export interface AccordionDefaultSingleProps extends Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'type' | 'value' | 'defaultValue' | 'onValueChange'> {
+  type?: 'single'
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+  collapsible?: boolean
   variant?: AccordionVariant
-  children?: React.ReactNode
 }
 
-export function AccordionDefault({
-  type = 'single',
-  value,
-  onValueChange: _onValueChange,
-  variant = 'default',
-  children,
-  className,
-  ...props
-}: AccordionDefaultProps) {
-  return (
-    <div
-      data-type={type}
-      data-variant={variant}
-      data-value={Array.isArray(value) ? value.join(',') : value}
-      className={[
-        'promptui-accordion-default',
-        `promptui-accordion-default--${variant}`,
-        className,
-      ].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+export interface AccordionDefaultMultipleProps extends Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'type' | 'value' | 'defaultValue' | 'onValueChange'> {
+  type: 'multiple'
+  value?: string[]
+  defaultValue?: string[]
+  onValueChange?: (value: string[]) => void
+  variant?: AccordionVariant
 }
 
-export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: string
-  open?: boolean
-  children?: React.ReactNode
-}
+export type AccordionDefaultProps = AccordionDefaultSingleProps | AccordionDefaultMultipleProps
 
-export function AccordionItem({ value, open = false, children, className, ...props }: AccordionItemProps) {
-  return (
-    <div
-      data-value={value}
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-accordion-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const AccordionDefault = React.forwardRef<HTMLDivElement, AccordionDefaultProps>(
+  function AccordionDefault(props, ref) {
+    const { variant = 'default', className } = props
+    const baseClass = [
+      'promptui-accordion-default',
+      `promptui-accordion-default--${variant}`,
+      className,
+    ].filter(Boolean).join(' ')
 
-export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children?: React.ReactNode
-}
+    if (props.type === 'multiple') {
+      const { variant: _v, className: _c, ...rest } = props
+      return <AccordionPrimitive.Root ref={ref} className={baseClass} {...rest} />
+    }
+    const { variant: _v, className: _c, type = 'single', collapsible = true, ...rest } = props as AccordionDefaultSingleProps
+    return (
+      <AccordionPrimitive.Root
+        ref={ref}
+        type={type}
+        collapsible={collapsible}
+        className={baseClass}
+        {...rest}
+      />
+    )
+  }
+) as React.ForwardRefExoticComponent<AccordionDefaultProps & React.RefAttributes<HTMLDivElement>>
 
-export function AccordionTrigger({ children, className, ...props }: AccordionTriggerProps) {
-  return (
-    <button
-      type="button"
-      className={['promptui-accordion-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const AccordionItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>>(
+  function AccordionItem({ className, ...props }, ref) {
+    return (
+      <AccordionPrimitive.Item
+        ref={ref}
+        className={['promptui-accordion-item', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
+export const AccordionTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>>(
+  function AccordionTrigger({ className, children, ...props }, ref) {
+    return (
+      <AccordionPrimitive.Header className="promptui-accordion-header">
+        <AccordionPrimitive.Trigger
+          ref={ref}
+          className={['promptui-accordion-trigger', className].filter(Boolean).join(' ')}
+          {...props}
+        >
+          {children}
+        </AccordionPrimitive.Trigger>
+      </AccordionPrimitive.Header>
+    )
+  }
+)
 
-export function AccordionContent({ children, className, ...props }: AccordionContentProps) {
-  return (
-    <div
-      role="region"
-      className={['promptui-accordion-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const AccordionContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>>(
+  function AccordionContent({ className, ...props }, ref) {
+    return (
+      <AccordionPrimitive.Content
+        ref={ref}
+        className={['promptui-accordion-content', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

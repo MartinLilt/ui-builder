@@ -39,7 +39,7 @@ export type { ResultTextProps } from './results/Text'
 
 // Shadcn-aligned primitives
 export { AccordionDefault, AccordionItem, AccordionTrigger, AccordionContent } from './accordions/Default'
-export type { AccordionDefaultProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps, AccordionType, AccordionVariant } from './accordions/Default'
+export type { AccordionDefaultProps, AccordionType, AccordionVariant } from './accordions/Default'
 
 export { AlertDefault, AlertTitle, AlertDescription } from './alerts/Default'
 export type { AlertDefaultProps, AlertTitleProps, AlertDescriptionProps, AlertVariant } from './alerts/Default'
@@ -188,7 +188,7 @@ export { CheckboxDefault } from './checkboxes/Default'
 export type { CheckboxDefaultProps } from './checkboxes/Default'
 
 export { CollapsibleDefault, CollapsibleTrigger, CollapsibleContent } from './collapsibles/Default'
-export type { CollapsibleDefaultProps, CollapsibleTriggerProps, CollapsibleContentProps } from './collapsibles/Default'
+export type { CollapsibleDefaultProps } from './collapsibles/Default'
 
 export { ComboboxDefault } from './comboboxes/Default'
 export type { ComboboxDefaultProps, ComboboxOption } from './comboboxes/Default'
@@ -216,7 +216,7 @@ export {
   ContextMenuLabel,
   ContextMenuGroup,
 } from './contextMenus/Default'
-export type { ContextMenuDefaultProps, ContextMenuItemProps } from './contextMenus/Default'
+export type { ContextMenuDefaultProps } from './contextMenus/Default'
 
 export { DataTableDefault } from './dataTables/Default'
 export type { DataTableDefaultProps, DataTableColumn } from './dataTables/Default'
@@ -264,7 +264,7 @@ export {
   DropdownMenuGroup,
   DropdownMenuCheckboxItem,
 } from './dropdownMenus/Default'
-export type { DropdownMenuDefaultProps, DropdownMenuItemProps, DropdownMenuCheckboxItemProps } from './dropdownMenus/Default'
+export type { DropdownMenuDefaultProps } from './dropdownMenus/Default'
 
 export {
   FormDefault,

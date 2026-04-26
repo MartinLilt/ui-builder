@@ -1,84 +1,90 @@
 import React from 'react'
+import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 
-export interface ContextMenuDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  open?: boolean
+export interface ContextMenuDefaultProps {
+  modal?: boolean
   onOpenChange?: (open: boolean) => void
   children?: React.ReactNode
 }
 
-export function ContextMenuDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: ContextMenuDefaultProps) {
+export function ContextMenuDefault({ modal, onOpenChange, children }: ContextMenuDefaultProps) {
   return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-context-menu-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <ContextMenuPrimitive.Root modal={modal} onOpenChange={onOpenChange}>
       {children}
-    </div>
+    </ContextMenuPrimitive.Root>
   )
 }
 
-export function ContextMenuTrigger({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-context-menu-trigger', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const ContextMenuTrigger = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Trigger>>(
+  function ContextMenuTrigger({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Trigger
+        ref={ref}
+        className={['promptui-context-menu-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ContextMenuContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="menu"
-      className={['promptui-context-menu-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const ContextMenuContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>>(
+  function ContextMenuContent({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Portal>
+        <ContextMenuPrimitive.Content
+          ref={ref}
+          className={['promptui-context-menu-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </ContextMenuPrimitive.Portal>
+    )
+  }
+)
 
-export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  disabled?: boolean
-  children?: React.ReactNode
-}
+export const ContextMenuItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item>>(
+  function ContextMenuItem({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Item
+        ref={ref}
+        className={['promptui-context-menu-item', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ContextMenuItem({ disabled, children, className, ...props }: ContextMenuItemProps) {
-  return (
-    <div
-      role="menuitem"
-      aria-disabled={disabled || undefined}
-      data-disabled={disabled || undefined}
-      className={['promptui-context-menu-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const ContextMenuSeparator = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator>>(
+  function ContextMenuSeparator({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Separator
+        ref={ref}
+        className={['promptui-context-menu-separator', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ContextMenuSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="separator"
-      className={['promptui-context-menu-separator', className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-}
+export const ContextMenuLabel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Label>>(
+  function ContextMenuLabel({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Label
+        ref={ref}
+        className={['promptui-context-menu-label', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ContextMenuLabel({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-context-menu-label', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
-
-export function ContextMenuGroup({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div role="group" className={['promptui-context-menu-group', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const ContextMenuGroup = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Group>>(
+  function ContextMenuGroup({ className, ...props }, ref) {
+    return (
+      <ContextMenuPrimitive.Group
+        ref={ref}
+        className={['promptui-context-menu-group', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

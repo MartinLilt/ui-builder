@@ -1,78 +1,90 @@
 import React from 'react'
+import * as MenubarPrimitive from '@radix-ui/react-menubar'
 
-export interface MenubarDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MenubarDefaultProps {
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+  loop?: boolean
   children?: React.ReactNode
+  className?: string
 }
 
-export function MenubarDefault({ children, className, ...props }: MenubarDefaultProps) {
-  return (
-    <div
-      role="menubar"
-      className={['promptui-menubar-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+export const MenubarDefault = React.forwardRef<HTMLDivElement, MenubarDefaultProps>(
+  function MenubarDefault({ value, defaultValue, onValueChange, loop, children, className, ...props }, ref) {
+    return (
+      <MenubarPrimitive.Root
+        ref={ref}
+        value={value}
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+        loop={loop}
+        className={['promptui-menubar-default', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        {children}
+      </MenubarPrimitive.Root>
+    )
+  }
+)
+
+export interface MenubarMenuProps extends React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Menu> {}
+
+export function MenubarMenu(props: MenubarMenuProps) {
+  return <MenubarPrimitive.Menu {...props} />
 }
 
-export function MenubarMenu({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-menubar-menu', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const MenubarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>>(
+  function MenubarTrigger({ className, ...props }, ref) {
+    return (
+      <MenubarPrimitive.Trigger
+        ref={ref}
+        className={['promptui-menubar-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function MenubarTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      role="menuitem"
-      className={['promptui-menubar-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const MenubarContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>>(
+  function MenubarContent({ className, sideOffset = 4, ...props }, ref) {
+    return (
+      <MenubarPrimitive.Portal>
+        <MenubarPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={['promptui-menubar-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </MenubarPrimitive.Portal>
+    )
+  }
+)
 
-export function MenubarContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="menu"
-      className={['promptui-menubar-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
-
-export interface MenubarItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MenubarItemProps extends React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item> {
   disabled?: boolean
-  children?: React.ReactNode
 }
 
-export function MenubarItem({ disabled, children, className, ...props }: MenubarItemProps) {
-  return (
-    <div
-      role="menuitem"
-      aria-disabled={disabled || undefined}
-      className={['promptui-menubar-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const MenubarItem = React.forwardRef<HTMLDivElement, MenubarItemProps>(
+  function MenubarItem({ className, ...props }, ref) {
+    return (
+      <MenubarPrimitive.Item
+        ref={ref}
+        className={['promptui-menubar-item', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function MenubarSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="separator"
-      className={['promptui-menubar-separator', className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-}
+export const MenubarSeparator = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>>(
+  function MenubarSeparator({ className, ...props }, ref) {
+    return (
+      <MenubarPrimitive.Separator
+        ref={ref}
+        className={['promptui-menubar-separator', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

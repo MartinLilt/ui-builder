@@ -1,48 +1,46 @@
 import React from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
 
-export interface TabVerticalProps extends React.HTMLAttributes<HTMLDivElement> {
-  value?: string
-  onValueChange?: (value: string) => void
-  children?: React.ReactNode
-}
+export interface TabVerticalProps extends Omit<React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>, 'orientation'> {}
 
-export function TabVertical({ value, onValueChange: _onValueChange, children, className, ...props }: TabVerticalProps) {
-  return (
-    <div
-      data-value={value}
-      className={['promptui-tab-vertical', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TabVertical = React.forwardRef<HTMLDivElement, TabVerticalProps>(
+  function TabVertical({ className, ...props }, ref) {
+    return (
+      <TabsPrimitive.Root
+        ref={ref}
+        orientation="vertical"
+        className={['promptui-tab-vertical', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface TabVerticalListProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
+export interface TabVerticalListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {}
 
-export function TabVerticalList({ children, className, ...props }: TabVerticalListProps) {
-  return (
-    <div
-      role="tablist"
-      aria-orientation="vertical"
-      className={['promptui-tab-vertical-list', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TabVerticalList = React.forwardRef<HTMLDivElement, TabVerticalListProps>(
+  function TabVerticalList({ className, ...props }, ref) {
+    return (
+      <TabsPrimitive.List
+        ref={ref}
+        aria-orientation="vertical"
+        className={['promptui-tab-vertical-list', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface TabVerticalPanelsProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
+export interface TabVerticalPanelsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function TabVerticalPanels({ children, className, ...props }: TabVerticalPanelsProps) {
-  return (
-    <div className={['promptui-tab-vertical-panels', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const TabVerticalPanels = React.forwardRef<HTMLDivElement, TabVerticalPanelsProps>(
+  function TabVerticalPanels({ className, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={['promptui-tab-vertical-panels', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

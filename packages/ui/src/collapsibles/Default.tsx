@@ -1,47 +1,40 @@
 import React from 'react'
+import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
 
-export interface CollapsibleDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  children?: React.ReactNode
-}
+export interface CollapsibleDefaultProps extends React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root> {}
 
-export function CollapsibleDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: CollapsibleDefaultProps) {
-  return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-collapsible-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const CollapsibleDefault = React.forwardRef<HTMLDivElement, CollapsibleDefaultProps>(
+  function CollapsibleDefault({ className, ...props }, ref) {
+    return (
+      <CollapsiblePrimitive.Root
+        ref={ref}
+        className={['promptui-collapsible-default', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface CollapsibleTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children?: React.ReactNode
-}
+export const CollapsibleTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>>(
+  function CollapsibleTrigger({ className, ...props }, ref) {
+    return (
+      <CollapsiblePrimitive.Trigger
+        ref={ref}
+        className={['promptui-collapsible-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function CollapsibleTrigger({ children, className, ...props }: CollapsibleTriggerProps) {
-  return (
-    <button
-      type="button"
-      className={['promptui-collapsible-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
-
-export interface CollapsibleContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
-
-export function CollapsibleContent({ children, className, ...props }: CollapsibleContentProps) {
-  return (
-    <div className={['promptui-collapsible-content', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const CollapsibleContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>>(
+  function CollapsibleContent({ className, ...props }, ref) {
+    return (
+      <CollapsiblePrimitive.Content
+        ref={ref}
+        className={['promptui-collapsible-content', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

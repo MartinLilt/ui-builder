@@ -1,86 +1,67 @@
 import React from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
 
 export type TabVariant = 'default' | 'pills' | 'boxed'
 
-export interface TabDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  value?: string
-  onValueChange?: (value: string) => void
+export interface TabDefaultProps extends Omit<React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>, 'orientation'> {
   variant?: TabVariant
-  children?: React.ReactNode
 }
 
-export function TabDefault({ value, onValueChange: _onValueChange, variant = 'default', children, className, ...props }: TabDefaultProps) {
-  return (
-    <div
-      data-value={value}
-      data-variant={variant}
-      className={[
-        'promptui-tab-default',
-        `promptui-tab-default--${variant}`,
-        className,
-      ].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TabDefault = React.forwardRef<HTMLDivElement, TabDefaultProps>(
+  function TabDefault({ variant = 'default', className, ...props }, ref) {
+    return (
+      <TabsPrimitive.Root
+        ref={ref}
+        data-variant={variant}
+        className={[
+          'promptui-tab-default',
+          `promptui-tab-default--${variant}`,
+          className,
+        ].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface TabListProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
+export interface TabListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {}
 
-export function TabList({ children, className, ...props }: TabListProps) {
-  return (
-    <div
-      role="tablist"
-      className={['promptui-tab-list', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TabList = React.forwardRef<HTMLDivElement, TabListProps>(
+  function TabList({ className, ...props }, ref) {
+    return (
+      <TabsPrimitive.List
+        ref={ref}
+        className={['promptui-tab-list', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface TabTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  value: string
-  active?: boolean
-  children?: React.ReactNode
-}
+export interface TabTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {}
 
-export function TabTrigger({ value, active = false, children, className, ...props }: TabTriggerProps) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      data-value={value}
-      data-state={active ? 'active' : 'inactive'}
-      aria-selected={active}
-      className={['promptui-tab-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const TabTrigger = React.forwardRef<HTMLButtonElement, TabTriggerProps>(
+  function TabTrigger({ className, ...props }, ref) {
+    return (
+      <TabsPrimitive.Trigger
+        ref={ref}
+        className={['promptui-tab-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface TabContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: string
-  active?: boolean
-  children?: React.ReactNode
-}
+export interface TabContentProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {}
 
-export function TabContent({ value, active = false, children, className, ...props }: TabContentProps) {
-  return (
-    <div
-      role="tabpanel"
-      data-value={value}
-      data-state={active ? 'active' : 'inactive'}
-      hidden={!active}
-      className={['promptui-tab-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const TabContent = React.forwardRef<HTMLDivElement, TabContentProps>(
+  function TabContent({ className, ...props }, ref) {
+    return (
+      <TabsPrimitive.Content
+        ref={ref}
+        className={['promptui-tab-content', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

@@ -88,6 +88,22 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.4.2
+
+Stage 4c — menus + disclosure now backed by Radix. Real keyboard navigation, type-ahead, focus management.
+
+- `DropdownMenuDefault` → `@radix-ui/react-dropdown-menu`. Sub-parts: Trigger, Content, Item, Label, Separator, Group, CheckboxItem (with built-in indicator).
+- `ContextMenuDefault` → `@radix-ui/react-context-menu`. Right-click + keyboard.
+- `MenubarDefault` → `@radix-ui/react-menubar`. Top-level menu bar with arrow-key nav.
+- `NavigationMenuDefault` → `@radix-ui/react-navigation-menu`. Keyboard-accessible nav with content panels.
+- `AccordionDefault` → `@radix-ui/react-accordion`. `type: 'single'` (with `collapsible`) or `'multiple'`. Now wraps Trigger in Header for proper a11y.
+- `CollapsibleDefault` → `@radix-ui/react-collapsible`.
+- `TabDefault` + `TabVertical` → `@radix-ui/react-tabs`. Keyboard nav, controlled/uncontrolled state.
+
+Adds 7 Radix deps. `NavigationMenuMobile` and `NavigationMenuMega` stay as our custom markup (not standard Radix patterns).
+
+Removed previously-exposed prop types that no longer match Radix shapes (e.g. `AccordionItemProps`, `DropdownMenuItemProps`). Components themselves still exported.
+
 ### 0.4.1
 
 Stage 4b — four more overlays now backed by Radix:

@@ -1,108 +1,108 @@
 import React from 'react'
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 
-export interface DropdownMenuDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DropdownMenuDefaultProps {
   open?: boolean
+  defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  modal?: boolean
   children?: React.ReactNode
 }
 
-export function DropdownMenuDefault({ open = false, onOpenChange: _onOpenChange, children, className, ...props }: DropdownMenuDefaultProps) {
+export function DropdownMenuDefault({ open, defaultOpen, onOpenChange, modal, children }: DropdownMenuDefaultProps) {
   return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      className={['promptui-dropdown-menu-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
+    <DropdownMenuPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal={modal}>
       {children}
-    </div>
+    </DropdownMenuPrimitive.Root>
   )
 }
 
-export function DropdownMenuTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      aria-haspopup="menu"
-      className={['promptui-dropdown-menu-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>>(
+  function DropdownMenuTrigger({ className, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Trigger
+        ref={ref}
+        className={['promptui-dropdown-menu-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DropdownMenuContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="menu"
-      className={['promptui-dropdown-menu-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const DropdownMenuContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>>(
+  function DropdownMenuContent({ className, sideOffset = 4, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Portal>
+        <DropdownMenuPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={['promptui-dropdown-menu-content', className].filter(Boolean).join(' ')}
+          {...props}
+        />
+      </DropdownMenuPrimitive.Portal>
+    )
+  }
+)
 
-export interface DropdownMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  disabled?: boolean
-  children?: React.ReactNode
-}
+export const DropdownMenuItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>>(
+  function DropdownMenuItem({ className, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Item
+        ref={ref}
+        className={['promptui-dropdown-menu-item', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DropdownMenuItem({ disabled, children, className, ...props }: DropdownMenuItemProps) {
-  return (
-    <div
-      role="menuitem"
-      aria-disabled={disabled || undefined}
-      data-disabled={disabled || undefined}
-      className={['promptui-dropdown-menu-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const DropdownMenuLabel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>>(
+  function DropdownMenuLabel({ className, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Label
+        ref={ref}
+        className={['promptui-dropdown-menu-label', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DropdownMenuLabel({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-dropdown-menu-label', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const DropdownMenuSeparator = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>>(
+  function DropdownMenuSeparator({ className, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Separator
+        ref={ref}
+        className={['promptui-dropdown-menu-separator', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DropdownMenuSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="separator"
-      className={['promptui-dropdown-menu-separator', className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-}
+export const DropdownMenuGroup = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Group>>(
+  function DropdownMenuGroup({ className, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.Group
+        ref={ref}
+        className={['promptui-dropdown-menu-group', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function DropdownMenuGroup({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div role="group" className={['promptui-dropdown-menu-group', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
-
-export interface DropdownMenuCheckboxItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  checked?: boolean
-  children?: React.ReactNode
-}
-
-export function DropdownMenuCheckboxItem({ checked = false, children, className, ...props }: DropdownMenuCheckboxItemProps) {
-  return (
-    <div
-      role="menuitemcheckbox"
-      aria-checked={checked}
-      data-state={checked ? 'checked' : 'unchecked'}
-      className={['promptui-dropdown-menu-checkbox-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const DropdownMenuCheckboxItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>>(
+  function DropdownMenuCheckboxItem({ className, children, ...props }, ref) {
+    return (
+      <DropdownMenuPrimitive.CheckboxItem
+        ref={ref}
+        className={['promptui-dropdown-menu-checkbox-item', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        <DropdownMenuPrimitive.ItemIndicator>✓</DropdownMenuPrimitive.ItemIndicator>
+        {children}
+      </DropdownMenuPrimitive.CheckboxItem>
+    )
+  }
+)
