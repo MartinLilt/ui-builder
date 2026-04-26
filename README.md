@@ -6,7 +6,7 @@
 
 **The typed contract between your LLM and your frontend.**
 
-PromptUI is an AI-native UI DSL. You give Claude (or any coding agent) a catalog of ~100 anchored components and a constraint-driven block grammar; it emits a `.promptui` file; the preprocessor compiles deterministic React or Vue — imports resolved, no hallucinated components, no invented CSS, no layout drift.
+PromptUI is an AI-native UI DSL. You give Claude (or any coding agent) a catalog of ~100 anchored components and a constraint-driven block grammar; it emits a `.promptui` file; the preprocessor compiles deterministic React or Vue — imports resolved, no hallucinated components, no invented CSS, no layout drift. Components ship with default styles and **real Radix-backed behavior** (focus trap, keyboard nav, a11y) so the output runs in production.
 
 [Install](#install) · **[Use with Claude Code](#use-with-claude-code)** · [Quick start](#quick-start) · [Component library](#component-library)
 
@@ -295,16 +295,21 @@ import { LIBRARY_ENTRIES } from '@getpromptui/core'
 
 ---
 
-## What v0.2 does not do
+## What v0.4 does and doesn't do
 
-PromptUI compiles **structure + imports** only. Not supported:
+**Does:**
+- Compiles `.promptui` files to React (`.tsx` files with imports + props + state hooks) and Vue (full SFC with `<script setup>`).
+- 101 anchored `use`-paths across 50+ component categories.
+- Real behavior on all interactive primitives (Dialog, Popover, Tooltip, DropdownMenu, ContextMenu, Menubar, NavigationMenu, Accordion, Collapsible, Tabs, Select, Switch, Checkbox, RadioGroup, Slider, Toggle, ToggleGroup, ScrollArea, AspectRatio, Avatar, Label, Toast, Separator, AlertDialog, Sheet, Drawer, HoverCard) — focus trap, keyboard nav, escape-to-close, scroll-lock, type-ahead, all wired via Radix UI.
+- Default styles (`@getpromptui/ui/styles.css`) + Tailwind preset.
+- `each:` / `if:` directives, `{{expr}}` interpolation, `variant:` skin prop.
+- Vite plugin (`@getpromptui/core/vite`) for native `import` of `.promptui` files.
+- CLI watch mode (`--watch`) for non-Vite projects.
 
-- Script / TypeScript logic generation
-- Conditional rendering (`if`, `v-if`)
-- Loops (`v-for`, `map`)
-- Computed props or state machines
-- Automatic data fetching
-- Full expression language
+**Doesn't (yet):**
+- Computed/derived state, data fetching, logic in DSL — keep that in your own code.
+- Vue Radix integration (Vue components are still pure structural — Radix Vue exists, would land in v0.5).
+- Custom-still: Combobox, Calendar/DatePicker, Carousel, Sidebar, Form (use react-hook-form), Heroes, Cards (variants), Skeletons, Charts.
 
 ---
 
@@ -323,14 +328,28 @@ pnpm monorepo with packages under `packages/`. Please open an issue before submi
 
 ## Changelog
 
-### 0.3.0
+### 0.4.0–0.4.3 — Production-ready ("behavior arrives")
 
-- Wrapped React output: `--export <Name>` or root `[Block:Name]` produces a full `export function Name()` with `useState` for `bind:` and `on<Flow>` props for `flow:`.
-- `each: item in items` directive for list rendering (React `.map()` / Vue `v-for`).
-- `if: expr` directive for conditional rendering (React `&&` / Vue `v-if`).
-- `{{expr}}` in `text:` emits as JSX expression / Vue mustache; literals stay strings.
-- `@getpromptui/ui` ships default CSS (68 KB / 589 selectors). Import `@getpromptui/ui/styles.css` and everything renders.
-- Tailwind plugin at `@getpromptui/ui/tailwind` exposing tokens as theme extension.
+The big shift: 30+ interactive primitives now wrap **Radix UI** for real a11y and behavior. PromptUI is no longer just "structure + imports" — components actually work.
+
+- **Stage 4a (0.4.0):** Dialog, Popover, Tooltip, TooltipRich.
+- **Stage 4b (0.4.1):** AlertDialog, Sheet, Drawer, HoverCard.
+- **Stage 4c (0.4.2):** DropdownMenu, ContextMenu, Menubar, NavigationMenu, Accordion, Collapsible, Tabs, TabVertical.
+- **Stage 4d (0.4.3):** Select, Switch, Checkbox, RadioGroup, Slider, SliderRange, Toggle, ToggleGroup, ScrollArea, AspectRatio, Avatar, Label, Toast, Separator.
+
+**Breaking** (composition shift to shadcn-style `<Root><Trigger/><Content/></Root>`): Dialog, AlertDialog, Sheet, Drawer, Popover, HoverCard, Tooltip. The DSL `use` paths and sub-part names are unchanged — only manual JSX usage needs updates.
+
+Adds 25 `@radix-ui/*` deps as `dependencies` (not peer) so consumers don't need to install them manually.
+
+`@getpromptui/core@0.4.0` is version-aligned with `@getpromptui/ui@0.4.x`. No core API changes since 0.3.1.
+
+### 0.3.0–0.3.1
+
+- Wrapped React output: `--export Name` (or root `[Block:Name]`) → `export function Name()` with `useState` for `bind:`, `on<Flow>` props for `flow:`.
+- `each: item in items` and `if: expr` directives. `{{expr}}` for expressions in `text:`.
+- Default CSS (`@getpromptui/ui/styles.css`, 68 KB / 589 selectors).
+- Tailwind plugin at `@getpromptui/ui/tailwind`.
+- CLI `--watch` + `--output`. Vite plugin at `@getpromptui/core/vite`.
 
 ### 0.2.2
 

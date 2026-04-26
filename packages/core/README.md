@@ -184,6 +184,10 @@ The compiler emits **structure + imports** only. Not supported: conditionals, lo
 
 ## Changelog
 
+### 0.4.0
+
+Version-aligned with `@getpromptui/ui@0.4.x`, the production-ready release. No core API changes — every component referenced via `use:` paths now ships with real Radix-backed behavior in `@getpromptui/ui`.
+
 ### 0.3.1
 
 - `--watch` / `-w` flag on CLI (recompile on file change).
