@@ -1,37 +1,32 @@
 import React from 'react'
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 
-export interface RadioGroupDefaultProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  value?: string
-  onValueChange?: (value: string) => void
-  name?: string
-  children?: React.ReactNode
-}
+export interface RadioGroupDefaultProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {}
 
-export function RadioGroupDefault({ value, onValueChange: _onValueChange, name, children, className, ...props }: RadioGroupDefaultProps) {
-  return (
-    <div
-      role="radiogroup"
-      data-name={name}
-      data-value={value}
-      className={['promptui-radio-group-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const RadioGroupDefault = React.forwardRef<HTMLDivElement, RadioGroupDefaultProps>(
+  function RadioGroupDefault({ className, ...props }, ref) {
+    return (
+      <RadioGroupPrimitive.Root
+        ref={ref}
+        className={['promptui-radio-group-default', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface RadioGroupItemProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  value: string
-}
+export interface RadioGroupItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {}
 
-export function RadioGroupItem({ value, className, ...props }: RadioGroupItemProps) {
-  return (
-    <input
-      type="radio"
-      value={value}
-      className={['promptui-radio-group-item', className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-}
+export const RadioGroupItem = React.forwardRef<HTMLButtonElement, RadioGroupItemProps>(
+  function RadioGroupItem({ className, ...props }, ref) {
+    return (
+      <RadioGroupPrimitive.Item
+        ref={ref}
+        className={['promptui-radio-group-item', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        <RadioGroupPrimitive.Indicator className="promptui-radio-group-indicator" />
+      </RadioGroupPrimitive.Item>
+    )
+  }
+)

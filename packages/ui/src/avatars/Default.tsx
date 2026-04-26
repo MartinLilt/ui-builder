@@ -1,37 +1,45 @@
 import React from 'react'
+import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
-export interface AvatarDefaultProps extends React.HTMLAttributes<HTMLSpanElement> {
-  children?: React.ReactNode
-}
+export interface AvatarDefaultProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> {}
 
-export function AvatarDefault({ children, className, ...props }: AvatarDefaultProps) {
-  return (
-    <span className={['promptui-avatar-default', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </span>
-  )
-}
+export const AvatarDefault = React.forwardRef<HTMLSpanElement, AvatarDefaultProps>(
+  function AvatarDefault({ className, ...props }, ref) {
+    return (
+      <AvatarPrimitive.Root
+        ref={ref}
+        className={['promptui-avatar-default', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {}
+export interface AvatarImageProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> {}
 
-export function AvatarImage({ className, alt = '', ...props }: AvatarImageProps) {
-  return (
-    <img
-      className={['promptui-avatar-image', className].filter(Boolean).join(' ')}
-      alt={alt}
-      {...props}
-    />
-  )
-}
+export const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
+  function AvatarImage({ className, alt = '', ...props }, ref) {
+    return (
+      <AvatarPrimitive.Image
+        ref={ref}
+        alt={alt}
+        className={['promptui-avatar-image', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement> {
-  children?: React.ReactNode
-}
+export interface AvatarFallbackProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> {}
 
-export function AvatarFallback({ children, className, ...props }: AvatarFallbackProps) {
-  return (
-    <span className={['promptui-avatar-fallback', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </span>
-  )
-}
+export const AvatarFallback = React.forwardRef<HTMLSpanElement, AvatarFallbackProps>(
+  function AvatarFallback({ className, ...props }, ref) {
+    return (
+      <AvatarPrimitive.Fallback
+        ref={ref}
+        className={['promptui-avatar-fallback', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

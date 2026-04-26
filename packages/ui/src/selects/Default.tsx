@@ -1,109 +1,93 @@
 import React from 'react'
+import * as SelectPrimitive from '@radix-ui/react-select'
 
-export interface SelectDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  value?: string
-  onValueChange?: (value: string) => void
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  children?: React.ReactNode
+export interface SelectDefaultProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {}
+
+export function SelectDefault(props: SelectDefaultProps) {
+  return <SelectPrimitive.Root {...props} />
 }
 
-export function SelectDefault({ value, onValueChange: _onValueChange, open = false, onOpenChange: _onOpenChange, children, className, ...props }: SelectDefaultProps) {
-  return (
-    <div
-      data-state={open ? 'open' : 'closed'}
-      data-value={value}
-      className={['promptui-select-default', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const SelectTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>>(
+  function SelectTrigger({ className, children, ...props }, ref) {
+    return (
+      <SelectPrimitive.Trigger
+        ref={ref}
+        className={['promptui-select-trigger', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        {children}
+        <SelectPrimitive.Icon>▾</SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+    )
+  }
+)
 
-export function SelectTrigger({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      role="combobox"
-      className={['promptui-select-trigger', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const SelectValue = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>>(
+  function SelectValue({ className, ...props }, ref) {
+    return (
+      <SelectPrimitive.Value
+        ref={ref}
+        className={['promptui-select-value', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export interface SelectValueProps extends React.HTMLAttributes<HTMLSpanElement> {
-  placeholder?: React.ReactNode
-  children?: React.ReactNode
-}
+export const SelectContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>>(
+  function SelectContent({ className, children, position = 'popper', ...props }, ref) {
+    return (
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Content
+          ref={ref}
+          position={position}
+          className={['promptui-select-content', className].filter(Boolean).join(' ')}
+          {...props}
+        >
+          <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+        </SelectPrimitive.Content>
+      </SelectPrimitive.Portal>
+    )
+  }
+)
 
-export function SelectValue({ placeholder, children, className, ...props }: SelectValueProps) {
-  return (
-    <span className={['promptui-select-value', className].filter(Boolean).join(' ')} {...props}>
-      {children ?? placeholder}
-    </span>
-  )
-}
+export const SelectItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>>(
+  function SelectItem({ className, children, ...props }, ref) {
+    return (
+      <SelectPrimitive.Item
+        ref={ref}
+        className={['promptui-select-item', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        <SelectPrimitive.ItemIndicator className="promptui-select-item-indicator">✓</SelectPrimitive.ItemIndicator>
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      </SelectPrimitive.Item>
+    )
+  }
+)
 
-export function SelectContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="listbox"
-      className={['promptui-select-content', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+export const SelectGroup = SelectPrimitive.Group as unknown as React.FC<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Group>>
 
-export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: string
-  selected?: boolean
-  disabled?: boolean
-  children?: React.ReactNode
-}
+export const SelectLabel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>>(
+  function SelectLabel({ className, ...props }, ref) {
+    return (
+      <SelectPrimitive.Label
+        ref={ref}
+        className={['promptui-select-label', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function SelectItem({ value, selected = false, disabled, children, className, ...props }: SelectItemProps) {
-  return (
-    <div
-      role="option"
-      aria-selected={selected}
-      aria-disabled={disabled || undefined}
-      data-value={value}
-      data-state={selected ? 'checked' : 'unchecked'}
-      className={['promptui-select-item', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
-
-export function SelectGroup({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div role="group" className={['promptui-select-group', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
-
-export function SelectLabel({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-select-label', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
-
-export function SelectSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="separator"
-      className={['promptui-select-separator', className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-}
+export const SelectSeparator = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>>(
+  function SelectSeparator({ className, ...props }, ref) {
+    return (
+      <SelectPrimitive.Separator
+        ref={ref}
+        className={['promptui-select-separator', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

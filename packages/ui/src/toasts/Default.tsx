@@ -1,74 +1,94 @@
 import React from 'react'
+import * as ToastPrimitive from '@radix-ui/react-toast'
 
 export type ToastVariant = 'default' | 'destructive'
 
-export interface ToastDefaultProps extends React.HTMLAttributes<HTMLLIElement> {
+export interface ToastProviderProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Provider> {}
+
+export function ToastProvider({ swipeDirection = 'right', ...props }: ToastProviderProps) {
+  return <ToastPrimitive.Provider swipeDirection={swipeDirection} {...props} />
+}
+
+export interface ToastDefaultProps extends Omit<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Root>, 'forceMount'> {
   variant?: ToastVariant
-  open?: boolean
-  children?: React.ReactNode
 }
 
-export function ToastDefault({ variant = 'default', open = true, children, className, ...props }: ToastDefaultProps) {
-  if (!open) return null
-  return (
-    <li
-      role="status"
-      aria-live="polite"
-      data-state="open"
-      data-variant={variant}
-      className={['promptui-toast-default', `promptui-toast-default--${variant}`, className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </li>
-  )
-}
+export const ToastDefault = React.forwardRef<HTMLLIElement, ToastDefaultProps>(
+  function ToastDefault({ className, variant = 'default', ...props }, ref) {
+    return (
+      <ToastPrimitive.Root
+        ref={ref}
+        data-variant={variant}
+        className={[
+          'promptui-toast-default',
+          `promptui-toast-default--${variant}`,
+          className,
+        ].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ToastAction({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      className={['promptui-toast-action', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const ToastAction = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof ToastPrimitive.Action>>(
+  function ToastAction({ className, altText = 'Action', ...props }, ref) {
+    return (
+      <ToastPrimitive.Action
+        ref={ref}
+        altText={altText}
+        className={['promptui-toast-action', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ToastClose({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      aria-label="Close"
-      className={['promptui-toast-close', className].filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children ?? '×'}
-    </button>
-  )
-}
+export const ToastClose = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close>>(
+  function ToastClose({ className, children, ...props }, ref) {
+    return (
+      <ToastPrimitive.Close
+        ref={ref}
+        className={['promptui-toast-close', className].filter(Boolean).join(' ')}
+        {...props}
+      >
+        {children ?? '×'}
+      </ToastPrimitive.Close>
+    )
+  }
+)
 
-export function ToastTitle({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-toast-title', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const ToastTitle = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ToastPrimitive.Title>>(
+  function ToastTitle({ className, ...props }, ref) {
+    return (
+      <ToastPrimitive.Title
+        ref={ref}
+        className={['promptui-toast-title', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ToastDescription({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={['promptui-toast-description', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+export const ToastDescription = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>>(
+  function ToastDescription({ className, ...props }, ref) {
+    return (
+      <ToastPrimitive.Description
+        ref={ref}
+        className={['promptui-toast-description', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
 
-export function ToastViewport({ children, className, ...props }: React.HTMLAttributes<HTMLOListElement>) {
-  return (
-    <ol className={['promptui-toast-viewport', className].filter(Boolean).join(' ')} {...props}>
-      {children}
-    </ol>
-  )
-}
+export const ToastViewport = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>>(
+  function ToastViewport({ className, ...props }, ref) {
+    return (
+      <ToastPrimitive.Viewport
+        ref={ref}
+        className={['promptui-toast-viewport', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

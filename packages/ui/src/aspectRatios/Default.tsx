@@ -1,20 +1,17 @@
 import React from 'react'
+import * as AspectRatioPrimitive from '@radix-ui/react-aspect-ratio'
 
-export interface AspectRatioDefaultProps extends React.HTMLAttributes<HTMLDivElement> {
-  ratio?: number
-  children?: React.ReactNode
-}
+export interface AspectRatioDefaultProps extends React.ComponentPropsWithoutRef<typeof AspectRatioPrimitive.Root> {}
 
-export function AspectRatioDefault({ ratio = 16 / 9, children, className, style, ...props }: AspectRatioDefaultProps) {
-  return (
-    <div
-      className={['promptui-aspect-ratio-default', className].filter(Boolean).join(' ')}
-      style={{ position: 'relative', width: '100%', paddingBottom: `${100 / ratio}%`, ...style }}
-      {...props}
-    >
-      <div className="promptui-aspect-ratio-inner" style={{ position: 'absolute', inset: 0 }}>
-        {children}
-      </div>
-    </div>
-  )
-}
+export const AspectRatioDefault = React.forwardRef<HTMLDivElement, AspectRatioDefaultProps>(
+  function AspectRatioDefault({ className, ratio = 16 / 9, ...props }, ref) {
+    return (
+      <AspectRatioPrimitive.Root
+        ref={ref}
+        ratio={ratio}
+        className={['promptui-aspect-ratio-default', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)

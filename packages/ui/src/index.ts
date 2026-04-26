@@ -403,7 +403,7 @@ export {
   SelectLabel,
   SelectSeparator,
 } from './selects/Default'
-export type { SelectDefaultProps, SelectValueProps, SelectItemProps } from './selects/Default'
+export type { SelectDefaultProps } from './selects/Default'
 
 export { SeparatorDefault } from './separators/Default'
 export type { SeparatorDefaultProps, SeparatorOrientation, SeparatorVariant } from './separators/Default'
@@ -496,7 +496,7 @@ export { ToggleDefault } from './toggles/Default'
 export type { ToggleDefaultProps } from './toggles/Default'
 
 export { ToggleGroupDefault, ToggleGroupItem } from './toggleGroups/Default'
-export type { ToggleGroupDefaultProps, ToggleGroupItemProps, ToggleGroupType } from './toggleGroups/Default'
+export type { ToggleGroupDefaultProps, ToggleGroupItemProps } from './toggleGroups/Default'
 
 export { TooltipDefault, TooltipTrigger, TooltipContent, TooltipProvider } from './tooltips/Default'
 export type { TooltipDefaultProps, TooltipTriggerProps, TooltipContentProps, TooltipProviderProps } from './tooltips/Default'

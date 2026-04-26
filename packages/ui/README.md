@@ -88,6 +88,27 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.4.3
+
+Stage 4d — final Radix batch. **The Radix integration is complete.** 13 more components now wrap Radix primitives:
+
+- `SelectDefault` → `@radix-ui/react-select`. Listbox with built-in `ItemIndicator` (✓) and arrow icon. `Group`, `Label`, `Separator`, `Item` sub-parts behave as expected.
+- `SwitchDefault` → `@radix-ui/react-switch`. Real `<button role="switch">` with thumb child.
+- `CheckboxDefault` → `@radix-ui/react-checkbox`. Indeterminate state supported via `checked={'indeterminate'}`.
+- `RadioGroupDefault` + `RadioGroupItem` → `@radix-ui/react-radio-group`. Roving tabindex, arrow keys.
+- `SliderDefault` (single value) and `SliderRange` (`[from, to]`) both → `@radix-ui/react-slider`. Real Track/Range/Thumb composition.
+- `ToggleDefault` + `ToggleGroupDefault` (`type: 'single' | 'multiple'`) → `@radix-ui/react-toggle{,-group}`.
+- `ScrollAreaDefault` → `@radix-ui/react-scroll-area`. Custom scrollbar styling that doesn't break native scroll.
+- `AspectRatioDefault` → `@radix-ui/react-aspect-ratio`.
+- `Avatar` family → `@radix-ui/react-avatar`. Image fallback handling built-in.
+- `LabelDefault` → `@radix-ui/react-label`. Proper `htmlFor` linking.
+- `Toast` family → `@radix-ui/react-toast`. New `ToastProvider` (export it from your app root) drives swipe-to-dismiss.
+- `SeparatorDefault` → `@radix-ui/react-separator`. Same API + correct aria semantics.
+
+Adds 13 Radix deps. Removes prop types that no longer match Radix shapes (`ToggleGroupType`, `SelectValueProps`, `SelectItemProps`).
+
+**Stays custom** (no Radix equivalent): Combobox/ComboboxMulti, Command, Calendar/CalendarRange/CalendarMultiple, DatePicker family, InputOtp, Sonner, NavigationMenuMobile, NavigationMenuMega, Carousel, Form, Sidebar, Heroes, Skeletons, Charts, Cards (variants), Pagination, Breadcrumb, Resizable.
+
 ### 0.4.2
 
 Stage 4c — menus + disclosure now backed by Radix. Real keyboard navigation, type-ahead, focus management.

@@ -1,24 +1,18 @@
 import React from 'react'
+import * as SwitchPrimitive from '@radix-ui/react-switch'
 
-export interface SwitchDefaultProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
-  checked?: boolean
-  onCheckedChange?: (checked: boolean) => void
-}
+export interface SwitchDefaultProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {}
 
-export function SwitchDefault({ checked, onCheckedChange, className, ...props }: SwitchDefaultProps) {
-  return (
-    <label className={['promptui-switch-default', className].filter(Boolean).join(' ')}>
-      <input
-        type="checkbox"
-        role="switch"
-        className="promptui-switch-input"
-        checked={checked ?? false}
-        onChange={e => onCheckedChange?.(e.target.checked)}
+export const SwitchDefault = React.forwardRef<HTMLButtonElement, SwitchDefaultProps>(
+  function SwitchDefault({ className, ...props }, ref) {
+    return (
+      <SwitchPrimitive.Root
+        ref={ref}
+        className={['promptui-switch-default', className].filter(Boolean).join(' ')}
         {...props}
-      />
-      <span className="promptui-switch-track" aria-hidden="true">
-        <span className="promptui-switch-thumb" />
-      </span>
-    </label>
-  )
-}
+      >
+        <SwitchPrimitive.Thumb className="promptui-switch-thumb" />
+      </SwitchPrimitive.Root>
+    )
+  }
+)

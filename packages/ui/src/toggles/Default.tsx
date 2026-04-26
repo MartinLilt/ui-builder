@@ -1,22 +1,16 @@
 import React from 'react'
+import * as TogglePrimitive from '@radix-ui/react-toggle'
 
-export interface ToggleDefaultProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
-  pressed?: boolean
-  onPressedChange?: (pressed: boolean) => void
-  children?: React.ReactNode
-}
+export interface ToggleDefaultProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> {}
 
-export function ToggleDefault({ pressed = false, onPressedChange, children, className, ...props }: ToggleDefaultProps) {
-  return (
-    <button
-      type="button"
-      aria-pressed={pressed}
-      data-state={pressed ? 'on' : 'off'}
-      className={['promptui-toggle-default', className].filter(Boolean).join(' ')}
-      onClick={() => onPressedChange?.(!pressed)}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+export const ToggleDefault = React.forwardRef<HTMLButtonElement, ToggleDefaultProps>(
+  function ToggleDefault({ className, ...props }, ref) {
+    return (
+      <TogglePrimitive.Root
+        ref={ref}
+        className={['promptui-toggle-default', className].filter(Boolean).join(' ')}
+        {...props}
+      />
+    )
+  }
+)
