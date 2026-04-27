@@ -4,17 +4,114 @@
 [![@getpromptui/ui](https://img.shields.io/npm/v/@getpromptui/ui?label=%40getpromptui%2Fui)](https://www.npmjs.com/package/@getpromptui/ui)
 [![license](https://img.shields.io/github/license/MartinLilt/promptui)](LICENSE)
 
-**The typed contract between your LLM and your frontend.**
+PromptUI is a declarative UI DSL that lets LLMs and developers generate real React interfaces from structured text.
 
-PromptUI is an AI-native UI DSL. You give Claude (or any coding agent) a catalog of ~100 anchored components and a constraint-driven block grammar; it emits a `.promptui` file; the preprocessor compiles deterministic React or Vue — imports resolved, no hallucinated components, no invented CSS, no layout drift. Components ship with default styles and **real Radix-backed behavior** (focus trap, keyboard nav, a11y) so the output runs in production.
+It includes:
 
-[Install](#install) · **[Use with Claude Code](#use-with-claude-code)** · [Quick start](#quick-start) · [Component library](#component-library)
+- A **preprocessor** that compiles PromptUI syntax into React components.
+- A **component library** for rendering production-ready UI with default styles and a11y-correct behavior.
+
+---
+
+## See it in 5 seconds
+
+**Input** — `pricing.promptui`:
+
+```
+[Pricing:PricingPage] {
+  use: library/cards/default
+  [CardHeader] { [CardTitle] { text: "Pricing" } }
+  [CardContent] {
+    [Plan] {
+      each: plan in plans
+      use: library/cards/pricing
+      [CardPricingName]  { text: {{plan.name}} }
+      [CardPricingPrice] { text: {{plan.price}} }
+    }
+  }
+}
+```
+
+**Output** — `PricingPage.tsx`:
+
+```tsx
+import { CardContent, CardDefault, CardHeader, CardPricing, CardPricingName, CardPricingPrice, CardTitle } from "@getpromptui/ui"
+
+export interface PricingPageProps {
+  plans: unknown[]
+}
+
+export function PricingPage({ plans }: PricingPageProps) {
+  return (
+    <CardDefault>
+      <CardHeader><CardTitle>Pricing</CardTitle></CardHeader>
+      <CardContent>
+        {plans.map((plan, index) => (
+          <CardPricing key={index}>
+            <CardPricingName>{plan.name}</CardPricingName>
+            <CardPricingPrice>{plan.price}</CardPricingPrice>
+          </CardPricing>
+        ))}
+      </CardContent>
+    </CardDefault>
+  )
+}
+```
+
+Real React, fully typed. Imports resolved. State + props inferred. No glue code.
+
+---
+
+## Why PromptUI?
+
+- **Built for LLMs.** UI is generated from text against an anchored catalog of 101 components — no hallucinated names, no invented props.
+- **Declarative.** No manual component wiring, no JSX scaffolding by hand.
+- **Serializable.** UI lives as text — store it, version-control it, edit it, stream it from a chat.
+- **Works with the React ecosystem.** Compiles to plain `.tsx`. Use it with Vite, Next.js, Astro — anything that runs React.
+
+---
+
+## Comparison
+
+| Feature              | PromptUI | shadcn/ui |
+|----------------------|:--------:|:---------:|
+| Declarative DSL      | ✅       | ❌         |
+| AI-friendly          | ✅       | ❌         |
+| Manual control       | ⚠️       | ✅         |
+| Default styles       | ✅       | ✅         |
+| Real behavior (a11y) | ✅       | ✅         |
+
+PromptUI trades manual flexibility for AI predictability. Use it where consistency and structured generation matter; reach for raw shadcn/Radix when you want full hand-control.
+
+---
+
+## Install
+
+```bash
+npm install @getpromptui/core @getpromptui/ui
+```
+
+```ts
+// app entry
+import "@getpromptui/ui/styles.css"
+```
+
+```ts
+// any component
+import { CardDefault, ButtonDefault, InputEmail } from "@getpromptui/ui"
+```
 
 ---
 
 ## Use with Claude Code
 
-PromptUI ships with a Claude Code skill that teaches Claude the full DSL, the 101 registered `use`-paths, sub-part relationships, and the `variant:`-vs-new-file rule. One command to install:
+Workflow:
+
+1. **Write PromptUI** — Claude generates `.promptui` against the typed catalog.
+2. **Compile** with `@getpromptui/core` (CLI, Vite plugin, or programmatic API).
+3. **Render** with `@getpromptui/ui` components.
+
+Install the skill once:
 
 ```bash
 mkdir -p .claude/commands
@@ -22,38 +119,50 @@ curl -o .claude/commands/promptui.md \
   https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
 ```
 
-Then in Claude Code:
+Then `/promptui` in Claude Code teaches Claude all 101 `use`-paths, sub-parts, variants, and DSL grammar. Ask "make a signup card with email + destructive alert + loading button" and Claude writes valid `.promptui` you can compile straight into your project.
+
+---
+
+## How it works
 
 ```
-/promptui
-
-make a signup card: email input + destructive alert on error + loading button
+.promptui  →  parse  →  resolve  →  emit  →  .tsx (or .vue)
+                            ↓
+                   library registry
+                (101 anchored entries)
 ```
 
-Claude writes a valid `.promptui`:
+- **Parse** turns block syntax into an AST.
+- **Resolve** validates `use:` paths against the registry, checks `lock`/`ban`/`allow`, validates `variant:`.
+- **Emit** walks the tree, collects every component used (main + nested sub-parts), and produces React or Vue with imports at the top.
 
-```
-[Signup] {
-  use: library/cards/default
-  [CardHeader] { [CardTitle] { text: "Join the waitlist" } }
-  [CardContent] {
-    [Email] { use: library/inputs/email bind: email }
-    [Error] {
-      use: library/alerts/default
-      variant: destructive
-      [AlertTitle]       { text: "Invalid email" }
-      [AlertDescription] { text: "Please provide a valid address." }
-    }
-  }
-  [CardFooter] {
-    [Submit] { use: library/buttons/loading text: "Notify me" flow: submit-waitlist }
-  }
-}
+Use the **Vite plugin** to import `.promptui` files directly:
+
+```ts
+// vite.config.ts
+import promptui from "@getpromptui/core/vite"
+export default defineConfig({ plugins: [react(), promptui()] })
 ```
 
-Run `npx promptui compile` and you have production JSX with imports at the top. Because Claude resolves against a typed registry, not guessing, output is consistent run-to-run.
+```tsx
+import Pricing from "./pricing.promptui"
+<Pricing plans={plans} />
+```
 
-This is the intended workflow. The CLI works standalone, but the skill is how you get the value without writing `.promptui` by hand.
+---
+
+## Use cases
+
+- **AI-generated dashboards** — LLM produces metric cards, charts, tables against a fixed catalog.
+- **Internal tools** — admin panels with consistent, constrained UI.
+- **Chat-driven UI** — interface streams from a model in response to user messages.
+- **Design-system handoff** — designers describe pages in `.promptui`, devs own the component implementations.
+
+---
+
+## Playground (coming soon)
+
+Edit PromptUI on the left, see the rendered UI on the right. Tracked publicly — see GitHub issues.
 
 ---
 
@@ -61,120 +170,35 @@ This is the intended workflow. The CLI works standalone, but the skill is how yo
 
 | Package | Description |
 |---------|-------------|
-| [`@getpromptui/core`](packages/core) | Parser, resolver, emitters, CLI, library registry |
-| [`@getpromptui/ui`](packages/ui) | React component library — 101 `use`-paths across 50+ categories |
-
----
-
-## Install
-
-```bash
-# CLI
-npm install -g @getpromptui/core
-
-# Programmatic API
-npm install @getpromptui/core
-
-# Component library (React)
-npm install @getpromptui/ui
-```
-
----
-
-## Quick start
-
-Create `hero.promptui`:
-
-```
-[Hero:main] {
-  role: landing-hero
-  use: library/heroes/split
-  lock: structure spacing
-  allow: text buttons
-
-  [HeroSplitContent] {
-    [HeroEyebrow]  { text: "Now in beta" }
-    [HeroTitle]    { text: "Describe UI. Compile it. Ship it." }
-    [HeroSubtitle] { text: "AI-native DSL for frontend templates." }
-    [HeroActions] {
-      [CTA] {
-        use: library/buttons/default
-        text: "Get started"
-        flow: open-docs
-      }
-      [Docs] {
-        use: library/buttons/default
-        variant: outline
-        text: "Read docs"
-      }
-    }
-  }
-
-  [HeroSplitVisual] {
-    [Placeholder] { use: library/skeletons/card }
-  }
-}
-```
-
-Compile to React:
-
-```bash
-promptui compile hero.promptui --target react
-```
-
-Output:
-
-```jsx
-import { ButtonDefault, HeroActions, HeroEyebrow, HeroSplit, HeroSplitContent, HeroSplitVisual, HeroSubtitle, HeroTitle, SkeletonCard } from '@getpromptui/ui'
-
-<HeroSplit>
-  <HeroSplitContent>
-    <HeroEyebrow>{"Now in beta"}</HeroEyebrow>
-    <HeroTitle>{"Describe UI. Compile it. Ship it."}</HeroTitle>
-    <HeroSubtitle>{"AI-native DSL for frontend templates."}</HeroSubtitle>
-    <HeroActions>
-      <ButtonDefault onClick={openDocs}>{"Get started"}</ButtonDefault>
-      <ButtonDefault variant="outline">{"Read docs"}</ButtonDefault>
-    </HeroActions>
-  </HeroSplitContent>
-  <HeroSplitVisual>
-    <SkeletonCard />
-  </HeroSplitVisual>
-</HeroSplit>
-```
-
-Vue output is a full SFC with `<script setup lang="ts">` + `<template>`.
+| [`@getpromptui/core`](packages/core) | Parser, resolver, emitters, CLI, Vite plugin, library registry |
+| [`@getpromptui/ui`](packages/ui) | React component library — 101 entries, default CSS, Radix-backed behavior |
 
 ---
 
 ## Programmatic API
 
 ```ts
-import { compile } from '@getpromptui/core'
-import { readFileSync } from 'node:fs'
+import { compile } from "@getpromptui/core"
 
-const source = readFileSync('hero.promptui', 'utf-8')
-const { output, warnings } = compile(source, { target: 'react' })
-
-console.log(output)
-warnings.forEach(w => console.warn(w))
+const { output, warnings } = compile(source, { target: "react", exportName: "Pricing" })
 ```
 
 Low-level primitives:
 
 ```ts
-import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
-
-const doc = parse(source)
-const { document, warnings } = resolve(doc)
-const jsx = emitReact(document)
-const vue = emitVue(document)
+import { parse, resolve, emitReact, emitVue } from "@getpromptui/core"
 ```
 
 Library introspection:
 
 ```ts
-import { LIBRARY_ENTRIES, lookupByUse, isKnownComponent } from '@getpromptui/core'
+import { LIBRARY_ENTRIES, lookupByUse, isKnownComponent } from "@getpromptui/core"
+```
+
+CLI:
+
+```bash
+promptui compile pricing.promptui --export Pricing -o src/Pricing.tsx --watch
 ```
 
 ---
@@ -186,7 +210,6 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 ```
 [BlockType:name] {
   directive: value
-  ...
   [ChildType] { ... }
 }
 ```
@@ -195,35 +218,28 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 
 | Directive  | Purpose |
 |------------|---------|
-| `use`      | Library path → component: `library/heroes/split` → `HeroSplit`. Validated against the registry. |
+| `use`      | Library path → component: `library/cards/default` → `CardDefault`. Validated against the registry. |
 | `variant`  | Skin variant (e.g. `destructive`, `outline`). Valid only when the `use` entry declares variants. Emitted as `variant="..."` prop. |
-| `role`     | Semantic role hint: `landing-hero`, `interactive-form`, `pricing-section` |
-| `goal`     | Natural-language intent, used as a hint for AI-assisted workflows |
-| `look`     | Semantic style tokens → `className`: `centered dark-gradient rounded` |
-| `lock`     | What must not change: `structure spacing hierarchy states layout base-style` |
-| `allow`    | What may be changed: `text subtitle buttons image badge icon binding` |
-| `ban`      | Explicitly forbidden: `invent-new-layout custom-css inline-styles extra-wrappers hierarchy-changes unapproved-components` |
-| `states`   | Supported variants: `desktop tablet mobile` / `default hover disabled` |
-| `text`     | Literal text content |
-| `flow`     | Interaction intent → handler: `open-waitlist` → `onClick={openWaitlist}` |
-| `bind`     | Data binding: `email` → `value={email} onChange={(v) => setEmail(v)}` |
+| `each`     | Repeat block: `each: item in items` → React `{items.map((item, i) => ...)}` / Vue `v-for`. |
+| `if`       | Conditional: `if: hasError` → React `{hasError && (...)}` / Vue `v-if`. |
+| `text`     | Literal text or `{{expr}}` for an expression. |
+| `flow`     | Interaction → handler: `open-docs` → prop `onOpenDocs?: () => void`. |
+| `bind`     | Two-way binding: `email` → `useState` + controlled `value`/`onChange`. |
+| `look`     | Semantic style tokens → `className`. |
+| `lock`     | Frozen aspects: `structure spacing hierarchy states layout base-style`. |
+| `allow`    | What may change: `text subtitle buttons image badge icon binding`. |
+| `ban`      | Forbidden: `invent-new-layout custom-css inline-styles extra-wrappers hierarchy-changes unapproved-components`. |
+| `role`     | Semantic role hint. |
+| `goal`     | Natural-language intent (used by AI tooling). |
+| `states`   | Supported responsive/interaction states. |
 
-### Priority rules
-
-- `lock` overrides `look`
-- `ban` overrides `allow`
-- `look` tokens are semantic — they pass through to `className`, not resolved as CSS classes by the compiler
-
-### `variant:` vs new `use` path
-
-- **Same markup, different skin** → `variant:` on the existing `use` path.
-- **Different markup, structure, or HTML element** → pick a different `use` path (e.g. `library/inputs/password` vs `library/inputs/search`).
+**Priority rules:** `lock` > `look`, `ban` > `allow`.
 
 ---
 
 ## Component library
 
-101 `use`-paths registered in [`@getpromptui/core`](https://www.npmjs.com/package/@getpromptui/core), mapped to components in [`@getpromptui/ui`](https://www.npmjs.com/package/@getpromptui/ui). Sub-parts are imported automatically when referenced as nested blocks by `blockType`.
+101 anchored `use`-paths across 50+ categories. Sub-parts are imported automatically when referenced as nested blocks.
 
 | Category | `use`-paths | Notes |
 |----------|-------------|-------|
@@ -234,11 +250,11 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 | `avatars` | `default`, `withStatus`, `group` | |
 | `badges` | `default` | variants: `default`, `secondary`, `destructive`, `outline` |
 | `breadcrumbs` | `default`, `withDropdown` | |
-| `buttons` | `default`, `icon`, `loading` + legacy `primary`, `ghost` | 6 skin variants on each new |
+| `buttons` | `default`, `icon`, `loading` + legacy `primary`, `ghost` | 6 skin variants on each |
 | `calendars` | `default`, `range`, `multiple` | |
 | `cards` | `default`, `stat`, `profile`, `media`, `pricing`, `interactive` | |
 | `carousels` | `default` | |
-| `charts` | `default`, `bar`, `line`, `area`, `pie`, `radar` | SVG rendering from `data` prop |
+| `charts` | `default`, `bar`, `line`, `area`, `pie`, `radar` | SVG-rendered from `data` prop |
 | `checkboxes` | `default` | |
 | `collapsibles` | `default` | |
 | `comboboxes` | `default`, `multi` | |
@@ -281,34 +297,31 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 | `toggleGroups` | `default` | |
 | `tooltips` | `default`, `rich` | |
 
-For the full catalog with every sub-part, see [`packages/core/README.md`](packages/core/README.md) or the Claude Code skill at [`.claude/commands/promptui.md`](.claude/commands/promptui.md). You can also inspect `LIBRARY_ENTRIES` at runtime:
-
-```ts
-import { LIBRARY_ENTRIES } from '@getpromptui/core'
-```
+For the full catalog with every sub-part, see [`packages/core/README.md`](packages/core/README.md) or inspect `LIBRARY_ENTRIES` at runtime.
 
 ### Design principles
 
-- **Thin wrappers.** Semantic HTML + `promptui-*` class hooks + controlled props. No Radix, no CVA, no Tailwind, no internal state (with rare pragmatic exceptions for SVG charts).
-- **Consumer styles.** Components expose class names — you supply CSS. Works with Tailwind, CSS Modules, or any design system.
-- **Structure, not behavior.** Focus trap, keyboard navigation, portals, animations are the consumer's responsibility.
+- **Anchored, not freeform.** Every `use:` path is validated against the registry. Unknown paths warn at compile time.
+- **Real behavior.** Interactive primitives (Dialog, Popover, Tooltip, Menu, Tabs, Select, Switch, etc.) wrap [Radix UI](https://www.radix-ui.com) for focus trap, keyboard navigation, scroll lock, and ARIA semantics.
+- **Default styles.** `@getpromptui/ui/styles.css` ships ~70 KB of opinionated defaults plus dark mode. Override via CSS custom properties on `:root`.
+- **Tailwind-friendly.** `@getpromptui/ui/tailwind` exposes tokens as theme extension.
 
 ---
 
 ## What v0.4 does and doesn't do
 
 **Does:**
-- Compiles `.promptui` files to React (`.tsx` files with imports + props + state hooks) and Vue (full SFC with `<script setup>`).
+
+- Compiles `.promptui` files to React (typed `.tsx` with imports + props + state hooks) and Vue (full SFC with `<script setup>`).
 - 101 anchored `use`-paths across 50+ component categories.
-- Real behavior on all interactive primitives (Dialog, Popover, Tooltip, DropdownMenu, ContextMenu, Menubar, NavigationMenu, Accordion, Collapsible, Tabs, Select, Switch, Checkbox, RadioGroup, Slider, Toggle, ToggleGroup, ScrollArea, AspectRatio, Avatar, Label, Toast, Separator, AlertDialog, Sheet, Drawer, HoverCard) — focus trap, keyboard nav, escape-to-close, scroll-lock, type-ahead, all wired via Radix UI.
-- Default styles (`@getpromptui/ui/styles.css`) + Tailwind preset.
-- `each:` / `if:` directives, `{{expr}}` interpolation, `variant:` skin prop.
-- Vite plugin (`@getpromptui/core/vite`) for native `import` of `.promptui` files.
-- CLI watch mode (`--watch`) for non-Vite projects.
+- Real Radix-backed behavior on 30+ interactive primitives.
+- Default styles + Tailwind preset + Vite plugin + CLI watch mode.
+- DSL features: `use`, `variant`, `each`, `if`, `{{expr}}`, `lock`/`ban`/`allow`, `bind`, `flow`.
 
 **Doesn't (yet):**
-- Computed/derived state, data fetching, logic in DSL — keep that in your own code.
-- Vue Radix integration (Vue components are still pure structural — Radix Vue exists, would land in v0.5).
+
+- Computed/derived state, data fetching, business logic in DSL — keep it in your code.
+- Vue Radix integration (Vue output is structural-only; Radix Vue parity is on the v0.5 list).
 - Custom-still: Combobox, Calendar/DatePicker, Carousel, Sidebar, Form (use react-hook-form), Heroes, Cards (variants), Skeletons, Charts.
 
 ---
@@ -317,12 +330,12 @@ import { LIBRARY_ENTRIES } from '@getpromptui/core'
 
 ```bash
 git clone https://github.com/MartinLilt/promptui
-cd ui-builder
+cd promptui
 pnpm install
 pnpm build
 ```
 
-pnpm monorepo with packages under `packages/`. Please open an issue before submitting a PR for non-trivial changes.
+pnpm monorepo with packages under `packages/`. Open an issue before submitting a PR for non-trivial changes.
 
 ---
 
@@ -330,7 +343,7 @@ pnpm monorepo with packages under `packages/`. Please open an issue before submi
 
 ### 0.4.0–0.4.3 — Production-ready ("behavior arrives")
 
-The big shift: 30+ interactive primitives now wrap **Radix UI** for real a11y and behavior. PromptUI is no longer just "structure + imports" — components actually work.
+30+ interactive primitives now wrap **Radix UI** for real a11y and behavior. PromptUI is no longer just "structure + imports" — components actually work.
 
 - **Stage 4a (0.4.0):** Dialog, Popover, Tooltip, TooltipRich.
 - **Stage 4b (0.4.1):** AlertDialog, Sheet, Drawer, HoverCard.
@@ -341,32 +354,20 @@ The big shift: 30+ interactive primitives now wrap **Radix UI** for real a11y an
 
 Adds 25 `@radix-ui/*` deps as `dependencies` (not peer) so consumers don't need to install them manually.
 
-`@getpromptui/core@0.4.0` is version-aligned with `@getpromptui/ui@0.4.x`. No core API changes since 0.3.1.
-
 ### 0.3.0–0.3.1
 
 - Wrapped React output: `--export Name` (or root `[Block:Name]`) → `export function Name()` with `useState` for `bind:`, `on<Flow>` props for `flow:`.
 - `each: item in items` and `if: expr` directives. `{{expr}}` for expressions in `text:`.
-- Default CSS (`@getpromptui/ui/styles.css`, 68 KB / 589 selectors).
+- Default CSS (`@getpromptui/ui/styles.css`).
 - Tailwind plugin at `@getpromptui/ui/tailwind`.
 - CLI `--watch` + `--output`. Vite plugin at `@getpromptui/core/vite`.
 
-### 0.2.2
+### 0.2.x
 
-Docs: promoted the Claude Code skill to a hero section in the root + core READMEs. No code changes.
-
-### 0.2.1
-
-Metadata-only: repository URLs updated to `MartinLilt/promptui` after GitHub rename.
-
-### 0.2.0
-
-- Library registry: 101 `use`-paths shared via `LIBRARY_ENTRIES`.
-- New `variant:` directive for skin variations.
-- 46 new component files covering inputs/buttons/cards/heroes/skeletons/charts/progresses/calendars/datePickers/comboboxes/sliders/avatars/tooltips/paginations/breadcrumbs/separators/navigationMenus/tabs.
-- React emitter: auto-imports `import { ... } from '@getpromptui/ui'` at the top.
-- Vue emitter: full SFC output with `<script setup>` imports. **Breaking:** no more per-child `<template #slot>` wrapping.
-- Resolver validates `use` paths and `variant:` values.
+- Library registry with 101 `use`-paths.
+- `variant:` directive for skin variants.
+- React emitter auto-imports from `@getpromptui/ui`.
+- Vue emitter outputs full SFC.
 
 ### 0.1.0
 
