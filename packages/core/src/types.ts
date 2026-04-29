@@ -20,6 +20,13 @@ export interface CompileOptions {
    * is set, emits a bare JSX fragment (back-compat).
    */
   exportName?: string
+  /**
+   * Source `.promptui` path (typically relative to project root). When provided,
+   * it's referenced in the "DO NOT EDIT — generated" header at the top of the
+   * compiled output, so a human or AI editing the wrong file knows where to
+   * make changes. Pass `false` to suppress the header entirely.
+   */
+  sourcePath?: string | false
 }
 
 export interface CompileResult {

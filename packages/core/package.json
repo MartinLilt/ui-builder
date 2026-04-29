@@ -1,6 +1,6 @@
 {
   "name": "@getpromptui/core",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "PromptUI preprocessor — compiles .promptui DSL into React or Vue templates",
   "keywords": [
     "promptui",
@@ -41,10 +41,12 @@
       "types": "./dist/vite.d.ts",
       "import": "./dist/vite.mjs",
       "require": "./dist/vite.js"
-    }
+    },
+    "./skill.md": "./skill.md"
   },
   "files": [
     "dist",
+    "skill.md",
     "README.md",
     "LICENSE"
   ],
@@ -55,11 +57,14 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm build"
+    "generate-skill": "tsx scripts/generate-skill.ts",
+    "check-version": "tsx scripts/check-version.ts",
+    "prepublishOnly": "pnpm check-version && pnpm generate-skill && pnpm build"
   },
   "devDependencies": {
     "@types/node": "^20",
     "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   }
 }

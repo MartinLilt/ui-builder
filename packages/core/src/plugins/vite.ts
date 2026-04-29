@@ -57,7 +57,8 @@ export default function promptui(options: PromptUIViteOptions = {}): VitePluginL
       if (!id.endsWith('.promptui')) return null
 
       const name = forcedName ?? pascalCaseFromFilename(id)
-      const { output, warnings } = compile(code, { target: 'react', exportName: name })
+      const sourcePath = path.relative(process.cwd(), id)
+      const { output, warnings } = compile(code, { target: 'react', exportName: name, sourcePath })
 
       if (logWarnings && warnings.length > 0) {
         for (const w of warnings) console.warn(`[promptui] ${path.relative(process.cwd(), id)}: ${w}`)

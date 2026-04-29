@@ -2,6 +2,7 @@ export { parse, ParseError } from './parser'
 export { resolve } from './resolver'
 export { emitReact } from './emitters/react'
 export { emitVue } from './emitters/vue'
+export { VERSION } from './version'
 export {
   LIBRARY_ENTRIES,
   lookupByUse,
@@ -24,8 +25,8 @@ export function compile(source: string, options: CompileOptions): CompileResult 
   const { document, warnings } = resolve(doc)
 
   const output = options.target === 'vue'
-    ? emitVue(document)
-    : emitReact(document, { exportName: options.exportName })
+    ? emitVue(document, { sourcePath: options.sourcePath })
+    : emitReact(document, { exportName: options.exportName, sourcePath: options.sourcePath })
 
   return {
     output,

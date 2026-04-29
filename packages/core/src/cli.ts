@@ -38,7 +38,8 @@ function flagPresent(argList: string[], ...names: string[]): boolean {
 
 function runCompile(resolved: string, target: EmitTarget, exportName: string | undefined, outputPath: string | undefined): void {
   const source = fs.readFileSync(resolved, 'utf-8')
-  const { output, warnings } = compile(source, { target, exportName })
+  const sourcePath = path.relative(process.cwd(), resolved)
+  const { output, warnings } = compile(source, { target, exportName, sourcePath })
   if (warnings.length > 0) {
     for (const w of warnings) console.warn(`warn: ${w}`)
   }

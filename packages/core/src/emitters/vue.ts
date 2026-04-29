@@ -1,5 +1,6 @@
 import { Block, Document } from '../types'
 import { lookupByUse, isKnownComponent, packageForComponent } from '../library'
+import { generatedHeader } from './header'
 
 function lookToClass(look: string | undefined): string {
   if (!look) return ''
@@ -111,7 +112,11 @@ function emitScriptBlock(components: Set<string>): string {
   return lines.join('\n')
 }
 
-export function emitVue(doc: Document): string {
+export interface EmitVueOptions {
+  sourcePath?: string | false
+}
+
+export function emitVue(doc: Document, options?: EmitVueOptions): string {
   const used = new Set<string>()
   for (const block of doc.blocks) collectUsedComponents(block, used)
 
@@ -119,5 +124,7 @@ export function emitVue(doc: Document): string {
   const body = doc.blocks.map(b => emitBlock(b, 0)).join('\n\n')
   const template = `<template>\n${body}\n</template>`
 
-  return scriptBlock ? `${scriptBlock}\n\n${template}` : template
+  const main = scriptBlock ? `${scriptBlock}\n\n${template}` : template
+  const header = generatedHeader('html', options?.sourcePath)
+  return header ? `${header}\n\n${main}` : main
 }

@@ -64,7 +64,7 @@ Real React, fully typed. Imports resolved. State + props inferred. No glue code.
 
 ## Why PromptUI?
 
-- **Built for LLMs.** UI is generated from text against an anchored catalog of 101 components — no hallucinated names, no invented props.
+- **Built for LLMs.** UI is generated from text against an anchored catalog of 109 components, including site chrome (`headers/`, `footers/`, `layouts/*`) — no hallucinated names, no invented props.
 - **Declarative.** No manual component wiring, no JSX scaffolding by hand.
 - **Serializable.** UI lives as text — store it, version-control it, edit it, stream it from a chat.
 - **Works with the React ecosystem.** Compiles to plain `.tsx`. Use it with Vite, Next.js, Astro — anything that runs React.
@@ -115,15 +115,16 @@ Workflow:
 2. **Compile** with `@getpromptui/core` (CLI, Vite plugin, or programmatic API).
 3. **Render** with `@getpromptui/ui` components.
 
-Install the skill once:
+Install the skill once. The skill ships **inside** `@getpromptui/core` and is regenerated on every release from `LIBRARY_ENTRIES`, so the catalog you teach Claude always matches the package version you installed:
 
 ```bash
 mkdir -p .claude/commands
-curl -o .claude/commands/promptui.md \
-  https://raw.githubusercontent.com/MartinLilt/promptui/main/.claude/commands/promptui.md
+cp node_modules/@getpromptui/core/skill.md .claude/commands/promptui.md
 ```
 
-Then `/promptui` in Claude Code teaches Claude all 101 `use`-paths, sub-parts, variants, and DSL grammar. Ask "make a signup card with email + destructive alert + loading button" and Claude writes valid `.promptui` you can compile straight into your project.
+Re-run that line whenever you upgrade `@getpromptui/core`.
+
+Then `/promptui` in Claude Code teaches Claude all 109 `use`-paths, sub-parts, variants, and DSL grammar. Ask "make a signup card with email + destructive alert + loading button" and Claude writes valid `.promptui` you can compile straight into your project.
 
 ---
 
@@ -181,7 +182,7 @@ pnpm --filter @getpromptui/storybook storybook
 | Package | Description |
 |---------|-------------|
 | [`@getpromptui/core`](packages/core) | Parser, resolver, emitters, CLI, Vite plugin, library registry |
-| [`@getpromptui/ui`](packages/ui) | React component library — 101 entries, default CSS, Radix-backed behavior |
+| [`@getpromptui/ui`](packages/ui) | React component library — 109 entries, default CSS, Radix-backed behavior |
 | [`@getpromptui/storybook`](packages/storybook) | Storybook 8 playground (private; not published) |
 
 ---
@@ -250,7 +251,7 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 
 ## Component library
 
-101 anchored `use`-paths across 50+ categories. Sub-parts are imported automatically when referenced as nested blocks.
+109 anchored `use`-paths across 50+ categories. Sub-parts are imported automatically when referenced as nested blocks.
 
 | Category | `use`-paths | Notes |
 |----------|-------------|-------|
@@ -276,13 +277,16 @@ A PromptUI file is a tree of **blocks**. Each block has a type, an optional name
 | `dialogs` | `default` | variants: `default`, `fullscreen`, `compact` |
 | `drawers` | `default` | `side: top \| bottom \| left \| right` |
 | `dropdownMenus` | `default` | |
+| `footers` | `default` | variants: `default`, `minimal`, `columns`, `newsletter`; 9 sub-parts |
 | `forms` | `default` | |
+| `headers` | `default` | variants: `default`, `minimal`, `full`, `sticky` |
 | `headings` | `gradientH2` (legacy) | |
 | `heroes` | `split`, `centered`, `withVideo`, `withGradient` + legacy `primary` | Shared `HeroTitle`/`HeroSubtitle`/`HeroActions`/`HeroEyebrow` parts |
 | `hoverCards` | `default` | |
 | `inputOtps` | `default` | |
 | `inputs` | `default`, `email`, `password`, `search`, `number`, `file`, `date`, `withIcon`, `withPrefix`, `withSuffix` + legacy `rounded` | |
 | `labels` | `default` | |
+| `layouts` | `header`, `footer`, `main`, `nav`, `section`, `article` | thin semantic-tag wrappers |
 | `menubars` | `default` | |
 | `navigationMenus` | `default`, `mobile`, `mega` | |
 | `paginations` | `default`, `withPageSize` | variants: `default`, `compact` |
@@ -324,7 +328,7 @@ For the full catalog with every sub-part, see [`packages/core/README.md`](packag
 **Does:**
 
 - Compiles `.promptui` files to React (typed `.tsx` with imports + props + state hooks) and Vue (full SFC with `<script setup>`).
-- 101 anchored `use`-paths across 50+ component categories.
+- 109 anchored `use`-paths across 50+ component categories.
 - Real Radix-backed behavior on 30+ interactive primitives.
 - Default styles + Tailwind preset + Vite plugin + CLI watch mode.
 - DSL features: `use`, `variant`, `each`, `if`, `{{expr}}`, `lock`/`ban`/`allow`, `bind`, `flow`.

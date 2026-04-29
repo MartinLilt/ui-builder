@@ -1,5 +1,6 @@
 import { Block, Document } from '../types'
 import { lookupByUse, isKnownComponent, packageForComponent } from '../library'
+import { generatedHeader } from './header'
 
 function lookToClassName(look: string | undefined): string {
   if (!look) return ''
@@ -172,6 +173,7 @@ function inferExportName(doc: Document): string | null {
 
 export interface EmitReactOptions {
   exportName?: string
+  sourcePath?: string | false
 }
 
 export function emitReact(doc: Document, options?: EmitReactOptions): string {
@@ -179,11 +181,14 @@ export function emitReact(doc: Document, options?: EmitReactOptions): string {
   for (const block of doc.blocks) collectUsedComponents(block, used)
 
   const exportName = options?.exportName ?? inferExportName(doc)
+  const header = generatedHeader('js', options?.sourcePath)
+  const headerPrefix = header ? `${header}\n\n` : ''
 
   if (!exportName) {
     const imports = emitImportLines(used).join('\n')
     const body = doc.blocks.map(b => emitBlock(b, 0, 'fragment')).join('\n\n')
-    return imports ? `${imports}\n\n${body}` : body
+    const main = imports ? `${imports}\n\n${body}` : body
+    return `${headerPrefix}${main}`
   }
 
   const binds = new Set<string>()
@@ -242,5 +247,5 @@ export function emitReact(doc: Document, options?: EmitReactOptions): string {
   parts.push(fnLines.join('\n'))
   parts.push('}')
 
-  return parts.join('\n')
+  return `${headerPrefix}${parts.join('\n')}`
 }
