@@ -1609,3 +1609,171 @@
   font-family: var(--promptui-font-mono); font-size: 0.875rem;
   color: var(--promptui-fg);
 }
+
+/* ------------------------------------------------------------------ *
+ * Site chrome — Header (v0.5)
+ * ------------------------------------------------------------------ */
+
+.promptui-header-default {
+  width: 100%;
+  background: var(--promptui-bg);
+  color: var(--promptui-fg);
+  border-bottom: 1px solid var(--promptui-border);
+  font-family: var(--promptui-font-sans);
+}
+.promptui-header-default-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  min-height: 3.5rem;
+}
+.promptui-header-default--minimal .promptui-header-default-inner {
+  padding: 0.5rem 1rem;
+  min-height: 2.75rem;
+}
+.promptui-header-default--full .promptui-header-default-inner {
+  padding: 1.25rem 2rem;
+  min-height: 4.5rem;
+}
+.promptui-header-default--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--promptui-bg) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+}
+
+.promptui-header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: inherit;
+  flex-shrink: 0;
+}
+.promptui-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.promptui-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Site chrome — Footer (v0.5)
+ * ------------------------------------------------------------------ */
+
+.promptui-footer-default {
+  width: 100%;
+  background: var(--promptui-bg);
+  color: var(--promptui-fg);
+  border-top: 1px solid var(--promptui-border);
+  font-family: var(--promptui-font-sans);
+}
+.promptui-footer-default-inner {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.promptui-footer-default--minimal .promptui-footer-default-inner {
+  padding: 1rem 1.5rem;
+  gap: 0.75rem;
+}
+.promptui-footer-default--columns .promptui-footer-default-inner,
+.promptui-footer-default--newsletter .promptui-footer-default-inner {
+  padding: 3rem 1.5rem 1.5rem;
+}
+
+.promptui-footer-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 2rem;
+}
+.promptui-footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.promptui-footer-column-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--promptui-muted);
+}
+.promptui-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.promptui-footer-link {
+  font-size: 0.875rem;
+  color: var(--promptui-fg);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.promptui-footer-link:hover { color: var(--promptui-muted); }
+
+.promptui-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--promptui-border);
+}
+.promptui-footer-default--minimal .promptui-footer-bottom {
+  padding-top: 0;
+  border-top: 0;
+}
+.promptui-footer-copyright {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--promptui-muted);
+}
+.promptui-footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.promptui-footer-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--promptui-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * Semantic layout primitives (v0.5)
+ * Pure semantic-tag wrappers. No defaults beyond display:block.
+ * ------------------------------------------------------------------ */
+
+.promptui-layout-header,
+.promptui-layout-footer,
+.promptui-layout-main,
+.promptui-layout-nav,
+.promptui-layout-section,
+.promptui-layout-article {
+  display: block;
+}

@@ -511,6 +511,43 @@ export {
 } from './tooltips/Rich'
 export type { TooltipRichProps } from './tooltips/Rich'
 
+// Site chrome (v0.5)
+export { HeaderDefault, HeaderBrand, HeaderNav, HeaderActions } from './headers/Default'
+export type { HeaderDefaultProps, HeaderVariant } from './headers/Default'
+
+export {
+  FooterDefault,
+  FooterColumns,
+  FooterColumn,
+  FooterColumnTitle,
+  FooterLinks,
+  FooterLink,
+  FooterBottom,
+  FooterCopyright,
+  FooterLegalLinks,
+  FooterSocial,
+} from './footers/Default'
+export type {
+  FooterDefaultProps,
+  FooterVariant,
+  FooterColumnsProps,
+  FooterLinkProps,
+} from './footers/Default'
+
+// Semantic layout primitives (v0.5)
+export { LayoutHeader } from './layouts/Header'
+export type { LayoutHeaderProps } from './layouts/Header'
+export { LayoutFooter } from './layouts/Footer'
+export type { LayoutFooterProps } from './layouts/Footer'
+export { LayoutMain } from './layouts/Main'
+export type { LayoutMainProps } from './layouts/Main'
+export { LayoutNav } from './layouts/Nav'
+export type { LayoutNavProps } from './layouts/Nav'
+export { LayoutSection } from './layouts/Section'
+export type { LayoutSectionProps } from './layouts/Section'
+export { LayoutArticle } from './layouts/Article'
+export type { LayoutArticleProps } from './layouts/Article'
+
 // ------------------------------------------------------------------ //
 // Short-name aliases (v0.4.4+)
 // Drop the `Default` suffix when there's no ambiguity. Both names point
@@ -572,3 +609,5 @@ export { ToastDefault as Toast } from './toasts/Default'
 export { ToggleDefault as Toggle } from './toggles/Default'
 export { ToggleGroupDefault as ToggleGroup } from './toggleGroups/Default'
 export { TooltipDefault as Tooltip } from './tooltips/Default'
+export { HeaderDefault as Header } from './headers/Default'
+export { FooterDefault as Footer } from './footers/Default'

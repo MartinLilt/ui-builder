@@ -571,6 +571,40 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     ],
     package: PKG,
   },
+
+  // Site chrome (v0.5)
+  {
+    use: 'library/headers/default',
+    main: 'HeaderDefault',
+    parts: ['HeaderBrand', 'HeaderNav', 'HeaderActions'],
+    package: PKG,
+    variants: ['default', 'minimal', 'full', 'sticky'],
+  },
+  {
+    use: 'library/footers/default',
+    main: 'FooterDefault',
+    parts: [
+      'FooterColumns',
+      'FooterColumn',
+      'FooterColumnTitle',
+      'FooterLinks',
+      'FooterLink',
+      'FooterBottom',
+      'FooterCopyright',
+      'FooterLegalLinks',
+      'FooterSocial',
+    ],
+    package: PKG,
+    variants: ['default', 'minimal', 'columns', 'newsletter'],
+  },
+
+  // Semantic layout primitives (v0.5)
+  { use: 'library/layouts/header', main: 'LayoutHeader', parts: [], package: PKG },
+  { use: 'library/layouts/footer', main: 'LayoutFooter', parts: [], package: PKG },
+  { use: 'library/layouts/main', main: 'LayoutMain', parts: [], package: PKG },
+  { use: 'library/layouts/nav', main: 'LayoutNav', parts: [], package: PKG },
+  { use: 'library/layouts/section', main: 'LayoutSection', parts: [], package: PKG },
+  { use: 'library/layouts/article', main: 'LayoutArticle', parts: [], package: PKG },
 ]
 
 const BY_USE = new Map<string, LibraryEntry>(LIBRARY_ENTRIES.map(e => [e.use, e]))
