@@ -1,0 +1,60 @@
+html[data-theme='light'] {
+  --promptui-sb-bg: #f7f7f8;
+  --promptui-sb-surface: #ffffff;
+  --promptui-sb-border: #e5e7eb;
+}
+
+html[data-theme='dark'] {
+  --promptui-sb-bg: #0b0b0e;
+  --promptui-sb-surface: #161619;
+  --promptui-sb-border: #2a2a30;
+}
+
+html,
+body,
+#storybook-root {
+  background: var(--promptui-sb-bg);
+}
+
+.promptui-sb-stage {
+  min-height: 100vh;
+  padding: 2.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: inherit;
+}
+
+.promptui-sb-stage[data-layout='centered'] {
+  align-items: center;
+  min-height: calc(100vh - 1px);
+}
+
+.promptui-sb-stage-inner {
+  background: var(--promptui-sb-surface);
+  border: 1px solid var(--promptui-sb-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 960px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.promptui-sb-stage[data-layout='centered'] .promptui-sb-stage-inner {
+  width: auto;
+  max-width: min(720px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promptui-sb-fullscreen {
+  min-height: 100vh;
+}

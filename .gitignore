@@ -2,6 +2,10 @@
 .idea/
 vault/
 CLAUDE.md
+.claude/scheduled_tasks.lock
+
+# Storybook build output
+storybook-static/
 
 # Logs
 logs

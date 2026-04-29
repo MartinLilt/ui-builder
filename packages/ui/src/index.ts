@@ -510,3 +510,65 @@ export {
   TooltipRichActions,
 } from './tooltips/Rich'
 export type { TooltipRichProps } from './tooltips/Rich'
+
+// ------------------------------------------------------------------ //
+// Short-name aliases (v0.4.4+)
+// Drop the `Default` suffix when there's no ambiguity. Both names point
+// to the exact same component — pick whichever reads better in your
+// code. Sub-parts (CardHeader, DialogTitle, etc.) keep their flat names
+// to match shadcn-style usage.
+// ------------------------------------------------------------------ //
+
+export { AccordionDefault as Accordion } from './accordions/Default'
+export { AlertDefault as Alert } from './alerts/Default'
+export { AlertDialogDefault as AlertDialog } from './alertDialogs/Default'
+export { AspectRatioDefault as AspectRatio } from './aspectRatios/Default'
+export { AvatarDefault as Avatar } from './avatars/Default'
+export { BadgeDefault as Badge } from './badges/Default'
+export { BreadcrumbDefault as Breadcrumb } from './breadcrumbs/Default'
+export { ButtonDefault as Button } from './buttons/Default'
+export { CalendarDefault as Calendar } from './calendars/Default'
+export { CardDefault as Card } from './cards/Default'
+export { CarouselDefault as Carousel } from './carousels/Default'
+export { ChartDefault as Chart } from './charts/Default'
+export { CheckboxDefault as Checkbox } from './checkboxes/Default'
+export { CollapsibleDefault as Collapsible } from './collapsibles/Default'
+export { ComboboxDefault as Combobox } from './comboboxes/Default'
+export { CommandDefault as Command } from './commands/Default'
+export { ContextMenuDefault as ContextMenu } from './contextMenus/Default'
+export { DataTableDefault as DataTable } from './dataTables/Default'
+export { DatePickerDefault as DatePicker } from './datePickers/Default'
+export { DialogDefault as Dialog } from './dialogs/Default'
+export { DrawerDefault as Drawer } from './drawers/Default'
+export { DropdownMenuDefault as DropdownMenu } from './dropdownMenus/Default'
+export { FormDefault as Form } from './forms/Default'
+export { HoverCardDefault as HoverCard } from './hoverCards/Default'
+export { InputDefault as Input } from './inputs/Default'
+export { InputOtpDefault as InputOtp } from './inputOtps/Default'
+export { LabelDefault as Label } from './labels/Default'
+export { MenubarDefault as Menubar } from './menubars/Default'
+export { NavigationMenuDefault as NavigationMenu } from './navigationMenus/Default'
+export { PaginationDefault as Pagination } from './paginations/Default'
+export { PopoverDefault as Popover } from './popovers/Default'
+export { ProgressDefault as Progress } from './progresses/Default'
+export { RadioGroupDefault as RadioGroup } from './radioGroups/Default'
+export { ResizableDefault as Resizable } from './resizables/Default'
+export { ScrollAreaDefault as ScrollArea } from './scrollAreas/Default'
+export { SelectDefault as Select } from './selects/Default'
+export { SeparatorDefault as Separator } from './separators/Default'
+export { SheetDefault as Sheet } from './sheets/Default'
+export { SidebarDefault as Sidebar } from './sidebars/Default'
+export { SkeletonDefault as Skeleton } from './skeletons/Default'
+export { SliderDefault as Slider } from './sliders/Default'
+export { SonnerDefault as Sonner } from './sonners/Default'
+export { SwitchDefault as Switch } from './switches/Default'
+export { TableDefault as Table } from './tables/Default'
+// `Tabs` is the idiomatic name (matches shadcn). The DSL emits `TabDefault`
+// because of the singularize rule on `library/tabs/default`; both names
+// work at the import site.
+export { TabDefault as Tabs } from './tabs/Default'
+export { TextareaDefault as Textarea } from './textareas/Default'
+export { ToastDefault as Toast } from './toasts/Default'
+export { ToggleDefault as Toggle } from './toggles/Default'
+export { ToggleGroupDefault as ToggleGroup } from './toggleGroups/Default'
+export { TooltipDefault as Tooltip } from './tooltips/Default'

@@ -1,0 +1,23 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Welcome" />
+
+# PromptUI Storybook
+
+Live catalog of every `library/*` component registered in `@getpromptui/core`.
+
+## Sections
+
+- **Components/** — hand-written stories for compound components (Heroes, Cards, Dialog, Combobox, Calendar, Charts).
+- **Generated/** — one auto-generated story per registered `use`-path. Sourced from `LIBRARY_ENTRIES` in `@getpromptui/core/library.ts`.
+
+## Theme
+
+Toggle light / dark in the toolbar (top right). The toggle sets `data-theme` on `<html>`; styles come from `@getpromptui/ui/styles.css`.
+
+## Adding a new entry
+
+1. Add the component to `@getpromptui/ui` and export it.
+2. Register it in `LIBRARY_ENTRIES` (`packages/core/src/library.ts`).
+3. Run `pnpm --filter @getpromptui/storybook generate` — your story appears under `Generated/...`.
+4. If composition is required, add a hand-written story under `src/manual/`.

@@ -88,6 +88,16 @@ For the full list with sub-parts, see the [catalog on GitHub](https://github.com
 
 ## Changelog
 
+### 0.4.4
+
+Short-name aliases for every `*Default` export. `Card` is now exported alongside `CardDefault`, `Button` alongside `ButtonDefault`, etc. Both names point to the same component — pick whichever reads better. Sub-parts (`CardHeader`, `DialogTitle`, etc.) keep their flat names. Non-breaking: existing imports continue to work.
+
+```ts
+import { Card, CardHeader, CardTitle, Button, Dialog, DialogTrigger, DialogContent } from "@getpromptui/ui"
+```
+
+`Tabs` is the alias for `TabDefault` (matches shadcn convention).
+
 ### 0.4.3
 
 Stage 4d — final Radix batch. **The Radix integration is complete.** 13 more components now wrap Radix primitives:

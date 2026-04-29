@@ -98,8 +98,12 @@ import "@getpromptui/ui/styles.css"
 
 ```ts
 // any component
-import { CardDefault, ButtonDefault, InputEmail } from "@getpromptui/ui"
+import { Card, CardHeader, CardTitle, Button, InputEmail } from "@getpromptui/ui"
 ```
+
+> Both `Card` and `CardDefault` work — the short names are aliases of the
+> registry-emitted `*Default` exports (added in 0.4.4). Pick whichever reads
+> better in your code.
 
 ---
 
@@ -160,9 +164,15 @@ import Pricing from "./pricing.promptui"
 
 ---
 
-## Playground (coming soon)
+## Storybook playground
 
-Edit PromptUI on the left, see the rendered UI on the right. Tracked publicly — see GitHub issues.
+Live catalog of every registered component. Auto-generated from `LIBRARY_ENTRIES` plus hand-written stories for compound layouts (Heroes, Cards, Dialog, Combobox, Calendar, Charts).
+
+```bash
+pnpm install
+pnpm --filter @getpromptui/storybook storybook
+# → http://localhost:6006
+```
 
 ---
 
@@ -172,6 +182,7 @@ Edit PromptUI on the left, see the rendered UI on the right. Tracked publicly �
 |---------|-------------|
 | [`@getpromptui/core`](packages/core) | Parser, resolver, emitters, CLI, Vite plugin, library registry |
 | [`@getpromptui/ui`](packages/ui) | React component library — 101 entries, default CSS, Radix-backed behavior |
+| [`@getpromptui/storybook`](packages/storybook) | Storybook 8 playground (private; not published) |
 
 ---
 
